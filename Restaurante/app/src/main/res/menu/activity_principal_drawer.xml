@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_gray_24dp"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_fazer_pedido"
+            android:icon="@drawable/ic_order_gray_24dp"
+            android:title="@string/menu_fazer_pedido" />
+        <item
+            android:id="@+id/nav_monitorar_pedido"
+            android:icon="@drawable/ic_computer_gray_24dp"
+            android:title="@string/menu_monitorar_pedido" />
+        <item
+            android:id="@+id/nav_cardapio"
+            android:icon="@drawable/ic_restaurant_menu_gray_24dp"
+            android:title="@string/menu_cardapio" />
+
+        <item
+            android:id="@+id/nav_mesas"
+            android:icon="@drawable/ic_service_gray_24dp"
+            android:title="@string/menu_mesas" />
+
+        <item
+            android:id="@+id/nav_categoria"
+            android:icon="@drawable/ic_categoria_gray_24dp"
+            android:title="@string/menu_categoria" />
+    </group>
+
+    <item android:title="Gerais">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Indefinido" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Indefinido" />
+        </menu>
+    </item>
+
+</menu>
