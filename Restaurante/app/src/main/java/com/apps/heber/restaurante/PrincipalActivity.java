@@ -72,7 +72,7 @@ public class PrincipalActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
+ssss
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
