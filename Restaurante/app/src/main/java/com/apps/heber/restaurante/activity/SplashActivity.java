@@ -1,9 +1,11 @@
-package com.apps.heber.restaurante;
+package com.apps.heber.restaurante.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+
+import com.apps.heber.restaurante.R;
 
 public class SplashActivity extends AppCompatActivity {
 

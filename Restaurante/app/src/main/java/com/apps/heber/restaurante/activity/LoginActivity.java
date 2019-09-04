@@ -1,4 +1,4 @@
-package com.apps.heber.restaurante;
+package com.apps.heber.restaurante.activity;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.apps.heber.restaurante.R;
 
 public class LoginActivity extends AppCompatActivity {
 

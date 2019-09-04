@@ -1,5 +1,6 @@
-package com.apps.heber.restaurante;
+package com.apps.heber.restaurante.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
+
+import com.apps.heber.restaurante.R;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,44 +75,50 @@ public class PrincipalActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-ssss
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            startActivity(new Intent(this, PrincipalActivity.class));
+            finish();
+
             Toast.makeText(getApplicationContext(),
                     "Home",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_fazer_pedido) {
+            startActivity(new Intent(this, FazerPedidoActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Fazer pedido",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_monitorar_pedido) {
+            startActivity(new Intent(this, MonitorarPedidoActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Monitorar pedido",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_cardapio) {
+            startActivity(new Intent(this, CardapioActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Cardapio",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_mesas) {
+            startActivity(new Intent(this, MesasActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Mesas",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_categoria) {
+            startActivity(new Intent(this, CategoriaActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Categoria",
