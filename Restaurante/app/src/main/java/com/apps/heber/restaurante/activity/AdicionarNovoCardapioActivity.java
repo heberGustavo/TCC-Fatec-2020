@@ -1,27 +1,25 @@
 package com.apps.heber.restaurante.activity;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Spinner;
 
 import com.apps.heber.restaurante.R;
 
-public class CardapioActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardapio);
+        setContentView(R.layout.activity_adicionar_novo_cardapio);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Cardápio");
+        actionBar.setTitle("Novo Cardapio");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    }
-
-    public void adicionarNovoCardapio(View view){
-        startActivity(new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class));
     }
 }

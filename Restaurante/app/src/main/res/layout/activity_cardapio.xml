@@ -15,9 +15,24 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="357dp"
         android:gravity="center"
-        android:text="Cardapio"
+        android:text="Mostra a lista de cardapio e o botao add novo item ao cardapio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:onClick="adicionarNovoCardapio"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
 </android.support.constraint.ConstraintLayout>

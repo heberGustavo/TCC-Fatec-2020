@@ -9,17 +9,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.CategoriaActivity"></activity>
-        <activity android:name=".activity.MesasActivity" />
-        <activity android:name=".activity.CardapioActivity" />
-        <activity android:name=".activity.MonitorarPedidoActivity" />
+        <activity android:name=".activity.AdicionarNovoCardapioActivity"
+            android:parentActivityName=".activity.CardapioActivity"></activity>
+        <activity
+            android:name=".activity.CategoriaActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
+        <activity
+            android:name=".activity.MesasActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
+        <activity
+            android:name=".activity.CardapioActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
+        <activity
+            android:name=".activity.MonitorarPedidoActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.PrincipalActivity"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.FazerPedidoActivity" />
-        <activity android:name=".activity.SplashActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/AppThemeSplashLogin" />
+        <activity
+            android:name=".activity.FazerPedidoActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/AppThemeSplashLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
