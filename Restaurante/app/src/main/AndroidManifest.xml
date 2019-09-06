@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AdicionarNovoCardapioActivity"
-            android:parentActivityName=".activity.CardapioActivity"></activity>
+        <activity android:name=".activity.AdicionarMesaActivity"></activity>
+        <activity android:name=".activity.AdicionarCategoriaActivity" />
+        <activity
+            android:name=".activity.AdicionarNovoCardapioActivity"
+            android:parentActivityName=".activity.CardapioActivity" />
         <activity
             android:name=".activity.CategoriaActivity"
             android:parentActivityName=".activity.PrincipalActivity" />
