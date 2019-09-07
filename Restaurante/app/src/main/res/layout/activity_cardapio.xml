@@ -6,16 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".activity.CardapioActivity">
 
-    <TextView
-        android:id="@+id/textView3"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerCardapio"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="355dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="357dp"
-        android:gravity="center"
-        android:text="Mostra a lista de cardapio e o botao add novo item ao cardapio"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +19,8 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="17dp"
         android:clickable="true"
         android:onClick="adicionarNovoCardapio"
         app:backgroundTint="@color/colorAccent"
@@ -34,5 +28,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_white_24dp" />
-
 </android.support.constraint.ConstraintLayout>
