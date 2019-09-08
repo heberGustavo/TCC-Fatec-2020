@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/editNomeProduto"
+            android:id="@+id/editNomeProdutoNovoCardapio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textShortMessage|text" />
@@ -38,14 +38,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/editIngredientes"
+            android:id="@+id/editIngredientesNovoCardapio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textLongMessage|text" />
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        android:id="@+id/spinnerCategoria"
+        android:id="@+id/spinnerCategoriaNovoCardapio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -77,7 +77,7 @@
         android:background="@color/colorPrimary">
 
         <EditText
-            android:id="@+id/editValor"
+            android:id="@+id/editValorNovoCardapio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

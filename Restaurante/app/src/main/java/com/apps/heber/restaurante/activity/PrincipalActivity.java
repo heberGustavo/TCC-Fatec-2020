@@ -71,7 +71,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(new Intent(this, FazerPedidoActivity.class));
 
             Toast.makeText(getApplicationContext(),
-                    "Fazer pedido",
+                    "Escolha a mesa!",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_monitorar_pedido) {
