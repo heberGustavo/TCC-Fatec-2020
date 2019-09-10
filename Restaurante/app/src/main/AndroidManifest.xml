@@ -9,10 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AdicionarMesaActivity"
-            android:parentActivityName=".activity.MesasActivity"></activity>
-        <activity android:name=".activity.AdicionarCategoriaActivity"
-            android:parentActivityName=".activity.CategoriaActivity"/>
+        <activity android:name=".activity.CardapioCategoriaActivity"
+            android:parentActivityName=".activity.PrincipalActivity"></activity>
+        <activity
+            android:name=".activity.AdicionarMesaActivity"
+            android:parentActivityName=".activity.MesasActivity" />
+        <activity
+            android:name=".activity.AdicionarCategoriaActivity"
+            android:parentActivityName=".activity.CategoriaActivity" />
         <activity
             android:name=".activity.AdicionarNovoCardapioActivity"
             android:parentActivityName=".activity.CardapioActivity" />
@@ -24,7 +28,7 @@
             android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.CardapioActivity"
-            android:parentActivityName=".activity.PrincipalActivity" />
+            android:parentActivityName=".activity.CardapioCategoriaActivity" />
         <activity
             android:name=".activity.MonitorarPedidoActivity"
             android:parentActivityName=".activity.PrincipalActivity" />

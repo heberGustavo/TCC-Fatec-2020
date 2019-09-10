@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CardapioActivity">
+    tools:context=".activity.CardapioCategoriaActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerCardapio"
+        android:id="@+id/recyclerCardapioCategoria"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,14 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="17dp"
         android:clickable="true"
-        android:onClick="adicionarNovoCardapio"
+        android:onClick="abrirCardapioActivity"
         app:backgroundTint="@color/colorAccent"
         app:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_white_24dp" />
-
 
 </android.support.constraint.ConstraintLayout>

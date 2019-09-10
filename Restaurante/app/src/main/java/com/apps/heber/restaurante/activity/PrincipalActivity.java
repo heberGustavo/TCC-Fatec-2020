@@ -82,10 +82,10 @@ public class PrincipalActivity extends AppCompatActivity
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_cardapio) {
-            startActivity(new Intent(this, CardapioActivity.class));
+            startActivity(new Intent(this, CardapioCategoriaActivity.class));
 
             Toast.makeText(getApplicationContext(),
-                    "Cardapio",
+                    "Escolha a categoria",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_mesas) {

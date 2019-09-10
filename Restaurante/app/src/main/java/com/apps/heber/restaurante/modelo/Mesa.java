@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class Mesa implements Serializable {
 
-    private String numeroMesas;
+    private int numeroMesas;
 
-    public String getNumeroMesas() {
+    public int getNumeroMesas() {
         return numeroMesas;
     }
 
-    public void setNumeroMesas(String numeroMesas) {
+    public void setNumeroMesas(int numeroMesas) {
         this.numeroMesas = numeroMesas;
     }
 }
