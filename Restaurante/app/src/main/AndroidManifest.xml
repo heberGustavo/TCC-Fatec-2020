@@ -12,9 +12,6 @@
         <activity android:name=".activity.CardapioCategoriaActivity"
             android:parentActivityName=".activity.PrincipalActivity"></activity>
         <activity
-            android:name=".activity.AdicionarMesaActivity"
-            android:parentActivityName=".activity.MesasActivity" />
-        <activity
             android:name=".activity.AdicionarCategoriaActivity"
             android:parentActivityName=".activity.CategoriaActivity" />
         <activity
@@ -24,14 +21,8 @@
             android:name=".activity.CategoriaActivity"
             android:parentActivityName=".activity.PrincipalActivity" />
         <activity
-            android:name=".activity.MesasActivity"
-            android:parentActivityName=".activity.PrincipalActivity" />
-        <activity
             android:name=".activity.CardapioActivity"
             android:parentActivityName=".activity.CardapioCategoriaActivity" />
-        <activity
-            android:name=".activity.MonitorarPedidoActivity"
-            android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.PrincipalActivity"
             android:label="@string/title_activity_principal"

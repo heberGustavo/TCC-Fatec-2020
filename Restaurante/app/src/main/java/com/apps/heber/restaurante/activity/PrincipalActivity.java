@@ -27,6 +27,7 @@ public class PrincipalActivity extends AppCompatActivity
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +36,7 @@ public class PrincipalActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -61,57 +63,47 @@ public class PrincipalActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             startActivity(new Intent(this, PrincipalActivity.class));
-            finish();
-
             Toast.makeText(getApplicationContext(),
                     "Home",
                     Toast.LENGTH_SHORT).show();
+            finish();
 
         } else if (id == R.id.nav_fazer_pedido) {
             startActivity(new Intent(this, FazerPedidoActivity.class));
 
             Toast.makeText(getApplicationContext(),
-                    "Escolha a mesa!",
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_monitorar_pedido) {
-            startActivity(new Intent(this, MonitorarPedidoActivity.class));
-
-            Toast.makeText(getApplicationContext(),
-                    "Monitorar pedido",
+                    "Faze pedido",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_cardapio) {
             startActivity(new Intent(this, CardapioCategoriaActivity.class));
 
             Toast.makeText(getApplicationContext(),
-                    "Escolha a categoria",
-                    Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_mesas) {
-            startActivity(new Intent(this, MesasActivity.class));
-
-            Toast.makeText(getApplicationContext(),
-                    "Mesas",
+                    "Cardapio",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_categoria) {
             startActivity(new Intent(this, CategoriaActivity.class));
-
             Toast.makeText(getApplicationContext(),
                     "Categoria",
+                    Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.nav_fluxoDeCaixa) {
+
+            Toast.makeText(getApplicationContext(),
+                    "Fluxo de Caixa",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
 
             Toast.makeText(getApplicationContext(),
-                    "Indefinido 1",
+                    "Configurações",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_send) {
 
             Toast.makeText(getApplicationContext(),
-                    "Indefinido 2",
+                    "Sair",
                     Toast.LENGTH_SHORT).show();
 
         }

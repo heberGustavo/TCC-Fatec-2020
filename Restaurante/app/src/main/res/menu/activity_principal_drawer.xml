@@ -13,23 +13,17 @@
             android:icon="@drawable/ic_order_gray_24dp"
             android:title="@string/menu_fazer_pedido" />
         <item
-            android:id="@+id/nav_monitorar_pedido"
-            android:icon="@drawable/ic_computer_gray_24dp"
-            android:title="@string/menu_monitorar_pedido" />
-        <item
             android:id="@+id/nav_cardapio"
             android:icon="@drawable/ic_restaurant_menu_gray_24dp"
             android:title="@string/menu_cardapio" />
-
-        <item
-            android:id="@+id/nav_mesas"
-            android:icon="@drawable/ic_service_gray_24dp"
-            android:title="@string/menu_mesas" />
-
         <item
             android:id="@+id/nav_categoria"
             android:icon="@drawable/ic_categoria_gray_24dp"
             android:title="@string/menu_categoria" />
+        <item
+            android:id="@+id/nav_fluxoDeCaixa"
+            android:icon="@drawable/ic_categoria_gray_24dp"
+            android:title="@string/menu_fluxo" />
     </group>
 
     <item android:title="Gerais">
@@ -37,11 +31,11 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Indefinido" />
+                android:title="Configurações" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Indefinido" />
+                android:title="Sair" />
         </menu>
     </item>
 

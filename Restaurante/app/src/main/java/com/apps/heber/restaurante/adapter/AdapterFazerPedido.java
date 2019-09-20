@@ -9,19 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.modelo.Mesa;
 
 import java.util.List;
 
 public class AdapterFazerPedido extends RecyclerView.Adapter<AdapterFazerPedido.MyViewHolderFazerPedidos> {
 
-    List<Mesa> listaMesas;
+    //List<Mesa> listaMesas;
     Context context;
 
-    public AdapterFazerPedido(List<Mesa> listaMesas, Context context) {
+    /*public AdapterFazerPedido(List<Mesa> listaMesas, Context context) {
         this.listaMesas = listaMesas;
         this.context = context;
     }
+    */
 
     @Override
     public MyViewHolderFazerPedidos onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

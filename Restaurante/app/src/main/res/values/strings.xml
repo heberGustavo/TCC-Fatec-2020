@@ -10,8 +10,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_fazer_pedido">Fazer Pedido</string>
-    <string name="menu_monitorar_pedido">Monitorar pedido</string>
     <string name="menu_cardapio">Cardapio</string>
-    <string name="menu_mesas">Mesas</string>
     <string name="menu_categoria">Categoria</string>
+    <string name="menu_fluxo">Fluxo de caixa</string>
 </resources>

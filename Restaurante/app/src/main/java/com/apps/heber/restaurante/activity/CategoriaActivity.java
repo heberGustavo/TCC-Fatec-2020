@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCategoria;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
@@ -68,6 +69,9 @@ public class CategoriaActivity extends AppCompatActivity {
     }
 
     public void configuracaoRecyclerView(){
+        //Listar Categoria
+        CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+
         //Adapter
         adapterCategoria = new AdapterCategoria(listaCategorias, getApplicationContext());
 

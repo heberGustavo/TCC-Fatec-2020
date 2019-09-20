@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterFazerPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.Mesa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
 
     private RecyclerView recyclerFazerPedido;
     private AdapterFazerPedido adapterFazerPedido;
-    private List<Mesa> listaMesas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
 
     public void configuracaoRecyclerView(){
         //Adapter
-        adapterFazerPedido = new AdapterFazerPedido(listaMesas, getApplicationContext());
+        //adapterFazerPedido = new AdapterFazerPedido(listaMesas, getApplicationContext());
 
         //RecyclerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
