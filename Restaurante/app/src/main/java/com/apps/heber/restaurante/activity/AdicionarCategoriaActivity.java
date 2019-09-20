@@ -1,15 +1,21 @@
 package com.apps.heber.restaurante.activity;
 
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
+import com.apps.heber.restaurante.modelo.Categoria;
 
 public class AdicionarCategoriaActivity extends AppCompatActivity {
+
+    private TextInputEditText editNomeCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +25,8 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Adicionar categoria");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        editNomeCategoria = findViewById(R.id.nomeCategoria);
     }
 
     @Override
@@ -31,12 +39,27 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_salvar:
-                Toast.makeText(getApplicationContext(),
-                        "Menu salvar",
-                        Toast.LENGTH_SHORT).show();
+                menuSalvar();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void menuSalvar(){
+        CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+
+        String nomeCategoria = editNomeCategoria.getText().toString();
+        if (!nomeCategoria.isEmpty()){
+            Categoria categoria = new Categoria();
+            categoria.setCategoria(nomeCategoria);
+
+            if (categoriaDAO.salvarCategoria(categoria)){
+                Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), "Informe o nome da categoria", Toast.LENGTH_SHORT).show();
+        }
     }
 }

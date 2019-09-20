@@ -36,7 +36,6 @@ public class CategoriaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerCategoria = findViewById(R.id.recyclerCategoria);
-        configuracaoRecyclerView();
 
         recyclerCategoria.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -68,9 +67,16 @@ public class CategoriaActivity extends AppCompatActivity {
         ));
     }
 
-    public void configuracaoRecyclerView(){
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregarRecyclerView();
+    }
+
+    public void carregarRecyclerView(){
         //Listar Categoria
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+        listaCategorias = categoriaDAO.listarCategoria();
 
         //Adapter
         adapterCategoria = new AdapterCategoria(listaCategorias, getApplicationContext());

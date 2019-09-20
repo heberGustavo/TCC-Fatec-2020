@@ -35,12 +35,13 @@ public class AdapterCategoria extends RecyclerView.Adapter<AdapterCategoria.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderCategoria myViewHolderCategoria, int i) {
 
-        myViewHolderCategoria.nomeCategoria.setText("Pizza");
+        Categoria categoria = listaCategorias.get(i);
+        myViewHolderCategoria.nomeCategoria.setText(categoria.getCategoria());
     }
 
     @Override
     public int getItemCount() {
-        return 12;
+        return listaCategorias.size();
     }
 
     public class MyViewHolderCategoria extends RecyclerView.ViewHolder{
