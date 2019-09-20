@@ -1,7 +1,9 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -25,6 +27,7 @@ public class CategoriaActivity extends AppCompatActivity {
     private RecyclerView recyclerCategoria;
     private List<Categoria> listaCategorias = new ArrayList<>();
     private AdapterCategoria adapterCategoria;
+    private Categoria categoriaSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,36 @@ public class CategoriaActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click Longo no item categoria",
-                                Toast.LENGTH_SHORT
-                        ).show();
+
+                        categoriaSelecionada = listaCategorias.get(position);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CategoriaActivity.this);
+
+                        builder.setTitle("Confirmar exclusão");
+                        builder.setMessage("Deseja excluir a tarefa: " +categoriaSelecionada.getCategoria()+ "?");
+                        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+
+                                if (categoriaDAO.deletarCategoria(categoriaSelecionada)){
+
+                                    carregarRecyclerView();
+                                    Toast.makeText(getApplicationContext(),
+                                            "Tarefa excluida com sucesso!",
+                                            Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(getApplicationContext(),
+                                            "Erro ao excluir tarefa",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        builder.setNegativeButton("Não", null);
+
+                        builder.create();
+                        builder.show();
                     }
 
                     @Override

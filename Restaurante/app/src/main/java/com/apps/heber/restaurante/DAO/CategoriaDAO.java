@@ -42,7 +42,15 @@ public class CategoriaDAO {
     }
 
     public boolean deletarCategoria(Categoria categoria){
-        return false;
+        try {
+            String[] args = {categoria.getId().toString()};
+            escrever.delete(DbHelper.TABELA_CATEGORIA, "idCategoria=?", args);
+            Log.i("INFO", "Tarefa deletada com sucesso!");
+        }catch (Exception e){
+            Log.i("INFO", "Erro ao deletar tarefa ..: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public List<Categoria> listarCategoria(){
