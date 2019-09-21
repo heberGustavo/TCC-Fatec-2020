@@ -16,6 +16,7 @@ import com.apps.heber.restaurante.modelo.Categoria;
 public class AdicionarCategoriaActivity extends AppCompatActivity {
 
     private TextInputEditText editNomeCategoria;
+    private Categoria categoriaSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,12 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         editNomeCategoria = findViewById(R.id.nomeCategoria);
+
+        categoriaSelecionada = (Categoria) getIntent().getSerializableExtra("categoriaSelecionada");
+
+        if (categoriaSelecionada != null){
+            editNomeCategoria.setText(categoriaSelecionada.getCategoria());
+        }
     }
 
     @Override
@@ -47,19 +54,42 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
     }
 
     public void menuSalvar(){
+
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
 
-        String nomeCategoria = editNomeCategoria.getText().toString();
-        if (!nomeCategoria.isEmpty()){
-            Categoria categoria = new Categoria();
-            categoria.setCategoria(nomeCategoria);
+        if (categoriaSelecionada != null){ // Edição
 
-            if (categoriaDAO.salvarCategoria(categoria)){
-                Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
-                finish();
+            String nomeCategoria = editNomeCategoria.getText().toString();
+
+            if (!nomeCategoria.isEmpty()){
+
+                Categoria categoriaAtualizada = new Categoria();
+                categoriaAtualizada.setId(categoriaSelecionada.getId());
+                categoriaAtualizada.setCategoria(nomeCategoria);
+
+                if (categoriaDAO.atualizarCategoria(categoriaAtualizada)){
+                    Toast.makeText(getApplicationContext(), "Categoria atualizada", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }else {
+                Toast.makeText(getApplicationContext(), "Informe a categoria", Toast.LENGTH_SHORT).show();
             }
-        }else {
-            Toast.makeText(getApplicationContext(), "Informe o nome da categoria", Toast.LENGTH_SHORT).show();
+
+        }else{//Salvar
+
+            String nomeCategoria = editNomeCategoria.getText().toString();
+            if (!nomeCategoria.isEmpty()){
+                Categoria categoria = new Categoria();
+                categoria.setCategoria(nomeCategoria);
+
+                if (categoriaDAO.salvarCategoria(categoria)){
+                    Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }else {
+                Toast.makeText(getApplicationContext(), "Informe o nome da categoria", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 }

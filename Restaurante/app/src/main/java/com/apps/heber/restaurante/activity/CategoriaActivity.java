@@ -46,11 +46,12 @@ public class CategoriaActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click no item categoria",
-                                Toast.LENGTH_SHORT
-                        ).show();
+
+                        categoriaSelecionada = listaCategorias.get(position);
+
+                        Intent intent = new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class);
+                        intent.putExtra("categoriaSelecionada", categoriaSelecionada);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -95,12 +96,6 @@ public class CategoriaActivity extends AppCompatActivity {
         ));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        carregarRecyclerView();
-    }
-
     public void carregarRecyclerView(){
         //Listar Categoria
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
@@ -115,6 +110,12 @@ public class CategoriaActivity extends AppCompatActivity {
         recyclerCategoria.setHasFixedSize(true);
         recyclerCategoria.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
         recyclerCategoria.setAdapter(adapterCategoria);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregarRecyclerView();
     }
 
     public void abrirAdicionarNovaCategoria(View view){

@@ -38,7 +38,18 @@ public class CategoriaDAO {
     }
 
     public boolean atualizarCategoria(Categoria categoria){
-        return false;
+        ContentValues values = new ContentValues();
+        values.put("nomeCategoria", categoria.getCategoria());
+
+        String[] args = {categoria.getId().toString()};
+        try {
+            escrever.update(DbHelper.TABELA_CATEGORIA, values, "idCategoria=?", args);
+            Log.i("INFO", "Categoria atualizada com sucesso!");
+        }catch (Exception e){
+            Log.i("INFO", "Erro ao atualizar categoria ..: " + e.getMessage());
+        }
+
+        return true;
     }
 
     public boolean deletarCategoria(Categoria categoria){
@@ -57,7 +68,10 @@ public class CategoriaDAO {
 
         List<Categoria> listaCategoria = new ArrayList<>();
 
-        String sql = "SELECT * FROM " + DbHelper.TABELA_CATEGORIA + ";";
+        String sql = "SELECT * " +
+                "FROM " + DbHelper.TABELA_CATEGORIA +
+                " order by nomeCategoria " + ";";
+
         Cursor cursor = ler.rawQuery(sql, null);
 
         while (cursor.moveToNext()){
