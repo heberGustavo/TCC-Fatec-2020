@@ -34,12 +34,13 @@ public class AdapterCardapioCategoria extends RecyclerView.Adapter<AdapterCardap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderCardapioCategoria myViewHolderCardapioCategoria, int i) {
-        myViewHolderCardapioCategoria.nomeCategoria.setText("Lanches");
+        Categoria categoria = listaCategorias.get(i);
+        myViewHolderCardapioCategoria.nomeCategoria.setText(categoria.getCategoria());
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return listaCategorias.size();
     }
 
     public class MyViewHolderCardapioCategoria extends RecyclerView.ViewHolder{
