@@ -42,20 +42,12 @@ public class CardapioActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click no lanche",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                        startActivity(new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class));;
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click longo no lanche",
-                                Toast.LENGTH_SHORT
-                        ).show();
+
                     }
 
                     @Override
@@ -76,9 +68,5 @@ public class CardapioActivity extends AppCompatActivity {
         recyclerCardapio.setHasFixedSize(true);
         recyclerCardapio.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
         recyclerCardapio.setAdapter(adapterCardapio);
-    }
-
-    public void adicionarNovoCardapio(View view){
-        startActivity(new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class));
     }
 }

@@ -82,4 +82,8 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
     public void abrirCardapioActivity(){
         startActivity(new Intent(CardapioCategoriaActivity.this, CardapioActivity.class));
     }
+
+    public void adicionarNovoCardapio(View view){
+        startActivity(new Intent(CardapioCategoriaActivity.this, AdicionarNovoCardapioActivity.class));
+    }
 }

@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".activity.CardapioCategoriaActivity">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:onClick="adicionarNovoCardapio"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerCardapioCategoria"
         android:layout_width="0dp"
