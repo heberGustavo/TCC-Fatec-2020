@@ -7,22 +7,27 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.CardapioDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapio;
+import com.apps.heber.restaurante.helper.DbHelper;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Cardapio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CardapioActivity extends AppCompatActivity {
 
     private RecyclerView recyclerCardapio;
     private AdapterCardapio adapterCardapio;
-    private List<Cardapio> listaCardapios;
+    private List<Cardapio> listaCardapios = new ArrayList<>();
+    private Cardapio cardapioSelecionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,13 @@ public class CardapioActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        startActivity(new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class));;
+
+                        cardapioSelecionado = listaCardapios.get(position);
+
+                        Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);
+                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+
+
                     }
 
                     @Override
@@ -56,9 +67,15 @@ public class CardapioActivity extends AppCompatActivity {
                     }
                 }
         ));
+
+
     }
 
     public void configuracaoRecyclerView(){
+        //Listar categoria
+        CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
+        listaCardapios = cardapioDAO.listar();
+
         //Adapter
         adapterCardapio = new AdapterCardapio(listaCardapios, getApplicationContext());
 

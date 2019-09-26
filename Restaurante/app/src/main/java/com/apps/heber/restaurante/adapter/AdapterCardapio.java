@@ -34,14 +34,15 @@ public class AdapterCardapio extends RecyclerView.Adapter<AdapterCardapio.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderCardapio myViewHolderCardapio, int i) {
-        myViewHolderCardapio.nomeProduto.setText("X-Bacon");
-        myViewHolderCardapio.valor.setText("14,90");
-        myViewHolderCardapio.ingredientes.setText("Hamburguer, Mussarela, Alface, Milho, Tomate, Molho vermelho");
+        Cardapio cardapio = listaCardapios.get(i);
+        myViewHolderCardapio.nomeProduto.setText(cardapio.getNomeProduto());
+        myViewHolderCardapio.valor.setText(String.valueOf(cardapio.getValor()));
+        myViewHolderCardapio.ingredientes.setText(cardapio.getIngredientes());
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        return listaCardapios.size();
     }
 
     public class MyViewHolderCardapio extends RecyclerView.ViewHolder{

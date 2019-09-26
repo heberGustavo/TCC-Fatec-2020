@@ -33,6 +33,22 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.i("INFO", "Erro na criação da tabela categoria ..: " + e.getMessage() );
         }
 
+        String sqlProduto = "CREATE TABLE IF NOT EXISTS " + TABELA_PRODUTO +
+                "(idProduto INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nomeProduto varchar NOT NULL," +
+                "descricao varchar NOT NULL," +
+                "preco double NOT NULL," +
+                "idCategoria INTEGER," +
+                "FOREIGN KEY (idCategoria) REFERENCES " + TABELA_CATEGORIA + " (idCategoria) " +
+                ")";
+
+        try {
+            db.execSQL(sqlProduto);
+            Log.i("INFO", "Tabela produto criada com sucesso!" );
+        }catch (Exception e){
+            Log.i("INFO", "Erro na criação da tabela produto ..: " + e.getMessage() );
+        }
+
     }
 
     @Override

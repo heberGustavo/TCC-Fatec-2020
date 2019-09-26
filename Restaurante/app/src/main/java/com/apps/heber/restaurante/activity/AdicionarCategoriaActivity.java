@@ -86,6 +86,7 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+
             }else {
                 Toast.makeText(getApplicationContext(), "Informe o nome da categoria", Toast.LENGTH_SHORT).show();
             }

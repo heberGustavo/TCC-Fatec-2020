@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -25,8 +26,8 @@ import java.util.List;
 public class CategoriaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerCategoria;
-    private List<Categoria> listaCategorias = new ArrayList<>();
     private AdapterCategoria adapterCategoria;
+    private List<Categoria> listaCategorias = new ArrayList<>();
     private Categoria categoriaSelecionada;
 
     @Override
