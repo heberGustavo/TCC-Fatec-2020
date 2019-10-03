@@ -45,7 +45,10 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        abrirCardapioActivity();
+                        Intent intent = new Intent(CardapioCategoriaActivity.this, CardapioActivity.class);
+                        Categoria categoriaSelecionada = listaCategorias.get(position);
+                        intent.putExtra("posicao", categoriaSelecionada.getId());
+                        startActivity(intent);
                     }
 
                     @Override
@@ -77,10 +80,6 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
         recyclerCardapioCategoria.addItemDecoration(new DividerItemDecoration(getApplicationContext(),1));
         recyclerCardapioCategoria.setAdapter(adapterCardapioCategoria);
 
-    }
-
-    public void abrirCardapioActivity(){
-        startActivity(new Intent(CardapioCategoriaActivity.this, CardapioActivity.class));
     }
 
     public void adicionarNovoCardapio(View view){

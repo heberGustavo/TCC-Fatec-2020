@@ -31,7 +31,7 @@ public class CategoriaDAO {
 
         try {
             escrever.insert(DbHelper.TABELA_CATEGORIA, null, values);
-            Log.i("INFO", "Tarefa salva com sucesso!");
+            Log.i("INFO", "Tarefa salva com sucesso!"+values.toString());
         }catch (Exception e){
             Log.i("INFO", "Erro ao salvar tarefa ..: " + e.getMessage());
         }
@@ -48,15 +48,18 @@ public class CategoriaDAO {
             Log.i("INFO", "Categoria atualizada com sucesso!");
         }catch (Exception e){
             Log.i("INFO", "Erro ao atualizar categoria ..: " + e.getMessage());
+            return false;
         }
 
         return true;
     }
 
+    //Nao esta deletando os cardapios cadastrado em uma tal categoria
     public boolean deletarCategoria(Categoria categoria){
         try {
             String[] args = {categoria.getId().toString()};
             escrever.delete(DbHelper.TABELA_CATEGORIA, "idCategoria=?", args);
+            escrever.close();
             Log.i("INFO", "Tarefa deletada com sucesso!");
         }catch (Exception e){
             Log.i("INFO", "Erro ao deletar tarefa ..: " + e.getMessage());
@@ -89,5 +92,4 @@ public class CategoriaDAO {
 
         return listaCategoria;
     }
-
 }

@@ -52,6 +52,7 @@ public class CategoriaActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class);
                         intent.putExtra("categoriaSelecionada", categoriaSelecionada);
+                        //Log.i("INFO", "Posicao categoria: "+categoriaSelecionada.getId());
                         startActivity(intent);
                     }
 

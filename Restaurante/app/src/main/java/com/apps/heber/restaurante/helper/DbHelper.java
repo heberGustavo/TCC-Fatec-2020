@@ -1,7 +1,6 @@
 package com.apps.heber.restaurante.helper;
 
 import android.content.Context;
-import android.content.RestrictionEntry;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -24,7 +23,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sqlCategoria = "CREATE TABLE IF NOT EXISTS " + TABELA_CATEGORIA +
-                "(idCategoria INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "(idCategoria INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "nomeCategoria varchar NOT NULL)";
         try {
             db.execSQL(sqlCategoria);
@@ -34,7 +33,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         String sqlProduto = "CREATE TABLE IF NOT EXISTS " + TABELA_PRODUTO +
-                "(idProduto INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "(idProduto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "nomeProduto varchar NOT NULL," +
                 "descricao varchar NOT NULL," +
                 "preco double NOT NULL," +
@@ -55,4 +54,5 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
 }

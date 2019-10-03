@@ -78,12 +78,14 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         }else{//Salvar
 
             String nomeCategoria = editNomeCategoria.getText().toString();
+
             if (!nomeCategoria.isEmpty()){
                 Categoria categoria = new Categoria();
                 categoria.setCategoria(nomeCategoria);
 
                 if (categoriaDAO.salvarCategoria(categoria)){
                     Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
+                    Log.i("Info", "idCategoria: "+categoria.getId()+ "Nome: "+categoria.getCategoria());
                     finish();
                 }
 
