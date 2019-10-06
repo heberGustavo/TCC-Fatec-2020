@@ -1,5 +1,8 @@
+//Essa activity é para ver todas as mesas cadastradas
+
 package com.apps.heber.restaurante.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +31,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fazer_pedido);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Fazer Pedido");
+        actionBar.setTitle("Mesas");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
@@ -75,5 +78,10 @@ public class FazerPedidoActivity extends AppCompatActivity {
         recyclerFazerPedido.addItemDecoration(new DividerItemDecoration(getApplicationContext(),1));
         recyclerFazerPedido.setAdapter(adapterFazerPedido);
 
+    }
+
+    public void adicionarNovaMesa(View view){
+        Intent intent = new Intent(FazerPedidoActivity.this, MesasActivity.class);
+        startActivity(intent);
     }
 }
