@@ -22,8 +22,6 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Categoria;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class AdicionarNovoCardapioActivity extends AppCompatActivity {
@@ -35,6 +33,9 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
     private Cardapio cardapioSelecionado;
 
     private Categoria posicaoSpinner; // Variavel global para saber a posição do Spinner
+
+    private Long posicao;
+    private int cardapioCategoria;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -54,19 +55,23 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         carregarSpinner(); //Carrega todas as categorias no Spinner
 
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
+        posicao = (Long) getIntent().getSerializableExtra("posicaoId");
+        cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
+
         if (cardapioSelecionado != null){ //Se for edição
 
             String valor = String.valueOf(cardapioSelecionado.getValor());
             editValor.setText(valor);
             editNomeProduto.setText(cardapioSelecionado.getNomeProduto());
             editIngredientes.setText(cardapioSelecionado.getIngredientes());
+            spinner.setSelection(cardapioCategoria);
+            Log.i("INFO", "fim: "+cardapioCategoria);
         }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    posicaoSpinner = (Categoria) spinner.getItemAtPosition(position);
-                    //Log.i("INFO", "Posicao Novo Cardapio: "+posicaoSpinner);
+
             }
 
             @Override
@@ -125,7 +130,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                         cardapioAtualizado.setValor(Double.parseDouble(valor));
                         cardapioAtualizado.setNomeProduto(nomeProduto);
                         cardapioAtualizado.setIngredientes(ingredientes);
-                        cardapioAtualizado.setIdCategoria(Long.valueOf(String.valueOf(posicaoSpinner)));
+                        cardapioAtualizado.setIdCategoria(Long.valueOf((posicaoSpinner.getId())));
 
                         if (cardapioDAO.atualizar(cardapioAtualizado)){
                             Toast.makeText(getApplicationContext(), "Cardápio atualizado!", Toast.LENGTH_SHORT).show();
@@ -163,14 +168,16 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
                         if (cardapioDAO.salvar(cardapio)){
                             Toast.makeText(getApplicationContext(),"Cardápio salvo!", Toast.LENGTH_SHORT).show();
+
                             /*
                             Log.i("INFO", "Nome: "+cardapio.getNomeProduto()+
                                     "idCategoria: " + cardapio.getIdCategoria() +
                                     "Valor: " + cardapio.getValor() +
                                     "Ingrediente: " + cardapio.getIngredientes()+
                                     "idCardapio: "+cardapio.getIdCardapio());
-
                              */
+
+
                             finish();
                         }
 

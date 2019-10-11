@@ -85,7 +85,7 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
 
                 if (categoriaDAO.salvarCategoria(categoria)){
                     Toast.makeText(getApplicationContext(), "Categoria salva!", Toast.LENGTH_SHORT).show();
-                    Log.i("Info", "idCategoria: "+categoria.getId()+ "Nome: "+categoria.getCategoria());
+                    //Log.i("Info", "idCategoria: "+categoria.getId()+ "Nome: "+categoria.getCategoria());
                     finish();
                 }
 
@@ -93,6 +93,5 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Informe o nome da categoria", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 }

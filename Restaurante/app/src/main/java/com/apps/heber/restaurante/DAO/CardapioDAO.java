@@ -76,7 +76,7 @@ public class CardapioDAO {
 
     public List<Cardapio> listar(Long posicao){
         List<Cardapio> listaCardapio = new ArrayList<>();
-        //Log.i("INFO", "Posicao BD: "+posicao);
+        //Log.i("INFO", "Posicao BD 2: "+posicao);
         String sql = "SELECT * FROM " + DbHelper.TABELA_PRODUTO +
                 " WHERE idCategoria = " + posicao +
                 " order by nomeProduto;";
@@ -99,6 +99,7 @@ public class CardapioDAO {
                 cardapio.setIdCategoria(idCategoria);
 
                 listaCardapio.add(cardapio);
+                //Log.i("INFO", "Lista BD: "+cardapio.getIdCategoria());
                 ler.close();
 
         }

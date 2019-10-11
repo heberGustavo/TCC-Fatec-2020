@@ -19,6 +19,7 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapio;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Cardapio;
+import com.apps.heber.restaurante.modelo.Categoria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CardapioActivity extends AppCompatActivity {
     private Cardapio cardapioSelecionado;
 
     private Long posicao;
+    private int cardapioCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,9 @@ public class CardapioActivity extends AppCompatActivity {
         recyclerCardapio = findViewById(R.id.recyclerCardapio);
 
         posicao = (Long) getIntent().getSerializableExtra("posicao");
-        //Log.i("INFO", "Posicao: "+ posicao);
+        cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
+        Log.i("INFO", "cardapioCategoria2: "+ cardapioCategoria);
+
         recyclerCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
                 recyclerCardapio,
@@ -56,6 +60,9 @@ public class CardapioActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        intent.putExtra("cardapioCategoria", cardapioCategoria);
+                        intent.putExtra("posicaoId", posicao);
+                        //Log.i("INFO", "valor do id1 passando: "+posicao);
                         startActivity(intent);
                     }
 
@@ -106,6 +113,7 @@ public class CardapioActivity extends AppCompatActivity {
         //Listar cardapios
         CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
         listaCardapios = cardapioDAO.listar(posicao);
+        //Log.i("INFO", "Lista de cardapios: "+posicao);
 
         //Adapter
         adapterCardapio = new AdapterCardapio(listaCardapios, getApplicationContext());

@@ -1,11 +1,13 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
@@ -46,5 +48,10 @@ public class MesasActivity extends AppCompatActivity {
         recyclerPedidos.setHasFixedSize(true);
         recyclerPedidos.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
         recyclerPedidos.setAdapter(adapterPedido);
+    }
+
+    public void abrirCardapioCategoriaFazerPedido(View view){
+        Intent intent = new Intent(MesasActivity.this, CardapioCategoriaFazerPedidoActivity.class);
+        startActivity(intent);
     }
 }
