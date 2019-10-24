@@ -45,9 +45,11 @@ public class CardapioActivity extends AppCompatActivity {
 
         recyclerCardapio = findViewById(R.id.recyclerCardapio);
 
+        //Recebe o ID e usa para fazer a listagem de itens por ID
         posicao = (Long) getIntent().getSerializableExtra("posicao");
+        //Recebe a posicao do item clicado
         cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-        Log.i("INFO", "cardapioCategoria2: "+ cardapioCategoria);
+        //Log.i("INFO", "cardapioCategoria2: "+ cardapioCategoria);
 
         recyclerCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -59,10 +61,10 @@ public class CardapioActivity extends AppCompatActivity {
                         cardapioSelecionado = listaCardapios.get(position);
 
                         Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);
+                        //Envia o cardapio para a proxima tela
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        //Envia a posicao do item clicado
                         intent.putExtra("cardapioCategoria", cardapioCategoria);
-                        intent.putExtra("posicaoId", posicao);
-                        //Log.i("INFO", "valor do id1 passando: "+posicao);
                         startActivity(intent);
                     }
 

@@ -34,14 +34,16 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderPedidos myViewHolderPedidos, int i) {
-        myViewHolderPedidos.nomeProduto.setText("VidaCap");
-        myViewHolderPedidos.valorProduto.setText("500.000,00");
-        myViewHolderPedidos.ingredientesProduto.setText("Sorteio");
+        Pedido pedido = listaPedidos.get(i);
+
+        myViewHolderPedidos.nomeProduto.setText(pedido.getNomeProduto());
+        myViewHolderPedidos.valorProduto.setText(String.valueOf(pedido.getValorTotal())); //********** retornar double
+        myViewHolderPedidos.ingredientesProduto.setText(pedido.getIngredientes());
     }
 
     @Override
     public int getItemCount() {
-        return 11;
+        return listaPedidos.size();
     }
 
     public class MyViewHolderPedidos extends RecyclerView.ViewHolder{

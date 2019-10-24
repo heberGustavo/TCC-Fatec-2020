@@ -10,17 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.DescricaoProdutoActivity"
+            android:name=".activity.AdicionarPedidoActivity"
             android:parentActivityName=".activity.CardapioFazerPedidoActivity" />
         <activity
             android:name=".activity.CardapioFazerPedidoActivity"
             android:parentActivityName=".activity.CardapioCategoriaFazerPedidoActivity" />
         <activity
             android:name=".activity.CardapioCategoriaFazerPedidoActivity"
-            android:parentActivityName=".activity.MesasActivity" />
+            android:parentActivityName=".activity.ComandaActivity" />
         <activity
-            android:name=".activity.MesasActivity"
-            android:parentActivityName=".activity.FazerPedidoActivity" />
+            android:name=".activity.ComandaActivity"
+            android:parentActivityName=".activity.MesasActivity" />
         <activity
             android:name=".activity.CardapioCategoriaActivity"
             android:parentActivityName=".activity.PrincipalActivity" />
@@ -44,7 +44,7 @@
             android:name=".activity.LoginActivity"
             android:theme="@style/AppThemeSplashLogin" />
         <activity
-            android:name=".activity.FazerPedidoActivity"
+            android:name=".activity.MesasActivity"
             android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.SplashActivity"

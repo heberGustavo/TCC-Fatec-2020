@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.R;
@@ -69,7 +68,7 @@ public class PrincipalActivity extends AppCompatActivity
             finish();
 
         } else if (id == R.id.nav_fazer_pedido) {
-            startActivity(new Intent(this, FazerPedidoActivity.class));
+            startActivity(new Intent(this, MesasActivity.class));
 
             Toast.makeText(getApplicationContext(),
                     "Faze pedido",

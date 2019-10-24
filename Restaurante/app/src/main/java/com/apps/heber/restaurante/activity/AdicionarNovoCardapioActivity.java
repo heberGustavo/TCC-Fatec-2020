@@ -34,7 +34,6 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
     private Categoria posicaoSpinner; // Variavel global para saber a posição do Spinner
 
-    private Long posicao;
     private int cardapioCategoria;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -54,24 +53,32 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
         carregarSpinner(); //Carrega todas as categorias no Spinner
 
+        //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
-        posicao = (Long) getIntent().getSerializableExtra("posicaoId");
-        cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
+        //posicao = (Long) getIntent().getSerializableExtra("posicaoId");
+
+        verificaSpinnerSelecionado();
 
         if (cardapioSelecionado != null){ //Se for edição
+
+            cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
 
             String valor = String.valueOf(cardapioSelecionado.getValor());
             editValor.setText(valor);
             editNomeProduto.setText(cardapioSelecionado.getNomeProduto());
             editIngredientes.setText(cardapioSelecionado.getIngredientes());
             spinner.setSelection(cardapioCategoria);
-            Log.i("INFO", "fim: "+cardapioCategoria);
+            //Log.i("INFO", "fim: "+cardapioCategoria);
         }
 
+    }
+
+    private void verificaSpinnerSelecionado() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                //Pega o id do item selecionado
+                posicaoSpinner = (Categoria) spinner.getItemAtPosition(position);
             }
 
             @Override
@@ -79,7 +86,6 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     public void carregarSpinner(){

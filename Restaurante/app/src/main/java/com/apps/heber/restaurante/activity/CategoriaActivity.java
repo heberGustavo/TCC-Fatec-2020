@@ -101,6 +101,7 @@ public class CategoriaActivity extends AppCompatActivity {
     public void carregarRecyclerView(){
         //Listar Categoria
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+        listaCategorias.clear();
         listaCategorias = categoriaDAO.listarCategoria();
 
         //Adapter

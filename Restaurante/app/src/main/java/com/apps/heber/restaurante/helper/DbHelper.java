@@ -8,7 +8,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static String NOME_DB = "db_app_restaurante";
-    public static int VERSION = 1;
+    public static int VERSION = 8;
 
     public static String TABELA_CATEGORIA = "tb_categoria";
     public static String TABELA_PRODUTO = "tb_produtos";
@@ -21,7 +21,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        //TABELA CATEGORIA
         String sqlCategoria = "CREATE TABLE IF NOT EXISTS " + TABELA_CATEGORIA +
                 "(idCategoria INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "nomeCategoria varchar NOT NULL)";
@@ -32,6 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.i("INFO", "Erro na criação da tabela categoria ..: " + e.getMessage() );
         }
 
+        //TABELA PRODUTO
         String sqlProduto = "CREATE TABLE IF NOT EXISTS " + TABELA_PRODUTO +
                 "(idProduto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 "nomeProduto varchar NOT NULL," +
@@ -48,10 +49,42 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.i("INFO", "Erro na criação da tabela produto ..: " + e.getMessage() );
         }
 
+        //TABELA iTEM DO PEDIDO
+        String sqlItemPedido = "CREATE TABLE IF NOT EXISTS " + TABELA_ITEM_DO_PEDIDO +
+                "(idItemPedido INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                "nomeProduto varchar NOT NULL," +
+                "ingredientes varchar NOT NULL," +
+                "quantidade INTEGER NOT NULL," +
+                "valorUnitario double NOT NULL," +
+                "valorTotal double NOT NULL," +
+                "observacao varchar," +
+                "fkIdProduto INTEGER," +
+                "FOREIGN KEY (fkidProduto) REFERENCES " + TABELA_PRODUTO + " (idProduto) " +
+                ")";
+
+        try {
+            db.execSQL(sqlItemPedido);
+            Log.i("INFO", "Tabela produto criada com sucesso!" );
+        }catch (Exception e){
+            Log.i("INFO", "Erro na criação da tabela produto ..: " + e.getMessage() );
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        try {
+            String sqlCategoria = "DROP TABLE IF EXISTS " + TABELA_CATEGORIA + ";";
+            String sqlProduto = "DROP TABLE IF EXISTS " + TABELA_PRODUTO + ";";
+            String sqlItemPedido = "DROP TABLE IF EXISTS " + TABELA_ITEM_DO_PEDIDO + ";";
+
+            db.execSQL(sqlCategoria);
+            db.execSQL(sqlProduto);
+            db.execSQL(sqlItemPedido);
+            onCreate(db);
+        }catch (Exception e){
+            Log.i("INFO", "Erro no upgrade da tabela");
+        }
 
     }
 

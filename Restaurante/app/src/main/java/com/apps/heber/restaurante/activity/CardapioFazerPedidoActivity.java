@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.apps.heber.restaurante.DAO.CardapioDAO;
-import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapioFazerPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
@@ -27,6 +25,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
     private List<Cardapio> listaCardapios = new ArrayList<>();
 
     private Long posicao;
+    private int posicaoSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +36,11 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerCardapioFazerPedido);
 
+        //Usado para listar a lista
         posicao = (Long) getIntent().getSerializableExtra("posicao");
-        Log.i("INFO", "Posicao 1: "+posicao);
+        //Log.i("INFO", "Posicao 1: "+posicao);
+        posicaoSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
+
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -46,9 +48,12 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(CardapioFazerPedidoActivity.this, DescricaoProdutoActivity.class);
+                        Intent intent = new Intent(CardapioFazerPedidoActivity.this, AdicionarPedidoActivity.class);
                         Cardapio cardapioSelecionado = listaCardapios.get(position);
-                        intent.putExtra("posicao", cardapioSelecionado);
+                        //Envia o cardapio para proxima tela
+                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        //Recebe e envia para proxima tela
+                        intent.putExtra("posicaoSpinner", posicaoSpinner);
                         startActivity(intent);
                     }
 

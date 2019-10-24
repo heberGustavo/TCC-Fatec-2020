@@ -31,7 +31,7 @@ public class CategoriaDAO {
 
         try {
             escrever.insert(DbHelper.TABELA_CATEGORIA, null, values);
-            Log.i("INFO", "Tarefa salva com sucesso!"+values.toString());
+            Log.i("INFO", "Tarefa salva com sucesso..: "+values.toString());
         }catch (Exception e){
             Log.i("INFO", "Erro ao salvar tarefa ..: " + e.getMessage());
         }

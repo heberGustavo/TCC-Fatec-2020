@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -44,6 +45,9 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                         Intent intent = new Intent(CardapioCategoriaFazerPedidoActivity.this, CardapioFazerPedidoActivity.class);
                         Categoria categoriaSelecionada = listaCategorias.get(position);
                         intent.putExtra("posicao", categoriaSelecionada.getId());
+                        intent.putExtra("posicaoSpinner", position);
+                        //Log.i("INFO", "posicao 1: " + position);
+
                         startActivity(intent);
                     }
 

@@ -31,6 +31,7 @@ public class CardapioDAO {
         values.put("preco", cardapio.getValor());
         values.put("idCategoria", cardapio.getIdCategoria());
 
+        //Log.i("INFO", "vvvCardapio: "+ cardapio);
         try {
             escrever.insert(DbHelper.TABELA_PRODUTO, null, values);
             escrever.close();
@@ -50,10 +51,10 @@ public class CardapioDAO {
 
         try {
             String[] args = {cardapio.getIdCardapio().toString()};
-            escrever.update(DbHelper.TABELA_PRODUTO, values, "idCardapio=?", args);
+            escrever.update(DbHelper.TABELA_PRODUTO, values, "idProduto=?", args);
             escrever.close();
         }catch (Exception e){
-            Log.i("INFO", "Erro ao excluir dados da tabela Cardapio");
+            Log.i("INFO", "Erro ao atualizar dados da tabela Cardapio");
             return false;
         }
 
