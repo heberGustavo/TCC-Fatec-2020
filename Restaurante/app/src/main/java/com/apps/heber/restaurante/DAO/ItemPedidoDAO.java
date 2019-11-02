@@ -50,17 +50,15 @@ public class ItemPedidoDAO {
         values.put("quantidade", pedido.getQuantidade());
         values.put("valorTotal", pedido.getValorTotal());
         values.put("observacao", pedido.getObservacao());
-        values.put("fkIdProduto", pedido.getFkIdCategoria());
 
         try {
             String[] args = {pedido.getIdItemPedido().toString()};
             escrever.update(DbHelper.TABELA_ITEM_DO_PEDIDO, values, "idItemPedido=?", args);
             escrever.close();
         }catch (Exception e){
-            Log.i("INFO", "Erro ao atualiza dados da tabela Cardapio");
+            Log.i("INFO", "Erro ao atualiza dados da tabela Cardapio: "+e.getMessage());
             return false;
         }
-
         return true;
     }
 
@@ -70,9 +68,9 @@ public class ItemPedidoDAO {
             String[] args = {pedido.getIdItemPedido().toString()};
             escrever.delete(DbHelper.TABELA_ITEM_DO_PEDIDO, "idItemPedido=?", args);
             escrever.close(); //Fecha a conexao
-            Log.i("INFO", "Sucesso na remocao do cardapio");
+            //Log.i("INFO", "Sucesso na remocao do pedido");
         }catch (Exception e){
-            Log.i("INFO", "Erro na remocao do cardapio");
+            //Log.i("INFO", "Erro na remocao do pedido");
             return false;
         }
         return true;
@@ -85,7 +83,6 @@ public class ItemPedidoDAO {
 
         Cursor cursor = ler.rawQuery(sql, null);
 
-        cursor.moveToFirst();
         while (cursor.moveToNext()){
             Pedido pedido = new Pedido();
 

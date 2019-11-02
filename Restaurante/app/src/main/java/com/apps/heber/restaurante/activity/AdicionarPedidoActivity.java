@@ -1,5 +1,6 @@
 package com.apps.heber.restaurante.activity;
 
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -29,15 +30,15 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
     private TextView textNomeProduto, textIngredientes, textQuantidade, textValorUnitario, textValorResultado;
     private EditText editObservacao;
+    private Spinner spinner;
 
     private Cardapio cardapioSelecionado;
     private Pedido pedidoSelecionado;
 
-    private Spinner spinner;
-    private Categoria posicaoSpinner;
-
-    private int quantidade;
+    private Categoria spinnerCategoria;
+    private int quantidadeCardapio;
     private int valorSpinner;
+    private int quantidadePedido;
 
     private double valorTotal;
 
@@ -50,6 +51,8 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         textNomeProduto = findViewById(R.id.textNomeProduto);
+        textNomeProduto.setPaintFlags(textNomeProduto.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG); //Sublinhar
+
         textIngredientes = findViewById(R.id.textIngredienteDescricao);
         textQuantidade = findViewById(R.id.textQuantidade);
         textValorUnitario = findViewById(R.id.textValorUnitario);
@@ -58,17 +61,15 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
         spinner = findViewById(R.id.spinnerCategoriaDescricao);
 
-        quantidade = Integer.parseInt(textQuantidade.getText().toString());
-
+        //Recebendo dados
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
+        //Log.i("INFO", "vvvcardapio: "+cardapioSelecionado);
         pedidoSelecionado = (Pedido) getIntent().getSerializableExtra("pedidoSelecionado");
         //Log.i("INFO", "vvvPedido: "+pedidoSelecionado);
 
         carregarSpinner();
-
+        verificaSpinner();
         imprimirCardapio();
-
-        verificarSpinner();
 
     }
 
@@ -78,18 +79,22 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         if (cardapioSelecionado != null){
 
             valorSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
+            quantidadeCardapio = 1;
 
             textNomeProduto.setText(cardapioSelecionado.getNomeProduto());
             textIngredientes.setText(cardapioSelecionado.getIngredientes());
             textValorUnitario.setText(String.valueOf(cardapioSelecionado.getValor()));
-            textValorResultado.setText(String.valueOf(cardapioSelecionado.getValor()));
+            textValorResultado.setText(String.valueOf(cardapioSelecionado.getValor())); //Mostra o valor para não iniciar com 0.00
             spinner.setSelection(valorSpinner);
             spinner.setEnabled(false); //Desativa para não poder alterar o valor
-            //Log.i("INFO","CardapioSelecionado");
-
+            //Log.i("INFO","vvvSl: CardapioSelecionado get id: " + cardapioSelecionado.getIdCategoria());
+            //Log.i("INFO","vvvSl: Valor Spinner: "+valorSpinner);
         }
 
         if(pedidoSelecionado != null){
+
+            quantidadePedido = pedidoSelecionado.getQuantidade();
+            //Log.i("INFO","Quant: "+ quant);
 
             textNomeProduto.setText(pedidoSelecionado.getNomeProduto());
             textIngredientes.setText(pedidoSelecionado.getIngredientes());
@@ -97,10 +102,36 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             textValorUnitario.setText(String.valueOf(pedidoSelecionado.getValorUnitario()));
             textValorResultado.setText(String.valueOf(pedidoSelecionado.getValorTotal()));
             editObservacao.setText(pedidoSelecionado.getObservacao());
-            spinner.setSelection(Integer.parseInt(String.valueOf(pedidoSelecionado.getFkIdCategoria())));
-            spinner.setEnabled(false); //Desativa para não poder alterar o valor
-            //Log.i("INFO","PedidoSelecionado");
+
+            //Log.v("SPINNER", "Quero selecionar o ID: " + pedidoSelecionado.getFkIdCategoria());
+            for (int i = 0; i < spinner.getCount(); i++){
+
+                Categoria categoriaId = (Categoria) spinner.getItemAtPosition(i);
+                //Log.v("SPINNER", "Selecionando " + i + " / " + categoriaId.getId());
+
+                if (categoriaId.getId().equals(pedidoSelecionado.getFkIdCategoria())) {
+                    spinner.setSelection(i);
+                    spinner.setEnabled(false); //Desativa para não poder alterar o valor
+                    //Log.v("SPINNER", "Selecionado " + i);
+                }
+            }
+            //Log.i("INFO","vvvSl: PedidoSelecionado get fk: "+pedidoSelecionado.getFkIdCategoria());
         }
+    }
+
+    public void verificaSpinner(){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerCategoria = (Categoria) spinner.getItemAtPosition(position);
+                //Log.i("INFO", "vvvCastCategoria: "+ spinnerCategoria.getId() + "/"+ spinnerCategoria.getCategoria());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void carregarSpinner(){
@@ -113,23 +144,56 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
     }
 
     public void adicionarProduto(View view){
-        quantidade++;
-        valorTotal = quantidade*cardapioSelecionado.getValor();
+        if (cardapioSelecionado != null){
 
-        textQuantidade.setText(String.valueOf(quantidade));
+            quantidadeCardapio += 1;
+            //Log.i("INFO","Quantidade: "+quantidade);
+
+            valorTotal = quantidadeCardapio*cardapioSelecionado.getValor();
+            textQuantidade.setText(String.valueOf(quantidadeCardapio));
+
+        }
+
+        if (pedidoSelecionado != null){
+            quantidadePedido += 1;
+
+            valorTotal = quantidadePedido*pedidoSelecionado.getValorUnitario();
+            textQuantidade.setText(String.valueOf(quantidadePedido));
+
+            //Log.i("INFO","Sl: Soma Pedido");
+        }
         textValorResultado.setText(String.valueOf(valorTotal));
     }
 
     public void removerProduto(View view){
-        if (quantidade <= 1){
-            return;
-        }else {
-            quantidade--;
-            valorTotal = quantidade*cardapioSelecionado.getValor();
+        if (cardapioSelecionado != null) {
+            if (quantidadeCardapio <= 1)
+                return;
+            else {
+                //Log.i("INFO", "Antes: " + quantidadeCardapio);
 
-            textQuantidade.setText(String.valueOf(quantidade));
-            textValorResultado.setText(String.valueOf(valorTotal));
+                quantidadeCardapio--;
+                valorTotal = quantidadeCardapio * cardapioSelecionado.getValor();
+                textQuantidade.setText(String.valueOf(quantidadeCardapio));
+
+                //Log.i("INFO", "Depois: " + quantidadeCardapio);
+
+            }
         }
+        if (pedidoSelecionado != null){
+            if (quantidadePedido <= 1)
+                return;
+            else {
+                //Log.i("INFO", "Antes: " + quantidadePedido);
+
+                quantidadePedido --;
+                valorTotal = quantidadePedido*pedidoSelecionado.getValorUnitario();
+                textQuantidade.setText(String.valueOf(quantidadePedido));
+
+                //Log.i("INFO", "Depois: " + quantidadePedido);
+            }
+        }
+            textValorResultado.setText(String.valueOf(valorTotal));
     }
 
     @Override
@@ -147,61 +211,62 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void verificarSpinner() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Pega o id do Spinner selecionado
-                posicaoSpinner = (Categoria) spinner.getItemAtPosition(position);
-                //Log.i("INFO", "vvvId do spinner: "+posicaoSpinner.getId());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
     public void menuSalvar(){
-
-        //*** Salvar os dados em uma tabela e listar na tela de Comanda
-
-        String nomeProduto = textNomeProduto.getText().toString();
-        String ingredientes = textIngredientes.getText().toString();
-        int quant = Integer.parseInt(textQuantidade.getText().toString());
-        double valorUnitario = Double.parseDouble(textValorUnitario.getText().toString());
-        double valorTotal = Double.parseDouble(textValorResultado.getText().toString());
-        String observacao = editObservacao.getText().toString();
-
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
 
-        Pedido pedido = new Pedido();
-        pedido.setNomeProduto(nomeProduto);
-        pedido.setFkIdCategoria(Long.valueOf(String.valueOf(posicaoSpinner.getId())));
-        pedido.setIngredientes(ingredientes);
-        pedido.setQuantidade(quant);
-        pedido.setValorUnitario(valorUnitario);
-        pedido.setValorTotal(valorTotal);
-        pedido.setObservacao(observacao);
+        //Editar
+        if (pedidoSelecionado != null){
+            //Log.v("INFO", "Editar");
 
-        /*
-        Log.i("INFO", "vvvValores: " +
-                "Nome: "+nomeProduto+","+
-                "Ingredientes: "+ingredientes+","+
-                "Quantidade: "+quant+","+
-                "Valor uni: "+valorUnitario+","+
-                "Valor tota: "+valorTotal+","+
-                "Obs: "+observacao+","+
-                "Posicao: "+posicaoSpinner.getId());
-         */
+            int quantidade = Integer.parseInt(textQuantidade.getText().toString());
+            double valorTotal = Double.parseDouble(textValorResultado.getText().toString());
+            String observacao = editObservacao.getText().toString();
 
-        if (itemPedidoDAO.salvar(pedido)){
-            Toast.makeText(getApplicationContext(), "Pedido salvo", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(getApplicationContext(), "Erro!!!", Toast.LENGTH_SHORT).show();
+            Pedido pedidoAtualizado = new Pedido();
+            pedidoAtualizado.setIdItemPedido(pedidoSelecionado.getIdItemPedido());
+            pedidoAtualizado.setNomeProduto(pedidoSelecionado.getNomeProduto());
+            pedidoAtualizado.setFkIdCategoria(pedidoSelecionado.getFkIdCategoria());
+            pedidoAtualizado.setIngredientes(pedidoSelecionado.getIngredientes());
+            pedidoAtualizado.setValorUnitario(pedidoSelecionado.getValorUnitario());
+            pedidoAtualizado.setQuantidade(quantidade);
+            pedidoAtualizado.setValorTotal(valorTotal);
+            pedidoAtualizado.setObservacao(observacao);
+
+            //Log.v("INFO", "Atualizando: "+ pedidoAtualizado.toString());
+            if (itemPedidoDAO.atualizar(pedidoAtualizado)){
+                Toast.makeText(getApplicationContext(), "Pedido atualizado!", Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(), "Erro ao atualizar pedido!", Toast.LENGTH_SHORT).show();
+            }
         }
+        //Salvar
+        else {
+            //Log.v("INFO", "Salvar");
 
+            //*** Salvar os dados em uma tabela e listar na tela de Comanda
+            String nomeProduto = textNomeProduto.getText().toString();
+            String ingredientes = textIngredientes.getText().toString();
+            int quant = Integer.parseInt(textQuantidade.getText().toString());
+            double valorUnitario = Double.parseDouble(textValorUnitario.getText().toString());
+            double valorTotal = Double.parseDouble(textValorResultado.getText().toString());
+            String observacao = editObservacao.getText().toString();
+
+            Pedido pedido = new Pedido();
+            pedido.setNomeProduto(nomeProduto);
+            pedido.setFkIdCategoria(Long.valueOf(String.valueOf(cardapioSelecionado.getIdCategoria())));
+            //Log.i("INFO", "vvvid: cardapio" + cardapioSelecionado.getIdCategoria());
+            pedido.setIngredientes(ingredientes);
+            pedido.setQuantidade(quant);
+            pedido.setValorUnitario(valorUnitario);
+            pedido.setValorTotal(valorTotal);
+            pedido.setObservacao(observacao);
+
+            if (itemPedidoDAO.salvar(pedido)){
+                Toast.makeText(getApplicationContext(), "Pedido salvo", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getApplicationContext(), "Erro ao salvar!!!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
-
 }

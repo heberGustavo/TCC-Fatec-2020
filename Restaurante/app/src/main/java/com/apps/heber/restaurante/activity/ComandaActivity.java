@@ -1,13 +1,14 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,6 @@ import com.apps.heber.restaurante.DAO.ItemPedidoDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Pedido;
 
 import java.util.ArrayList;
@@ -57,15 +57,39 @@ public class ComandaActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(ComandaActivity.this, AdicionarPedidoActivity.class);
                         intent.putExtra("pedidoSelecionado", pedidoSelecionado);
-                        //Log.i("INFO", "hhhPedido: "+pedidoSelecionado);
                         startActivity(intent);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        Toast.makeText(getApplicationContext(),
-                                "Click longo",
-                                Toast.LENGTH_SHORT).show();
+                        pedidoSelecionado = listaPedidos.get(position);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
+                        builder.setTitle("Confirmar exclusão.");
+                        builder.setMessage("Deseja excluir o cardapio: " + pedidoSelecionado.getNomeProduto() + "?");
+                        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
+
+                                if (itemPedidoDAO.deletar(pedidoSelecionado)){
+                                    //Atualiza os dados na lista
+                                    carregarRecycler();
+                                    Toast.makeText(getApplicationContext(),
+                                            "Sucesso ao remover pedido!",
+                                            Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(getApplicationContext(),
+                                            "Erro ao excluir pedido!",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        builder.setNegativeButton("Não", null);
+
+                        builder.create();
+                        builder.show();
                     }
 
                     @Override
@@ -93,12 +117,13 @@ public class ComandaActivity extends AppCompatActivity {
     }
 
     private void menuSalvar() {
+        //
         Toast.makeText(getApplicationContext(),
                 "Menu salvar!",
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void configurarRecycler(){
+    public void carregarRecycler(){
         //Listar
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
         listaPedidos.clear();
@@ -123,6 +148,6 @@ public class ComandaActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        configurarRecycler();
+        carregarRecycler();
     }
 }
