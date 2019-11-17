@@ -75,11 +75,14 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Informe a categoria", Toast.LENGTH_SHORT).show();
             }
 
-        }else{//Salvar
+        }
+
+        else{//Salvar
 
             String nomeCategoria = editNomeCategoria.getText().toString();
 
             if (!nomeCategoria.isEmpty()){
+
                 Categoria categoria = new Categoria();
                 categoria.setCategoria(nomeCategoria);
 

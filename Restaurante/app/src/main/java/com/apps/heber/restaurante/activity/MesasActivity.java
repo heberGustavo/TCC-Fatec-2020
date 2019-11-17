@@ -9,14 +9,16 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.QuantMesasDAO;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.adapter.AdapterFazerPedido;
+import com.apps.heber.restaurante.adapter.AdapterQuantMesas;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.Mesas;
+import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,8 @@ import java.util.List;
 public class MesasActivity extends AppCompatActivity {
 
     private RecyclerView recyclerFazerPedido;
-    private AdapterFazerPedido adapterFazerPedido;
-    private List<Mesas> listaMesas = new ArrayList<>();
+    private AdapterQuantMesas adapterQuantMesas;
+    private List<QuantMesas> listaMesas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +47,13 @@ public class MesasActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click na Mesa",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                        Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
+                        intent.putExtra("numeroMesa", position);
+                        startActivity(intent);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Click Longo na Mesa",
-                                Toast.LENGTH_SHORT
-                        ).show();
                     }
 
                     @Override
@@ -70,15 +65,18 @@ public class MesasActivity extends AppCompatActivity {
     }
 
     public void configuracaoRecyclerView(){
+        QuantMesasDAO quantMesasDAO = new QuantMesasDAO(getApplicationContext());
+        listaMesas = quantMesasDAO.listarQuantMesa();
+
         //Adapter
-        adapterFazerPedido = new AdapterFazerPedido(listaMesas, getApplicationContext());
+        adapterQuantMesas = new AdapterQuantMesas(listaMesas, getApplicationContext());
 
         //RecyclerView
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerFazerPedido.setLayoutManager(layoutManager);
         recyclerFazerPedido.setHasFixedSize(true);
         recyclerFazerPedido.addItemDecoration(new DividerItemDecoration(getApplicationContext(),1));
-        recyclerFazerPedido.setAdapter(adapterFazerPedido);
+        recyclerFazerPedido.setAdapter(adapterQuantMesas);
 
     }
 

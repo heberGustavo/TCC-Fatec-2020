@@ -1,0 +1,33 @@
+import javax.inject.Inject
+import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+import org.gradle.tooling.provider.model.ToolingModelBuilder
+initscript {
+  dependencies {
+      classpath files(['/app/extra/android-studio/plugins/Kotlin/lib/kapt3-idea.jar', '/app/extra/android-studio/lib/kotlin-stdlib-1.3.50.jar', '/app/extra/android-studio/plugins/Kotlin/lib/kotlin-gradle-tooling.jar', '/app/extra/android-studio/plugins/gradle/lib/gradle-tooling-extension-api.jar'])
+  }
+}
+allprojects {
+  apply plugin: KaptModelBuilderPlugin
+}
+class KaptModelBuilder implements ToolingModelBuilder {
+  public org.jetbrains.kotlin.kapt.idea.KaptModelBuilderService builder;
+  public KaptModelBuilder() {
+    builder = new org.jetbrains.kotlin.kapt.idea.KaptModelBuilderService();
+  }
+  public boolean canBuild(String modelName) {
+    return builder.canBuild(modelName);
+  }
+  public Object buildAll(String modelName, Project project) {
+    return builder.buildAll(modelName, project);
+  }
+}
+class KaptModelBuilderPlugin implements Plugin<Project>{ 
+  ToolingModelBuilderRegistry registry
+  @Inject KaptModelBuilderPlugin(ToolingModelBuilderRegistry registry) {
+    this.registry = registry  }
+
+
+  void apply(Project project) {
+    registry.register(new KaptModelBuilder())
+  }
+}

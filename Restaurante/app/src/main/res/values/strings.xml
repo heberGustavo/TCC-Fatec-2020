@@ -12,6 +12,7 @@
     <string name="menu_fazer_pedido">Fazer Pedido</string>
     <string name="menu_cardapio">Cardapio</string>
     <string name="menu_categoria">Categoria</string>
+    <string name="menu_mesa">Mesa</string>
     <string name="menu_fluxo">Fluxo de caixa</string>
     <string name="title_activity_mesas">MesasActivity</string>
     <string name="title_activity_teste">TesteActivity</string>

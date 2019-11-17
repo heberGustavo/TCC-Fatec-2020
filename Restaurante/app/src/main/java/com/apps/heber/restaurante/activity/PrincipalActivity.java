@@ -27,15 +27,6 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,48 +53,34 @@ public class PrincipalActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             startActivity(new Intent(this, PrincipalActivity.class));
-            Toast.makeText(getApplicationContext(),
-                    "Home",
-                    Toast.LENGTH_SHORT).show();
             finish();
 
         } else if (id == R.id.nav_fazer_pedido) {
             startActivity(new Intent(this, MesasActivity.class));
 
-            Toast.makeText(getApplicationContext(),
-                    "Faze pedido",
-                    Toast.LENGTH_SHORT).show();
-
         } else if (id == R.id.nav_cardapio) {
             startActivity(new Intent(this, CardapioCategoriaActivity.class));
 
-            Toast.makeText(getApplicationContext(),
-                    "Cardapio",
-                    Toast.LENGTH_SHORT).show();
-
         } else if (id == R.id.nav_categoria) {
             startActivity(new Intent(this, CategoriaActivity.class));
-            Toast.makeText(getApplicationContext(),
-                    "Categoria",
-                    Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.nav_fluxoDeCaixa) {
+        } else if (id == R.id.nav_mesa) {
+            startActivity(new Intent(this, QuantMesasActivity.class));
+        }
+        else if (id == R.id.nav_fluxoDeCaixa) {
 
             Toast.makeText(getApplicationContext(),
-                    "Fluxo de Caixa",
+                    "Em manutenção",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_share) {
 
             Toast.makeText(getApplicationContext(),
-                    "Configurações",
+                    "Em manutenção",
                     Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_send) {
-
-            Toast.makeText(getApplicationContext(),
-                    "Sair",
-                    Toast.LENGTH_SHORT).show();
+            finish();
 
         }
 

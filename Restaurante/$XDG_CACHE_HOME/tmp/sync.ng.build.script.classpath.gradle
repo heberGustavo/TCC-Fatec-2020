@@ -1,0 +1,33 @@
+import javax.inject.Inject
+import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+import org.gradle.tooling.provider.model.ToolingModelBuilder
+initscript {
+  dependencies {
+      classpath files(['/app/extra/android-studio/plugins/gradle/lib/gradle-tooling-extension-impl.jar', '/app/extra/android-studio/plugins/gradle/lib/gradle-tooling-extension-api.jar', '/app/extra/android-studio/plugins/gradle/lib/gradle-api-impldep-4.10.3.jar'])
+  }
+}
+allprojects {
+  apply plugin: BuildScriptClasspathModelBuilderPlugin
+}
+class BuildScriptClasspathModelBuilder implements ToolingModelBuilder {
+  public org.jetbrains.plugins.gradle.tooling.builder.ModelBuildScriptClasspathBuilderImpl builder;
+  public BuildScriptClasspathModelBuilder() {
+    builder = new org.jetbrains.plugins.gradle.tooling.builder.ModelBuildScriptClasspathBuilderImpl();
+  }
+  public boolean canBuild(String modelName) {
+    return builder.canBuild(modelName);
+  }
+  public Object buildAll(String modelName, Project project) {
+    return builder.buildAll(modelName, project);
+  }
+}
+class BuildScriptClasspathModelBuilderPlugin implements Plugin<Project>{ 
+  ToolingModelBuilderRegistry registry
+  @Inject BuildScriptClasspathModelBuilderPlugin(ToolingModelBuilderRegistry registry) {
+    this.registry = registry  }
+
+
+  void apply(Project project) {
+    registry.register(new BuildScriptClasspathModelBuilder())
+  }
+}

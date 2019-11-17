@@ -1,0 +1,8 @@
+initscript {
+    dependencies {
+        classpath files(['/app/extra/android-studio/plugins/android/lib/sdk-tools.jar', '/app/extra/android-studio/plugins/android/lib/sdk-tools.jar', '/app/extra/android-studio/lib/kotlin-stdlib-1.3.50.jar'])
+    }
+}
+allprojects {
+    apply plugin: com.android.java.model.builder.JavaLibraryPlugin
+}

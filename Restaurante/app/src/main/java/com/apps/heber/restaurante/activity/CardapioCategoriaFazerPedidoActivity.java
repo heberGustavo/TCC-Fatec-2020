@@ -25,6 +25,8 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
     private AdapterCardapioCategoriaFazerPedidoActivity adapterCardCateFazerPedido;
     private List<Categoria> listaCategorias = new ArrayList<>();
 
+    private int numeroMesa;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,9 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
         this.getSupportActionBar().setTitle("Categoria");
 
         recyclerView = findViewById(R.id.recyclerCardapioCategoriaFazerPedido);
+
+        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+        //Log.v("INFO", "Numero da mesa2: "+numeroMesa);
 
         configurarRecyclerView();
 
@@ -47,6 +52,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                         intent.putExtra("posicao", categoriaSelecionada.getId());
                         intent.putExtra("posicaoSpinner", position);
                         //Log.i("INFO", "posicao 1: " + position);
+                        intent.putExtra("numeroMesa", numeroMesa);
 
                         startActivity(intent);
                     }

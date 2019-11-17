@@ -14,6 +14,7 @@ public class Pedido implements Serializable {
     private double valorUnitario;
     private double valorTotal;
     private String observacao;
+    private int posicaoMesa;
 
     public Long getIdItemPedido() {
         return idItemPedido;
@@ -79,6 +80,14 @@ public class Pedido implements Serializable {
         this.observacao = observacao;
     }
 
+    public int getPosicaoMesa() {
+        return posicaoMesa;
+    }
+
+    public void setPosicaoMesa(int posicaoMesa) {
+        this.posicaoMesa = posicaoMesa;
+    }
+
     @Override
     public String toString() {
         return "Pedido{" +
@@ -90,6 +99,7 @@ public class Pedido implements Serializable {
                 ", valorUnitario=" + valorUnitario +
                 ", valorTotal=" + valorTotal +
                 ", observacao='" + observacao + '\'' +
+                ", posicaoMesa=" + posicaoMesa +
                 '}';
     }
 }

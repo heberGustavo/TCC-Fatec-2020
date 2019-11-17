@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +17,11 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.DAO.ItemPedidoDAO;
+import com.apps.heber.restaurante.DAO.MesasDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
+import com.apps.heber.restaurante.modelo.Mesas;
 import com.apps.heber.restaurante.modelo.Pedido;
 
 import java.util.ArrayList;
@@ -26,11 +29,13 @@ import java.util.List;
 
 public class ComandaActivity extends AppCompatActivity {
 
-    private TextInputEditText numeroMesa, nomeCliente;
+    private TextInputEditText nomeCliente;
     private RecyclerView recyclerPedidos;
     private List<Pedido> listaPedidos = new ArrayList<>();
     private AdapterPedido adapterPedido;
     private Pedido pedidoSelecionado;
+
+    private int numeroMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +44,14 @@ public class ComandaActivity extends AppCompatActivity {
         this.getSupportActionBar().setTitle("Comanda");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        numeroMesa = findViewById(R.id.editNumeroMesa);
+        // Remover NumeroMesa do Banco de dados
+        // numeroMesa = findViewById(R.id.editNumeroMesa);
         nomeCliente = findViewById(R.id.editNomeCliente);
         recyclerPedidos = findViewById(R.id.recyclerPedidos);
+
+        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+
+        //Log.v("INFO", "Numero da mesa1: "+numeroMesa);
 
         clickRecyclerView();
     }
@@ -110,24 +120,40 @@ public class ComandaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_salvar:
-                menuSalvar();
+                Toast.makeText(getApplicationContext(),
+                        "Em manutenção!",
+                        Toast.LENGTH_SHORT).show();
+                //menuSalvar();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void menuSalvar() {
-        //
-        Toast.makeText(getApplicationContext(),
-                "Menu salvar!",
-                Toast.LENGTH_SHORT).show();
+    public void menuSalvar() {
+
+        //Salvar
+        String nome = nomeCliente.getText().toString();
+        String lista = String.valueOf(listaPedidos);
+        Log.v("vvv", "Item: "+ lista);
+
+        if (!nome.isEmpty()){
+
+            Mesas mesas = new Mesas();
+            mesas.setNomeCliente(nome);
+
+            Log.v("vvv", "Mesas: "+mesas);
+
+        }else {
+            Toast.makeText(getApplicationContext(),
+                    "Informe nome do cliente!",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void carregarRecycler(){
         //Listar
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        listaPedidos.clear();
-        listaPedidos = itemPedidoDAO.listar();
+        listaPedidos = itemPedidoDAO.listar(numeroMesa);
 
         //Adapter
         adapterPedido = new AdapterPedido(listaPedidos, getApplicationContext());
@@ -142,6 +168,7 @@ public class ComandaActivity extends AppCompatActivity {
 
     public void abrirCardapioCategoriaFazerPedido(View view){
         Intent intent = new Intent(ComandaActivity.this, CardapioCategoriaFazerPedidoActivity.class);
+        intent.putExtra("numeroMesa", numeroMesa);
         startActivity(intent);
     }
 

@@ -31,7 +31,7 @@ public class CategoriaDAO {
 
         try {
             escrever.insert(DbHelper.TABELA_CATEGORIA, null, values);
-            Log.i("INFO", "Tarefa salva com sucesso..: "+values.toString());
+            Log.i("INFO", "Tarefa salva com sucesso..: "+categoria.toString());
         }catch (Exception e){
             Log.i("INFO", "Erro ao salvar tarefa ..: " + e.getMessage());
         }
@@ -78,6 +78,7 @@ public class CategoriaDAO {
 
         Cursor cursor = ler.rawQuery(sql, null);
 
+        cursor.moveToFirst();
         while (cursor.moveToNext()){
             Categoria categoria = new Categoria();
 
@@ -88,9 +89,9 @@ public class CategoriaDAO {
             categoria.setCategoria(nomeCategoria);
 
             listaCategoria.add(categoria);
-            //Log.i("Info", "vvvLista de categorias: " + categoria.getId() + "--" + categoria.getCategoria());
+            Log.i("Info", "vvvLista de categorias: " + categoria.toString());
         }
-
         return listaCategoria;
     }
+
 }

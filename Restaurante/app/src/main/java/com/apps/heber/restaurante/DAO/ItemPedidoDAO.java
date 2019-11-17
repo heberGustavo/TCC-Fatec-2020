@@ -32,6 +32,7 @@ public class ItemPedidoDAO {
         values.put("valorTotal", pedido.getValorTotal());
         values.put("observacao", pedido.getObservacao());
         values.put("fkIdProduto", pedido.getFkIdCategoria());
+        values.put("posicaoMesa", pedido.getPosicaoMesa());
 
         //Log.i("INFO", "vvvBD: "+pedido);
 
@@ -76,10 +77,11 @@ public class ItemPedidoDAO {
         return true;
     }
 
-    public List<Pedido> listar(){
+    public List<Pedido> listar(int pMesa){
         List<Pedido> listaPedidos = new ArrayList<>();
 
-        String sql = "SELECT * FROM " + DbHelper.TABELA_ITEM_DO_PEDIDO + ";";
+        String sql = "SELECT * FROM " + DbHelper.TABELA_ITEM_DO_PEDIDO +
+                " WHERE posicaoMesa = " + pMesa + ";";
 
         Cursor cursor = ler.rawQuery(sql, null);
 
@@ -94,6 +96,7 @@ public class ItemPedidoDAO {
             double valorTotal = cursor.getDouble(cursor.getColumnIndex("valorTotal"));
             String observacao = cursor.getString(cursor.getColumnIndex("observacao"));
             Long fkIdProduto = cursor.getLong(cursor.getColumnIndex("fkIdProduto"));
+            int posicaoMesa = cursor.getInt(cursor.getColumnIndex("posicaoMesa"));
 
             pedido.setIdItemPedido(idItemProduto);
             pedido.setNomeProduto(nomeProduto);
@@ -103,6 +106,7 @@ public class ItemPedidoDAO {
             pedido.setValorTotal(valorTotal);
             pedido.setObservacao(observacao);
             pedido.setFkIdCategoria(fkIdProduto);
+            pedido.setPosicaoMesa(posicaoMesa);
 
             listaPedidos.add(pedido);
 

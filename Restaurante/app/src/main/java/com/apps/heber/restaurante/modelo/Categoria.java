@@ -1,7 +1,5 @@
 package com.apps.heber.restaurante.modelo;
 
-import android.support.annotation.NonNull;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -26,10 +24,9 @@ public class Categoria implements Serializable {
         this.categoria = categoria;
     }
 
-    @NonNull
     @Override
     public String toString() {
-        return getCategoria();
+        return categoria;
     }
 
     @Override

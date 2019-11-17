@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -26,6 +27,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
     private Long posicao;
     private int posicaoSpinner;
+    private int numeroMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,9 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
         //Log.i("INFO", "Posicao 1: "+posicao);
         posicaoSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
 
+        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+        //Log.v("INFO", "Numero da mesa3: "+numeroMesa);
+
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -54,6 +59,8 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Recebe e envia para proxima tela
                         intent.putExtra("posicaoSpinner", posicaoSpinner);
+
+                        intent.putExtra("numeroMesa", numeroMesa);
                         startActivity(intent);
                     }
 

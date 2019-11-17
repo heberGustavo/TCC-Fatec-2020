@@ -10,15 +10,16 @@ import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Mesas;
+import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.List;
 
-public class AdapterFazerPedido extends RecyclerView.Adapter<AdapterFazerPedido.MyViewHolderFazerPedidos> {
+public class AdapterQuantMesas extends RecyclerView.Adapter<AdapterQuantMesas.MyViewHolderFazerPedidos> {
 
-    List<Mesas> listaMesas;
+    List<QuantMesas> listaMesas;
     Context context;
 
-    public AdapterFazerPedido(List<Mesas> listaMesas, Context context) {
+    public AdapterQuantMesas(List<QuantMesas> listaMesas, Context context) {
         this.listaMesas = listaMesas;
         this.context = context;
     }
@@ -34,12 +35,14 @@ public class AdapterFazerPedido extends RecyclerView.Adapter<AdapterFazerPedido.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderFazerPedidos myViewHolderFazerPedidos, int i) {
-        myViewHolderFazerPedidos.numeroMesa.setText("Mesa "+(i+1));
+        QuantMesas quantMesas = listaMesas.get(i);
+
+        myViewHolderFazerPedidos.numeroMesa.setText("Mesa " +quantMesas.getIdMesa());
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return listaMesas.size();
     }
 
     public class MyViewHolderFazerPedidos extends RecyclerView.ViewHolder{

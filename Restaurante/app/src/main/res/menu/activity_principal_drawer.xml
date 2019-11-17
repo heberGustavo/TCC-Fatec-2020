@@ -21,8 +21,12 @@
             android:icon="@drawable/ic_categoria_gray_24dp"
             android:title="@string/menu_categoria" />
         <item
+            android:id="@+id/nav_mesa"
+            android:icon="@drawable/ic_mesas_gray_24dp"
+            android:title="@string/menu_mesa" />
+        <item
             android:id="@+id/nav_fluxoDeCaixa"
-            android:icon="@drawable/ic_categoria_gray_24dp"
+            android:icon="@drawable/ic_wallet_gray_24dp"
             android:title="@string/menu_fluxo" />
     </group>
 

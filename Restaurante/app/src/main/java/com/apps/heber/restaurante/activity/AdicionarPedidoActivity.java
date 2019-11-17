@@ -34,11 +34,12 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
     private Cardapio cardapioSelecionado;
     private Pedido pedidoSelecionado;
-
     private Categoria spinnerCategoria;
+
     private int quantidadeCardapio;
     private int valorSpinner;
     private int quantidadePedido;
+    private int numeroMesa;
 
     private double valorTotal;
 
@@ -66,6 +67,9 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         //Log.i("INFO", "vvvcardapio: "+cardapioSelecionado);
         pedidoSelecionado = (Pedido) getIntent().getSerializableExtra("pedidoSelecionado");
         //Log.i("INFO", "vvvPedido: "+pedidoSelecionado);
+
+        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+        Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
 
         carregarSpinner();
         verificaSpinner();
@@ -231,6 +235,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             pedidoAtualizado.setQuantidade(quantidade);
             pedidoAtualizado.setValorTotal(valorTotal);
             pedidoAtualizado.setObservacao(observacao);
+            pedidoAtualizado.setPosicaoMesa(pedidoSelecionado.getPosicaoMesa());
 
             //Log.v("INFO", "Atualizando: "+ pedidoAtualizado.toString());
             if (itemPedidoDAO.atualizar(pedidoAtualizado)){
@@ -261,9 +266,11 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             pedido.setValorUnitario(valorUnitario);
             pedido.setValorTotal(valorTotal);
             pedido.setObservacao(observacao);
+            pedido.setPosicaoMesa(numeroMesa);
 
             if (itemPedidoDAO.salvar(pedido)){
                 Toast.makeText(getApplicationContext(), "Pedido salvo", Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Salvando Pedido: " + pedido.toString());
             }else {
                 Toast.makeText(getApplicationContext(), "Erro ao salvar!!!", Toast.LENGTH_SHORT).show();
             }

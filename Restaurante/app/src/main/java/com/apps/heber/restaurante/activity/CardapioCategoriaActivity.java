@@ -49,7 +49,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                         Categoria categoriaSelecionada = listaCategorias.get(position);
                         intent.putExtra("posicao", categoriaSelecionada.getId());
                         intent.putExtra("cardapioCategoria", position);
-                        //Log.i("INFO", "cardapioCategoria1: "+ position);
+
                         startActivity(intent);
                     }
 
