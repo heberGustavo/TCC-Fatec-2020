@@ -34,8 +34,6 @@ public class ItemPedidoDAO {
         values.put("fkIdProduto", pedido.getFkIdCategoria());
         values.put("posicaoMesa", pedido.getPosicaoMesa());
 
-        //Log.i("INFO", "vvvBD: "+pedido);
-
         try {
             escrever.insert(DbHelper.TABELA_ITEM_DO_PEDIDO, null, values);
             escrever.close();
@@ -113,5 +111,24 @@ public class ItemPedidoDAO {
             ler.close();
         }
         return listaPedidos;
+    }
+
+    public double listarGastoMesa(int pMesa){
+
+        double soma = 0;
+
+        String sql = "SELECT * " +
+                "FROM " + DbHelper.TABELA_ITEM_DO_PEDIDO +
+                " WHERE posicaoMesa = " + pMesa + ";";
+
+        Cursor cursor = ler.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            soma += cursor.getDouble(cursor.getColumnIndex("valorTotal"));
+        }
+
+        ler.close();
+
+        return soma;
     }
 }

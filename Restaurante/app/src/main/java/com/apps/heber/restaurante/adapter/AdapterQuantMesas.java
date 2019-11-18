@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.modelo.Mesas;
 import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.List;

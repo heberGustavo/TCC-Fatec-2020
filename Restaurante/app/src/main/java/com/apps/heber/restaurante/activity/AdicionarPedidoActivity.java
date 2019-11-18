@@ -68,9 +68,6 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         pedidoSelecionado = (Pedido) getIntent().getSerializableExtra("pedidoSelecionado");
         //Log.i("INFO", "vvvPedido: "+pedidoSelecionado);
 
-        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
-
         carregarSpinner();
         verificaSpinner();
         imprimirCardapio();
@@ -82,6 +79,9 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
         if (cardapioSelecionado != null){
 
+            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+
+            Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
             valorSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
             quantidadeCardapio = 1;
 

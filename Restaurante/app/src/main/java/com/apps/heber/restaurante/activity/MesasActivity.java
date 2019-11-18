@@ -79,9 +79,4 @@ public class MesasActivity extends AppCompatActivity {
         recyclerFazerPedido.setAdapter(adapterQuantMesas);
 
     }
-
-    public void adicionarNovaMesa(View view){
-        Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
-        startActivity(intent);
-    }
 }

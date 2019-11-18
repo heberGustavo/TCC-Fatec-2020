@@ -13,7 +13,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public static String TABELA_MESA = "tb_mesa";
     public static String TABELA_CATEGORIA = "tb_categoria";
     public static String TABELA_PRODUTO = "tb_produtos";
-    public static String TABELA_PEDIDO = "tb_pedido";
     public static String TABELA_ITEM_DO_PEDIDO = "tb_item_do_pedido";
 
     public DbHelper(Context context) {
@@ -80,17 +79,6 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.i("INFO", "Tabela item do pedido criada com sucesso!" );
         }catch (Exception e){
             Log.i("INFO", "Erro na criação da tabela produto ..: " + e.getMessage() );
-        }
-
-        //TABELA PEDIDO
-        String sqlPedido = "CREATE TABLE IF NOT EXISTS " + TABELA_PEDIDO +
-                "(idPedido INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "nomeCliente VARCHAR NOT NULL)";
-        try {
-            db.execSQL(sqlPedido);
-            Log.i("INFO", "Tabela pedido criada com sucesso!" );
-        }catch (Exception e){
-            Log.i("INFO", "Erro na criação da tabela pedido ..: " + e.getMessage() );
         }
 
     }
