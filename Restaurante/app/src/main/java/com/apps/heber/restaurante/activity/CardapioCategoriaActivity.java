@@ -34,7 +34,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cardapio_categoria);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Cardapio");
+        actionBar.setTitle("Categoria");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         recyclerCardapioCategoria = findViewById(R.id.recyclerCardapioCategoria);

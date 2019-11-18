@@ -8,9 +8,10 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static String NOME_DB = "db_app_restaurante";
-    public static int VERSION = 20;
+    public static int VERSION = 21;
 
     public static String TABELA_MESA = "tb_mesa";
+    public static String TABELA_FLUXO_CAIXA = "tb_fluxo";
     public static String TABELA_CATEGORIA = "tb_categoria";
     public static String TABELA_PRODUTO = "tb_produtos";
     public static String TABELA_ITEM_DO_PEDIDO = "tb_item_do_pedido";
@@ -79,6 +80,17 @@ public class DbHelper extends SQLiteOpenHelper {
             Log.i("INFO", "Tabela item do pedido criada com sucesso!" );
         }catch (Exception e){
             Log.i("INFO", "Erro na criação da tabela produto ..: " + e.getMessage() );
+        }
+
+        //TABELA FLUXO DE CAIXA
+        String sqlFLuxoCaixa = "CREATE TABLE IF NOT EXISTS " + TABELA_FLUXO_CAIXA +
+                "(id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                "somaEntrada DECIMAL(10,2) NOT NULL)";
+        try {
+            db.execSQL(sqlFLuxoCaixa);
+            Log.i("INFO", "Tabela FLUXO criada com sucesso!" );
+        }catch (Exception e){
+            Log.i("INFO", "Erro na criação da tabela FLUXO ..: " + e.getMessage() );
         }
 
     }

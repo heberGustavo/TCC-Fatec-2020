@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.QuantMesasActivity"
-            android:parentActivityName=".activity.PrincipalActivity"/>
+        <activity android:name=".activity.FluxoDeCaixaActivity"
+            android:parentActivityName=".activity.PrincipalActivity"></activity>
+        <activity
+            android:name=".activity.QuantMesasActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.AdicionarPedidoActivity"
             android:parentActivityName=".activity.CardapioFazerPedidoActivity" />
@@ -31,7 +34,7 @@
             android:parentActivityName=".activity.CategoriaActivity" />
         <activity
             android:name=".activity.AdicionarNovoCardapioActivity"
-            android:parentActivityName=".activity.CardapioActivity" />
+            android:parentActivityName=".activity.CardapioCategoriaActivity" />
         <activity
             android:name=".activity.CategoriaActivity"
             android:parentActivityName=".activity.PrincipalActivity" />

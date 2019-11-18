@@ -68,10 +68,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(new Intent(this, QuantMesasActivity.class));
         }
         else if (id == R.id.nav_fluxoDeCaixa) {
-
-            Toast.makeText(getApplicationContext(),
-                    "Em manutenção",
-                    Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, FluxoDeCaixaActivity.class));
 
         } else if (id == R.id.nav_share) {
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.FluxoCaixaDAO;
 import com.apps.heber.restaurante.DAO.ItemPedidoDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
@@ -141,11 +142,18 @@ public class ComandaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Salva na tela do Fluxo de Caixa
+                        FluxoCaixaDAO fluxoCaixaDAO = new FluxoCaixaDAO(getApplicationContext());
 
-                        Toast.makeText(getApplicationContext(),
-                                "Fechando comanda...",
-                                Toast.LENGTH_SHORT).show();
-                        finish();
+                        if (fluxoCaixaDAO.salvar(gastoMesa)){
+                            Toast.makeText(getApplicationContext(),
+                                    "Fechando comanda...",
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Erro ao fechar comanda...",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 builder2.show();
