@@ -40,12 +40,14 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
         //Usado para listar a lista
         posicao = (Long) getIntent().getSerializableExtra("posicao");
-        //Log.i("INFO", "Posicao 1: "+posicao);
-        posicaoSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
 
-        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        //Log.v("INFO", "Numero da mesa3: "+numeroMesa);
+        if (!listaCardapios.isEmpty()){
+            //Log.i("INFO", "Posicao 1: "+posicao);
+            posicaoSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
 
+            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+            //Log.v("INFO", "Numero da mesa3: "+numeroMesa);
+        }
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.DAO.CardapioDAO;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardapioActivity extends AppCompatActivity {
+
+    private TextView descricaoCardapio;
 
     private RecyclerView recyclerCardapio;
     private AdapterCardapio adapterCardapio;
@@ -44,6 +47,7 @@ public class CardapioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerCardapio = findViewById(R.id.recyclerCardapio);
+        descricaoCardapio = findViewById(R.id.descricaoCardapio);
 
         //Recebe o ID e usa para fazer a listagem de itens por ID
         posicao = (Long) getIntent().getSerializableExtra("posicao");
@@ -135,5 +139,10 @@ public class CardapioActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         carregarRecyclerView();
+
+        //SE A LISTA ESTIVER COM DADOS, ESCONDE A DESCRIÇÃO DA TELA
+        if (!listaCardapios.isEmpty()){
+            descricaoCardapio.setVisibility(View.INVISIBLE);
+        }
     }
 }

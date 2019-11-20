@@ -81,7 +81,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
             numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
 
-            Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
+            //Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
             valorSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
             quantidadeCardapio = 1;
 
@@ -270,7 +270,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
             if (itemPedidoDAO.salvar(pedido)){
                 Toast.makeText(getApplicationContext(), "Pedido salvo", Toast.LENGTH_SHORT).show();
-                Log.v("INFO", "Salvando Pedido: " + pedido.toString());
+                //Log.v("INFO", "Salvando Pedido: " + pedido.toString());
             }else {
                 Toast.makeText(getApplicationContext(), "Erro ao salvar!!!", Toast.LENGTH_SHORT).show();
             }

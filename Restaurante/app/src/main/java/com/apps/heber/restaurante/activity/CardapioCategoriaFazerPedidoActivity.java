@@ -36,8 +36,10 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerCardapioCategoriaFazerPedido);
 
-        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        //Log.v("INFO", "Numero da mesa2: "+numeroMesa);
+        if (!listaCategorias.isEmpty()){
+            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+            //Log.v("INFO", "Numero da mesa2: "+numeroMesa);
+        }
 
         configurarRecyclerView();
 

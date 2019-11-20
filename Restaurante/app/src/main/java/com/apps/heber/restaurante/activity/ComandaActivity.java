@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.DAO.FluxoCaixaDAO;
@@ -20,16 +22,21 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Pedido;
+import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComandaActivity extends AppCompatActivity {
 
+    private TextView descricaoComanda;
+
     private RecyclerView recyclerPedidos;
     private List<Pedido> listaPedidos = new ArrayList<>();
     private AdapterPedido adapterPedido;
+
     private Pedido pedidoSelecionado;
+    private QuantMesas quantMesas;
 
     private int numeroMesa;
     private double gastoMesa;
@@ -38,14 +45,21 @@ public class ComandaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mesas);
-
-        recyclerPedidos = findViewById(R.id.recyclerPedidos);
-
-        numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        this.getSupportActionBar().setTitle("Mesa "+ (numeroMesa+1));
+        this.getSupportActionBar().setTitle("Mesa");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Log.v("INFO", "Numero da mesa1: "+numeroMesa);
+        recyclerPedidos = findViewById(R.id.recyclerPedidos);
+        descricaoComanda = findViewById(R.id.descricaoComanda);
+
+        quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesas");
+        //Log.v("INFO", "Quant mesas2: "+ quantMesas);
+
+        if (quantMesas != null){
+            //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
+            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+            //Log.v("INFO", "Numero da mesa1: "+numeroMesa);
+            //Log.v("INFO", "Quant mesas Não Null");
+        }
 
         clickRecyclerView();
     }
@@ -143,16 +157,24 @@ public class ComandaActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //Salva na tela do Fluxo de Caixa
                         FluxoCaixaDAO fluxoCaixaDAO = new FluxoCaixaDAO(getApplicationContext());
+                        ItemPedidoDAO dao = new ItemPedidoDAO(getApplicationContext());
 
-                        if (fluxoCaixaDAO.salvar(gastoMesa)){
+                        if (gastoMesa <= 0){
                             Toast.makeText(getApplicationContext(),
-                                    "Fechando comanda...",
+                                    "Comanda vazia",
                                     Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else {
-                            Toast.makeText(getApplicationContext(),
-                                    "Erro ao fechar comanda...",
-                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            if (fluxoCaixaDAO.salvar(gastoMesa) && dao.deletar(numeroMesa)){
+                                Toast.makeText(getApplicationContext(),
+                                        "Fechando comanda...",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                            }else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro ao fechar comanda...",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -189,5 +211,10 @@ public class ComandaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         carregarRecycler();
+
+        //SE A LISTA ESTIVER COM ITENS, ESCONDE A DESCRIÇÃO DA TELA
+        if (!listaPedidos.isEmpty()){
+            descricaoComanda.setVisibility(View.INVISIBLE);
+        }
     }
 }

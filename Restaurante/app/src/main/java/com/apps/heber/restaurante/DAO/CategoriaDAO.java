@@ -54,7 +54,6 @@ public class CategoriaDAO {
         return true;
     }
 
-    //Nao esta deletando os cardapios cadastrado em uma tal categoria
     public boolean deletarCategoria(Categoria categoria){
         try {
             String[] args = {categoria.getId().toString()};
@@ -89,7 +88,7 @@ public class CategoriaDAO {
             categoria.setCategoria(nomeCategoria);
 
             listaCategoria.add(categoria);
-            Log.i("Info", "vvvLista de categorias: " + categoria.toString());
+            //Log.i("Info", "vvvLista de categorias: " + categoria.toString());
         }
         return listaCategoria;
     }

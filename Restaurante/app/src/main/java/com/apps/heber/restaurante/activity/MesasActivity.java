@@ -29,13 +29,15 @@ public class MesasActivity extends AppCompatActivity {
     private AdapterQuantMesas adapterQuantMesas;
     private List<QuantMesas> listaMesas = new ArrayList<>();
 
+    private QuantMesas quantMesas;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fazer_pedido);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Mesas");
+        actionBar.setTitle("Mesa");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
@@ -47,8 +49,12 @@ public class MesasActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        quantMesas = listaMesas.get(position);
+
                         Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", position);
+                        intent.putExtra("quantMesas", quantMesas);
+                        Log.v("INFO", "Quant mesas1: "+ quantMesas);
                         startActivity(intent);
                     }
 

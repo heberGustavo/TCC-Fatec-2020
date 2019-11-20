@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.apps.heber.restaurante.DAO.CardapioDAO;
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCategoria;
@@ -68,18 +69,34 @@ public class CategoriaActivity extends AppCompatActivity {
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
 
-                                if (categoriaDAO.deletarCategoria(categoriaSelecionada)){
+                                CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
 
-                                    carregarRecyclerView();
+                                //Log.v("INFO", "Id categoria: "+categoriaSelecionada.getId());
+
+                                // SE EXISTIR CARDAPIO CADASTRADO NÃO EXCLUI CATEGORIA
+                                int count = cardapioDAO.somaCardapio(categoriaSelecionada.getId());
+                                if (count >=1){
                                     Toast.makeText(getApplicationContext(),
-                                            "Tarefa excluida com sucesso!",
-                                            Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(getApplicationContext(),
-                                            "Erro ao excluir tarefa",
-                                            Toast.LENGTH_SHORT).show();
+                                            "Existe cardápio cadastrado nessa categoria!",
+                                            Toast.LENGTH_LONG).show();
+                                    //Log.v("INFO", "Quant de cardapios: "+count);
+                                }
+
+                                else{
+                                    CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+
+                                    if (categoriaDAO.deletarCategoria(categoriaSelecionada)){
+
+                                        carregarRecyclerView();
+                                        Toast.makeText(getApplicationContext(),
+                                                "Categoria excluida com sucesso!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(),
+                                                "Erro ao excluir categoria!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });

@@ -16,7 +16,7 @@
             android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.AdicionarPedidoActivity"
-            android:parentActivityName=".activity.CardapioFazerPedidoActivity" />
+            android:parentActivityName=".activity.ComandaActivity" />
         <activity
             android:name=".activity.CardapioFazerPedidoActivity"
             android:parentActivityName=".activity.CardapioCategoriaFazerPedidoActivity" />

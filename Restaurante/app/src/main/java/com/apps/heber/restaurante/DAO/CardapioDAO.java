@@ -61,7 +61,6 @@ public class CardapioDAO {
         return true;
     }
 
-    //Erro ao excluir tarefa
     public boolean deletar(Cardapio cardapio){
         try {
             String[] args = {cardapio.getIdCardapio().toString()};
@@ -105,5 +104,21 @@ public class CardapioDAO {
 
         }
         return listaCardapio;
+    }
+
+    public int somaCardapio(Long idCategoria){
+
+        int contador = 0;
+
+        String sql = "SELECT * " +
+                "FROM " + DbHelper.TABELA_PRODUTO +
+                " WHERE idCategoria = " + idCategoria +";";
+
+        Cursor cursor = ler.rawQuery(sql, null);
+
+        while (cursor.moveToNext()){
+            contador++;
+        }
+        return contador;
     }
 }

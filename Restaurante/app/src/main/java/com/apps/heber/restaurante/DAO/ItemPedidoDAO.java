@@ -61,7 +61,6 @@ public class ItemPedidoDAO {
         return true;
     }
 
-    //Erro ao excluir tarefa
     public boolean deletar(Pedido pedido){
         try {
             String[] args = {pedido.getIdItemPedido().toString()};
@@ -70,6 +69,19 @@ public class ItemPedidoDAO {
             //Log.i("INFO", "Sucesso na remocao do pedido");
         }catch (Exception e){
             //Log.i("INFO", "Erro na remocao do pedido");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deletar(int numeroMesa){
+        try {
+            String[] args = {String.valueOf(numeroMesa)};
+            escrever.delete(DbHelper.TABELA_ITEM_DO_PEDIDO, "posicaoMesa=?", args);
+            escrever.close(); //Fecha a conexao
+            Log.i("INFO", "Sucesso na remocao do pedido");
+        }catch (Exception e){
+            Log.i("INFO", "Erro na remocao do pedido: "+e.getMessage());
             return false;
         }
         return true;
@@ -126,7 +138,7 @@ public class ItemPedidoDAO {
         while(cursor.moveToNext()){
             soma += cursor.getDouble(cursor.getColumnIndex("valorTotal"));
         }
-
+        cursor.close();
         ler.close();
 
         return soma;
