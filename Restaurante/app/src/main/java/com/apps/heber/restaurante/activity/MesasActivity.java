@@ -54,7 +54,7 @@ public class MesasActivity extends AppCompatActivity {
                         Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", position);
                         intent.putExtra("quantMesas", quantMesas);
-                        Log.v("INFO", "Quant mesas1: "+ quantMesas);
+                        Log.v("INFO", "Quant mesas1: "+ quantMesas.getIdMesa());
                         startActivity(intent);
                     }
 

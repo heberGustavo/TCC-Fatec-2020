@@ -15,6 +15,7 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapioCategoriaFazerPedidoActivity;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdapterCardapioCategoriaFazerPedidoActivity adapterCardCateFazerPedido;
     private List<Categoria> listaCategorias = new ArrayList<>();
+    private QuantMesas quantMesas;
 
     private int numeroMesa;
 
@@ -35,13 +37,18 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
         this.getSupportActionBar().setTitle("Categoria");
 
         recyclerView = findViewById(R.id.recyclerCardapioCategoriaFazerPedido);
-
-        if (!listaCategorias.isEmpty()){
-            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-            //Log.v("INFO", "Numero da mesa2: "+numeroMesa);
-        }
-
         configurarRecyclerView();
+
+        quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
+        //Log.v("INFO", "Quant mesas3: "+ quantMesas.getIdMesa());
+
+        if (quantMesas != null){
+            //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
+            /*
+            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+            Log.v("INFO", "Numero da mesa2 dentro: "+numeroMesa);
+             */
+        }
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -55,6 +62,9 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                         intent.putExtra("posicaoSpinner", position);
                         //Log.i("INFO", "posicao 1: " + position);
                         intent.putExtra("numeroMesa", numeroMesa);
+                        intent.putExtra("quantMesa", quantMesas);
+
+                        //Log.v("INFO", "Numero da mesa saindo ... : "+numeroMesa);
 
                         startActivity(intent);
                     }

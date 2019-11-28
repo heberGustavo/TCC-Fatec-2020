@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
@@ -28,6 +29,8 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
     private AdapterCardapioCategoria adapterCardapioCategoria;
     private List<Categoria> listaCategorias = new ArrayList<>();
 
+    private TextView descricaoCardapioCategoria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         recyclerCardapioCategoria = findViewById(R.id.recyclerCardapioCategoria);
+        descricaoCardapioCategoria = findViewById(R.id.descricaoCategoriaCardapio);
 
         recyclerCardapioCategoria.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -49,6 +53,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                         Categoria categoriaSelecionada = listaCategorias.get(position);
                         intent.putExtra("posicao", categoriaSelecionada.getId());
                         intent.putExtra("cardapioCategoria", position);
+                        //Log.v("INFO", "Cardapio cat - inicio: "+position);
 
                         startActivity(intent);
                     }
@@ -72,6 +77,11 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
         listaCategorias = categoriaDAO.listarCategoria();
 
+        if (listaCategorias.isEmpty()){
+            descricaoCardapioCategoria.setVisibility(View.VISIBLE);
+        }else {
+            descricaoCardapioCategoria.setVisibility(View.INVISIBLE);
+        }
         //Adapter
         adapterCardapioCategoria = new AdapterCardapioCategoria(listaCategorias, getApplicationContext());
 

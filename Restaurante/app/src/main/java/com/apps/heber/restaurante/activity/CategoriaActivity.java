@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apps.heber.restaurante.DAO.CardapioDAO;
@@ -31,6 +32,8 @@ public class CategoriaActivity extends AppCompatActivity {
     private List<Categoria> listaCategorias = new ArrayList<>();
     private Categoria categoriaSelecionada;
 
+    private TextView descricaoCategoria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class CategoriaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerCategoria = findViewById(R.id.recyclerCategoria);
+        descricaoCategoria = findViewById(R.id.descricaoCategoria);
 
         recyclerCategoria.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -118,8 +122,14 @@ public class CategoriaActivity extends AppCompatActivity {
     public void carregarRecyclerView(){
         //Listar Categoria
         CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
-        listaCategorias.clear();
         listaCategorias = categoriaDAO.listarCategoria();
+
+        //Verificao para mostrar a descrição da tela
+        if (listaCategorias.isEmpty()){
+            descricaoCategoria.setVisibility(View.VISIBLE);
+        }else{
+            descricaoCategoria.setVisibility(View.INVISIBLE);
+        }
 
         //Adapter
         adapterCategoria = new AdapterCategoria(listaCategorias, getApplicationContext());

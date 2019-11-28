@@ -67,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                             "Informe o email!",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

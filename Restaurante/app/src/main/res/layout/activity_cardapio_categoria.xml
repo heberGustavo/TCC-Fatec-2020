@@ -20,6 +20,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
+    <TextView
+        android:id="@+id/descricaoCategoriaCardapio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Nenhuma categoria cadastrada \n no momento"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerCardapioCategoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recyclerCardapioCategoria"
+        app:layout_constraintTop_toTopOf="@+id/recyclerCardapioCategoria" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerCardapioCategoria"
         android:layout_width="0dp"

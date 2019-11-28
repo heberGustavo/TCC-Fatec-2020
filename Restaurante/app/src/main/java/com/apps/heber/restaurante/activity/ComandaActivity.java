@@ -52,14 +52,6 @@ public class ComandaActivity extends AppCompatActivity {
         descricaoComanda = findViewById(R.id.descricaoComanda);
 
         quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesas");
-        //Log.v("INFO", "Quant mesas2: "+ quantMesas);
-
-        if (quantMesas != null){
-            //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
-            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-            //Log.v("INFO", "Numero da mesa1: "+numeroMesa);
-            //Log.v("INFO", "Quant mesas Não Null");
-        }
 
         clickRecyclerView();
     }
@@ -136,7 +128,7 @@ public class ComandaActivity extends AppCompatActivity {
 
     public void menuSalvar() {
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        gastoMesa = itemPedidoDAO.listarGastoMesa(numeroMesa);
+        gastoMesa = itemPedidoDAO.listarGastoMesa(quantMesas.getIdMesa());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
 
@@ -165,7 +157,7 @@ public class ComandaActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            if (fluxoCaixaDAO.salvar(gastoMesa) && dao.deletar(numeroMesa)){
+                            if (fluxoCaixaDAO.salvar(gastoMesa) && dao.deletar(quantMesas.getIdMesa())){
                                 Toast.makeText(getApplicationContext(),
                                         "Fechando comanda...",
                                         Toast.LENGTH_SHORT).show();
@@ -187,7 +179,14 @@ public class ComandaActivity extends AppCompatActivity {
     public void carregarRecycler(){
         //Listar
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        listaPedidos = itemPedidoDAO.listar(numeroMesa);
+        listaPedidos = itemPedidoDAO.listar(quantMesas.getIdMesa());
+
+        //SE A LISTA ESTIVER COM ITENS, ESCONDE A DESCRIÇÃO DA TELA
+        if (listaPedidos.isEmpty()){
+            descricaoComanda.setVisibility(View.VISIBLE);
+        }else{
+            descricaoComanda.setVisibility(View.INVISIBLE);
+        }
 
         //Adapter
         adapterPedido = new AdapterPedido(listaPedidos, getApplicationContext());
@@ -203,6 +202,9 @@ public class ComandaActivity extends AppCompatActivity {
     public void abrirCardapioCategoriaFazerPedido(View view){
         Intent intent = new Intent(ComandaActivity.this, CardapioCategoriaFazerPedidoActivity.class);
         intent.putExtra("numeroMesa", numeroMesa);
+        intent.putExtra("quantMesa", quantMesas);
+        //Log.v("INFO", "Numero da mesa abrir tela: "+numeroMesa);
+        //Log.v("INFO", "Quant mesa comanda2: "+quantMesas);
 
         startActivity(intent);
     }
@@ -211,10 +213,5 @@ public class ComandaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         carregarRecycler();
-
-        //SE A LISTA ESTIVER COM ITENS, ESCONDE A DESCRIÇÃO DA TELA
-        if (!listaPedidos.isEmpty()){
-            descricaoComanda.setVisibility(View.INVISIBLE);
-        }
     }
 }

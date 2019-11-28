@@ -88,7 +88,7 @@ public class CategoriaDAO {
             categoria.setCategoria(nomeCategoria);
 
             listaCategoria.add(categoria);
-            //Log.i("Info", "vvvLista de categorias: " + categoria.toString());
+            //Log.v("Info", "Lista de categorias: " + categoria.toString());
         }
         return listaCategoria;
     }

@@ -8,7 +8,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static String NOME_DB = "db_app_restaurante";
-    public static int VERSION = 21;
+    public static int VERSION = 24;
 
     public static String TABELA_MESA = "tb_mesa";
     public static String TABELA_FLUXO_CAIXA = "tb_fluxo";
@@ -103,11 +103,13 @@ public class DbHelper extends SQLiteOpenHelper {
             String sqlProduto = "DROP TABLE IF EXISTS " + TABELA_PRODUTO + ";";
             String sqlItemPedido = "DROP TABLE IF EXISTS " + TABELA_ITEM_DO_PEDIDO + ";";
             String sqlMesa = "DROP TABLE IF EXISTS " + TABELA_MESA + ";";
+            String sqlFluxo = "DROP TABLE IF EXISTS " + TABELA_FLUXO_CAIXA + ";";
 
             db.execSQL(sqlCategoria);
             db.execSQL(sqlProduto);
             db.execSQL(sqlItemPedido);
             db.execSQL(sqlMesa);
+            db.execSQL(sqlFluxo);
             onCreate(db);
         }catch (Exception e){
             Log.i("INFO", "Erro no upgrade da tabela");

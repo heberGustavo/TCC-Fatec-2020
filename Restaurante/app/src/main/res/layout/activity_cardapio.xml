@@ -12,19 +12,22 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/descricaoCardapio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nenhum cardápio cadastradono\nno momento"
+        android:text="Nunhum cardapio cadastrado \n no momento"
         android:gravity="center"
         android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerCardapio"
         app:layout_constraintStart_toStartOf="@+id/recyclerCardapio"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerCardapio" />
 
 </android.support.constraint.ConstraintLayout>

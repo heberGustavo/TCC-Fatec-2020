@@ -51,12 +51,10 @@ public class CardapioActivity extends AppCompatActivity {
 
         //Recebe o ID e usa para fazer a listagem de itens por ID
         posicao = (Long) getIntent().getSerializableExtra("posicao");
-        //Recebe a posicao do item clicado
 
-        if (cardapioSelecionado != null){
-            cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-            //Log.i("INFO", "cardapioCategoria2: "+ cardapioCategoria);
-        }
+        //Recebe a posicao do item clicado
+        cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
+        //Log.v("INFO", "cardapioCategoria2: "+ cardapioCategoria);
 
         recyclerCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -72,6 +70,7 @@ public class CardapioActivity extends AppCompatActivity {
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Envia a posicao do item clicado
                         intent.putExtra("cardapioCategoria", cardapioCategoria);
+                        Log.v("INFO", "Cardapio categoria - cardapio: "+cardapioCategoria);
                         startActivity(intent);
                     }
 
@@ -124,6 +123,12 @@ public class CardapioActivity extends AppCompatActivity {
         listaCardapios = cardapioDAO.listar(posicao);
         //Log.i("INFO", "Lista de cardapios: "+posicao);
 
+        if (listaCardapios.isEmpty()){
+            descricaoCardapio.setVisibility(View.VISIBLE);
+        }else{
+            descricaoCardapio.setVisibility(View.INVISIBLE);
+        }
+
         //Adapter
         adapterCardapio = new AdapterCardapio(listaCardapios, getApplicationContext());
 
@@ -139,10 +144,5 @@ public class CardapioActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         carregarRecyclerView();
-
-        //SE A LISTA ESTIVER COM DADOS, ESCONDE A DESCRIÇÃO DA TELA
-        if (!listaCardapios.isEmpty()){
-            descricaoCardapio.setVisibility(View.INVISIBLE);
-        }
     }
 }

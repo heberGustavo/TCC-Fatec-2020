@@ -62,6 +62,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         if (cardapioSelecionado != null){ //Se for edição
 
             cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
+            //Log.v("INFO", "Cardapio Categoria: "+cardapioCategoria);
 
             String valor = String.valueOf(cardapioSelecionado.getValor());
             editValor.setText(valor);
@@ -79,6 +80,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Pega o id do item selecionado
                 posicaoSpinner = (Categoria) spinner.getItemAtPosition(position);
+                //Log.v("INFO", "Posicao Spinner: "+posicaoSpinner.getId()+ " : "+posicaoSpinner.getCategoria());
             }
 
             @Override
