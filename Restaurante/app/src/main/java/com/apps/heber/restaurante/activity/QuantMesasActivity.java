@@ -9,16 +9,35 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.QuantMesasDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.helper.DbHelper;
 import com.apps.heber.restaurante.modelo.QuantMesas;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class QuantMesasActivity extends AppCompatActivity {
 
-    private TextInputEditText quantMesas;
+    private TextInputEditText numeroMesa;
+
+    private RequestQueue requestQueue;
+
+    private static String url_registrar_mesa = "https://restaurantecome.000webhostapp.com/registrarMesa.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +48,8 @@ public class QuantMesasActivity extends AppCompatActivity {
         actionBar.setTitle("Adicionar mesa");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        quantMesas = findViewById(R.id.editQuantMesas);
+        numeroMesa = findViewById(R.id.editQuantMesas);
+        requestQueue = Volley.newRequestQueue(this);
 
     }
 
@@ -43,12 +63,77 @@ public class QuantMesasActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_salvar:
-                salvarMesas();
+                Log.v("zzz", "Clique salvar");
+                RegistrarMesa(); // MySQL
+                //salvarMesas(); // SQLite
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    //MySQL
+    public void RegistrarMesa(){
+        final String campoquantidade = numeroMesa.getText().toString();
+
+        if (!campoquantidade.isEmpty()){
+
+            final int quantidade = Integer.parseInt(campoquantidade);
+            int i;
+
+            for(i=1; i<= quantidade; i++) {
+
+                final int finalI = i;
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_mesa,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    Log.v("Info", "zzzResponse: " + jsonObject);
+
+                                    String sucess = jsonObject.getString("sucess");
+                                    if (sucess.equals("1")) {
+                                        finish();
+                                    }
+                                } catch (JSONException e) {
+                                    Log.v("INFO", "zzzErro1: " + e.toString());
+
+                                    Toast.makeText(QuantMesasActivity.this,
+                                            "Erro ao registrar! --> " + e.toString(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.v("INFO", "zzzErro2: " + error.toString());
+                                Toast.makeText(QuantMesasActivity.this,
+                                        "Erro ao registrar! --> " + error.toString(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("numeroMesa", finalI+"");
+
+                        Log.v("zzzParametros", "Paramentros: " + params.toString());
+                        return params;
+                    }
+                };
+                requestQueue.add(stringRequest);
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),
+                    "Preencha o campo!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    //SQLite
+    /*
     public void salvarMesas(){
         QuantMesasDAO quantMesasDAO = new QuantMesasDAO(getApplicationContext());
 
@@ -76,4 +161,5 @@ public class QuantMesasActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+     */
 }

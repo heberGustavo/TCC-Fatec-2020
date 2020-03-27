@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 String textoEmail = campoEmail.getText().toString();
                 String textoSenha = campoSenha.getText().toString();
 
@@ -67,8 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                             "Informe o email!",
                             Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
+
+
     }
 
     public void validarUsuario(){

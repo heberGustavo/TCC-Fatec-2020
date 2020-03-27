@@ -2,9 +2,9 @@ package com.apps.heber.restaurante.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.DividerItemDecoration;
+
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -17,27 +17,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apps.heber.restaurante.DAO.QuantMesasDAO;
-import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.adapter.AdapterPrincipal;
-import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.QuantMesas;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
+import com.android.volley.toolbox.Volley;
+import com.apps.heber.restaurante.modelo.QuantMesa;
+import com.apps.heber.restaurante.R;
+import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
+import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView recyclerViewPricipal;
-    private AdapterPrincipal adapterPrincipal;
-    private List<QuantMesas> listaMesas;
+    private DividerItemDecoration itemDecoration;
+    private LinearLayoutManager linearLayoutManager;
+    private List<QuantMesa> mesaList;
+    private RecyclerView.Adapter adapter;
 
-    private TextView descricaoMesa;
+    private String url = "https://restaurantecome.000webhostapp.com/listarMesa.php";
 
-    private QuantMesas quantMesas;
+    //private TextView descricaoMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +58,21 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        descricaoMesa = findViewById(R.id.descricaoMesa);
+        //descricaoMesa = findViewById(R.id.descricaoMesa);
         recyclerViewPricipal = findViewById(R.id.recyclerPrincipal);
-        clickRecyclerView();
+
+        mesaList= new ArrayList<>();
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerViewPricipal.getContext(), linearLayoutManager.getOrientation());
+
+        recyclerViewPricipal.setHasFixedSize(true);
+        recyclerViewPricipal.setLayoutManager(linearLayoutManager);
+        recyclerViewPricipal.addItemDecoration(itemDecoration);
+
+        listagemMesa();
+        //clickRecyclerView();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -60,6 +84,45 @@ public class PrincipalActivity extends AppCompatActivity
 
     }
 
+    private void listagemMesa(){
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            QuantMesa quantMesa = new QuantMesa();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            mesaList.add(quantMesa);
+                        }
+                        adapter = new AdapterQuantMesa(getApplicationContext(), mesaList);
+                        recyclerViewPricipal.setAdapter(adapter);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
     public void clickRecyclerView(){
         recyclerViewPricipal.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -67,11 +130,11 @@ public class PrincipalActivity extends AppCompatActivity
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        quantMesas = listaMesas.get(position);
+                        //quantMesas = listaMesas.get(position);
 
                         Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", position);
-                        intent.putExtra("quantMesas", quantMesas);
+                        //intent.putExtra("quantMesas", quantMesas);
                         //Log.v("INFO", "Quant mesas1: "+ quantMesas);
                         startActivity(intent);
                     }
@@ -89,30 +152,10 @@ public class PrincipalActivity extends AppCompatActivity
         ));
     }
 
-    public void configuracaoRecyclerView(){
-        //Listar
-        QuantMesasDAO quantMesasDAO = new QuantMesasDAO(getApplicationContext());
-        listaMesas = quantMesasDAO.listarQuantMesa();
-
-        if (listaMesas.isEmpty()){
-            descricaoMesa.setVisibility(View.VISIBLE);
-        }else {
-            descricaoMesa.setVisibility(View.INVISIBLE);
-        }
-
-        //Adapter
-        adapterPrincipal = new AdapterPrincipal(getApplicationContext(), listaMesas);
-
-        //Recycler
-        RecyclerView.Adapter adapter = new AdapterPrincipal(this, listaMesas);
-        recyclerViewPricipal.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerViewPricipal.setAdapter(adapter);
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        configuracaoRecyclerView();
     }
 
     @Override

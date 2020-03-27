@@ -55,21 +55,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/descricaoMesa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nenhuma mesa cadastrada \n no momento"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerPrincipal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-20dp"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
