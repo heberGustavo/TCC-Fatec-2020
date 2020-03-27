@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuantMesasActivity extends AppCompatActivity {
+public class AdicionarMesasActivity extends AppCompatActivity {
 
     private TextInputEditText numeroMesa;
 
@@ -91,7 +91,7 @@ public class QuantMesasActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     Log.v("INFO", "zzzErro1: " + e.toString());
 
-                                    Toast.makeText(QuantMesasActivity.this,
+                                    Toast.makeText(AdicionarMesasActivity.this,
                                             "Erro ao registrar! --> " + e.toString(),
                                             Toast.LENGTH_SHORT).show();
                                 }
@@ -101,7 +101,7 @@ public class QuantMesasActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.v("INFO", "zzzErro2: " + error.toString());
-                                Toast.makeText(QuantMesasActivity.this,
+                                Toast.makeText(AdicionarMesasActivity.this,
                                         "Erro ao registrar! --> " + error.toString(),
                                         Toast.LENGTH_SHORT).show();
                             }

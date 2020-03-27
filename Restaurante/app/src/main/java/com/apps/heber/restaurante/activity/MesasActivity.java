@@ -52,8 +52,6 @@ public class MesasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
-        configuracaoRecyclerView();
-        listagemMesa();
 
         recyclerFazerPedido.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -131,5 +129,12 @@ public class MesasActivity extends AppCompatActivity {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(arrayRequest);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        configuracaoRecyclerView();
+        listagemMesa();
     }
 }

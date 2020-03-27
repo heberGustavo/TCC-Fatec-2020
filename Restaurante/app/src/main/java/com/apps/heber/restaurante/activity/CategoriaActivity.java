@@ -15,12 +15,23 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CardapioDAO;
-import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.adapter.AdapterCategoria;
+import com.apps.heber.restaurante.adapter.AdapterCategoriaNovo;
+import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.CategoriaNovo;
+import com.apps.heber.restaurante.modelo.QuantMesa;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +39,14 @@ import java.util.List;
 public class CategoriaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerCategoria;
-    private AdapterCategoria adapterCategoria;
-    private List<Categoria> listaCategorias = new ArrayList<>();
-    private Categoria categoriaSelecionada;
+    private DividerItemDecoration itemDecoration;
+    private LinearLayoutManager linearLayoutManager;
+    private List<CategoriaNovo> listaCategorias;
+    private RecyclerView.Adapter adapter;
+
+    private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
+
+    //private Categoria categoriaSelecionada;
 
     private TextView descricaoCategoria;
 
@@ -53,10 +69,10 @@ public class CategoriaActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        categoriaSelecionada = listaCategorias.get(position);
+                        //categoriaSelecionada = listaCategorias.get(position);
 
                         Intent intent = new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class);
-                        intent.putExtra("categoriaSelecionada", categoriaSelecionada);
+                        //intent.putExtra("categoriaSelecionada", categoriaSelecionada);
                         //Log.i("INFO", "Posicao categoria: "+categoriaSelecionada.getId());
                         startActivity(intent);
                     }
@@ -64,12 +80,12 @@ public class CategoriaActivity extends AppCompatActivity {
                     @Override
                     public void onLongItemClick(View view, int position) {
 
-                        categoriaSelecionada = listaCategorias.get(position);
+                        //categoriaSelecionada = listaCategorias.get(position);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(CategoriaActivity.this);
 
                         builder.setTitle("Confirmar exclusão");
-                        builder.setMessage("Deseja excluir a tarefa: " +categoriaSelecionada.getCategoria()+ "?");
+                        //builder.setMessage("Deseja excluir a tarefa: " +categoriaSelecionada.getCategoria()+ "?");
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -79,29 +95,29 @@ public class CategoriaActivity extends AppCompatActivity {
                                 //Log.v("INFO", "Id categoria: "+categoriaSelecionada.getId());
 
                                 // SE EXISTIR CARDAPIO CADASTRADO NÃO EXCLUI CATEGORIA
-                                int count = cardapioDAO.somaCardapio(categoriaSelecionada.getId());
-                                if (count >=1){
-                                    Toast.makeText(getApplicationContext(),
-                                            "Existe cardápio cadastrado nessa categoria!",
-                                            Toast.LENGTH_LONG).show();
-                                    //Log.v("INFO", "Quant de cardapios: "+count);
-                                }
-
-                                else{
-                                    CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
-
-                                    if (categoriaDAO.deletarCategoria(categoriaSelecionada)){
-
-                                        carregarRecyclerView();
-                                        Toast.makeText(getApplicationContext(),
-                                                "Categoria excluida com sucesso!",
-                                                Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getApplicationContext(),
-                                                "Erro ao excluir categoria!",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
+                                //int count = cardapioDAO.somaCardapio(categoriaSelecionada.getId());
+                                //if (count >=1){
+                                //    Toast.makeText(getApplicationContext(),
+                                //            "Existe cardápio cadastrado nessa categoria!",
+                                //            Toast.LENGTH_LONG).show();
+                                //    //Log.v("INFO", "Quant de cardapios: "+count);
+                                //}
+//
+                                //else{
+                                //    CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
+//
+                                //    if (categoriaDAO.deletarCategoria(categoriaSelecionada)){
+//
+                                //        carregarRecyclerView();
+                                //        Toast.makeText(getApplicationContext(),
+                                //                "Categoria excluida com sucesso!",
+                                //                Toast.LENGTH_SHORT).show();
+                                //    }else {
+                                //        Toast.makeText(getApplicationContext(),
+                                //                "Erro ao excluir categoria!",
+                                //                Toast.LENGTH_SHORT).show();
+                                //    }
+                                //}
                             }
                         });
 
@@ -120,36 +136,65 @@ public class CategoriaActivity extends AppCompatActivity {
     }
 
     public void carregarRecyclerView(){
-        //Listar Categoria
-        CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
-        listaCategorias = categoriaDAO.listarCategoria();
+        listaCategorias = new ArrayList<>();
 
-        //Verificao para mostrar a descrição da tela
-        if (listaCategorias.isEmpty()){
-            descricaoCategoria.setVisibility(View.VISIBLE);
-        }else{
-            descricaoCategoria.setVisibility(View.INVISIBLE);
-        }
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerCategoria.getContext(), linearLayoutManager.getOrientation());
 
-        //Adapter
-        adapterCategoria = new AdapterCategoria(listaCategorias, getApplicationContext());
-
-        //Recycler View
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerCategoria.setLayoutManager(layoutManager);
         recyclerCategoria.setHasFixedSize(true);
-        recyclerCategoria.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
-        recyclerCategoria.setAdapter(adapterCategoria);
+        recyclerCategoria.setLayoutManager(linearLayoutManager);
+        recyclerCategoria.addItemDecoration(itemDecoration);
+    }
+
+    private void listagemCategoria(){
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_categoria, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            CategoriaNovo categoria = new CategoriaNovo();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                categoria.setCategoria(jsonObject.getString("nomeCategoria"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaCategorias.add(categoria);
+                        }
+                        adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
+                        recyclerCategoria.setAdapter(adapter);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    public void abrirAdicionarNovaCategoria(View view){
+        startActivity(new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         carregarRecyclerView();
-    }
-
-    public void abrirAdicionarNovaCategoria(View view){
-        startActivity(new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class));
+        listagemCategoria();
     }
 }
 

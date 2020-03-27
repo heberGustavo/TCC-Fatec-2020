@@ -37,8 +37,9 @@ public class AdapterQuantMesa extends RecyclerView.Adapter<AdapterQuantMesa.Quan
     public void onBindViewHolder(QuantMesaViewHolder quantMesaViewHolder, int i) {
         QuantMesa mesa = mListaMesa.get(i);
 
+        // --> Pegar pelo Id da mesa
         quantMesaViewHolder.iconeMesa.setImageResource(ic_restaurant_menu_gray_24dp);
-        quantMesaViewHolder.numeroMesa.setText("Mesa" + mesa.getNumero());
+        quantMesaViewHolder.numeroMesa.setText("Mesa " + (i+1));
     }
 
     @Override

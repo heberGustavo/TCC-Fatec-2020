@@ -190,7 +190,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(new Intent(this, CategoriaActivity.class));
 
         } else if (id == R.id.nav_mesa) {
-            startActivity(new Intent(this, QuantMesasActivity.class));
+            startActivity(new Intent(this, AdicionarMesasActivity.class));
         }
         else if (id == R.id.nav_fluxoDeCaixa) {
             startActivity(new Intent(this, FluxoDeCaixaActivity.class));

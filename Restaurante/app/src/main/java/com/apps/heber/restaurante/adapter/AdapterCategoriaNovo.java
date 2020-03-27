@@ -10,21 +10,22 @@ import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.CategoriaNovo;
 
 import java.util.List;
 
-public class AdapterCategoria extends RecyclerView.Adapter<AdapterCategoria.MyViewHolderCategoria> {
+public class AdapterCategoriaNovo extends RecyclerView.Adapter<AdapterCategoriaNovo.MyViewHolderCategoria> {
 
-    List<Categoria> listaCategorias;
     Context context;
+    List<CategoriaNovo> listaCategorias;
 
-    public AdapterCategoria(List<Categoria> listaCategorias, Context context) {
+    public AdapterCategoriaNovo(List<CategoriaNovo> listaCategorias, Context context) {
         this.listaCategorias = listaCategorias;
         this.context = context;
     }
 
     @Override
-    public MyViewHolderCategoria onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolderCategoria onCreateViewHolder(ViewGroup viewGroup, int i) {
 
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.item_categoria, viewGroup, false);
@@ -35,7 +36,7 @@ public class AdapterCategoria extends RecyclerView.Adapter<AdapterCategoria.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderCategoria myViewHolderCategoria, int i) {
 
-        Categoria categoria = listaCategorias.get(i);
+        CategoriaNovo categoria = listaCategorias.get(i);
         myViewHolderCategoria.nomeCategoria.setText(categoria.getCategoria());
     }
 

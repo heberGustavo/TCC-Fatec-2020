@@ -15,7 +15,7 @@
         <activity android:name=".activity.FluxoDeCaixaActivity"
             android:parentActivityName=".activity.PrincipalActivity"></activity>
         <activity
-            android:name=".activity.QuantMesasActivity"
+            android:name=".activity.AdicionarMesasActivity"
             android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.AdicionarPedidoActivity"

@@ -3,17 +3,25 @@ package com.apps.heber.restaurante.modelo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Categoria implements Serializable {
+public class CategoriaNovo{
 
-    private Long id;
+    private int idCategoria;
     private String categoria;
 
-    public Long getId() {
-        return id;
+    public CategoriaNovo() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public CategoriaNovo(int idCategoria, String categoria) {
+        this.idCategoria = idCategoria;
+        this.categoria = categoria;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public String getCategoria() {
@@ -24,21 +32,4 @@ public class Categoria implements Serializable {
         this.categoria = categoria;
     }
 
-    @Override
-    public String toString() {
-        return categoria;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Categoria categoria1 = (Categoria) o;
-        return id.equals(categoria1.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, categoria);
-    }
 }
