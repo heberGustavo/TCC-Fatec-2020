@@ -9,19 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.modelo.QuantMesas;
-
-import java.util.List;
 
 public class AdapterPrincipal extends RecyclerView.Adapter<AdapterPrincipal.MyViewHolderPrincipal> {
 
     Context context;
-    List<QuantMesas> listaMesas;
+    //List<QuantMesas> listaMesas;
 
-    public AdapterPrincipal(Context context, List<QuantMesas> listaMesas) {
-        this.context = context;
-        this.listaMesas = listaMesas;
-    }
+    //public AdapterPrincipal(Context context, List<QuantMesas> listaMesas) {
+    //    this.context = context;
+    //    this.listaMesas = listaMesas;
+    //}
 
     @NonNull
     @Override
@@ -35,14 +32,14 @@ public class AdapterPrincipal extends RecyclerView.Adapter<AdapterPrincipal.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderPrincipal myViewHolderPrincipal, int i) {
-        QuantMesas quantMesas = listaMesas.get(i);
+        //QuantMesas quantMesas = listaMesas.get(i);
 
-        myViewHolderPrincipal.numeroMesa.setText(String.valueOf(quantMesas.getIdMesa()));
+        //myViewHolderPrincipal.numeroMesa.setText(String.valueOf(quantMesas.getIdMesa()));
     }
 
     @Override
     public int getItemCount() {
-        return listaMesas.size();
+        return 10;
     }
 
     public class MyViewHolderPrincipal extends RecyclerView.ViewHolder{

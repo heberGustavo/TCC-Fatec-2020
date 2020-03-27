@@ -14,11 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.apps.heber.restaurante.DAO.QuantMesasDAO;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.adapter.AdapterQuantMesas;
+import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.QuantMesas;
+import com.apps.heber.restaurante.modelo.QuantMesa;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +35,12 @@ import java.util.List;
 public class MesasActivity extends AppCompatActivity {
 
     private RecyclerView recyclerFazerPedido;
-    private AdapterQuantMesas adapterQuantMesas;
-    private List<QuantMesas> listaMesas = new ArrayList<>();
+    private DividerItemDecoration itemDecoration;
+    private LinearLayoutManager linearLayoutManager;
+    private List<QuantMesa> listaMesas;
+    private RecyclerView.Adapter adapter;
 
-    private QuantMesas quantMesas;
+    private String url = "https://restaurantecome.000webhostapp.com/listarMesa.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,7 @@ public class MesasActivity extends AppCompatActivity {
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
         configuracaoRecyclerView();
+        listagemMesa();
 
         recyclerFazerPedido.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -49,13 +61,13 @@ public class MesasActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        quantMesas = listaMesas.get(position);
-
-                        Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
-                        intent.putExtra("numeroMesa", position);
-                        intent.putExtra("quantMesas", quantMesas);
-                        Log.v("INFO", "Quant mesas1: "+ quantMesas.getIdMesa());
-                        startActivity(intent);
+                        //quantMesas = listaMesas.get(position);
+//
+                        //Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
+                        //intent.putExtra("numeroMesa", position);
+                        //intent.putExtra("quantMesas", quantMesas);
+                        //Log.v("INFO", "Quant mesas1: "+ quantMesas.getIdMesa());
+                        //startActivity(intent);
                     }
 
                     @Override
@@ -71,18 +83,53 @@ public class MesasActivity extends AppCompatActivity {
     }
 
     public void configuracaoRecyclerView(){
-        QuantMesasDAO quantMesasDAO = new QuantMesasDAO(getApplicationContext());
-        listaMesas = quantMesasDAO.listarQuantMesa();
+        listaMesas = new ArrayList<>();
 
-        //Adapter
-        adapterQuantMesas = new AdapterQuantMesas(listaMesas, getApplicationContext());
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerFazerPedido.getContext(), linearLayoutManager.getOrientation());
 
-        //RecyclerView
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerFazerPedido.setLayoutManager(layoutManager);
         recyclerFazerPedido.setHasFixedSize(true);
-        recyclerFazerPedido.addItemDecoration(new DividerItemDecoration(getApplicationContext(),1));
-        recyclerFazerPedido.setAdapter(adapterQuantMesas);
+        recyclerFazerPedido.setLayoutManager(linearLayoutManager);
+        recyclerFazerPedido.addItemDecoration(itemDecoration);
+    }
 
+    private void listagemMesa(){
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            QuantMesa quantMesa = new QuantMesa();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaMesas.add(quantMesa);
+                        }
+                        adapter = new AdapterQuantMesa(getApplicationContext(), listaMesas);
+                        recyclerFazerPedido.setAdapter(adapter);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
     }
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Pedido;
-import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public class ComandaActivity extends AppCompatActivity {
     private AdapterPedido adapterPedido;
 
     private Pedido pedidoSelecionado;
-    private QuantMesas quantMesas;
+    //private QuantMesas quantMesas;
 
     private int numeroMesa;
     private double gastoMesa;
@@ -51,7 +49,7 @@ public class ComandaActivity extends AppCompatActivity {
         recyclerPedidos = findViewById(R.id.recyclerPedidos);
         descricaoComanda = findViewById(R.id.descricaoComanda);
 
-        quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesas");
+        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesas");
 
         clickRecyclerView();
     }
@@ -128,7 +126,7 @@ public class ComandaActivity extends AppCompatActivity {
 
     public void menuSalvar() {
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        gastoMesa = itemPedidoDAO.listarGastoMesa(quantMesas.getIdMesa());
+        //gastoMesa = itemPedidoDAO.listarGastoMesa(quantMesas.getIdMesa());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
 
@@ -157,7 +155,8 @@ public class ComandaActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            if (fluxoCaixaDAO.salvar(gastoMesa) && dao.deletar(quantMesas.getIdMesa())){
+                            //dao.deletar(quantMesas.getIdMesa())
+                            if (fluxoCaixaDAO.salvar(gastoMesa)){
                                 Toast.makeText(getApplicationContext(),
                                         "Fechando comanda...",
                                         Toast.LENGTH_SHORT).show();
@@ -179,7 +178,7 @@ public class ComandaActivity extends AppCompatActivity {
     public void carregarRecycler(){
         //Listar
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        listaPedidos = itemPedidoDAO.listar(quantMesas.getIdMesa());
+        //listaPedidos = itemPedidoDAO.listar(quantMesas.getIdMesa());
 
         //SE A LISTA ESTIVER COM ITENS, ESCONDE A DESCRIÇÃO DA TELA
         if (listaPedidos.isEmpty()){
@@ -202,7 +201,7 @@ public class ComandaActivity extends AppCompatActivity {
     public void abrirCardapioCategoriaFazerPedido(View view){
         Intent intent = new Intent(ComandaActivity.this, CardapioCategoriaFazerPedidoActivity.class);
         intent.putExtra("numeroMesa", numeroMesa);
-        intent.putExtra("quantMesa", quantMesas);
+        //intent.putExtra("quantMesa", quantMesas);
         //Log.v("INFO", "Numero da mesa abrir tela: "+numeroMesa);
         //Log.v("INFO", "Quant mesa comanda2: "+quantMesas);
 

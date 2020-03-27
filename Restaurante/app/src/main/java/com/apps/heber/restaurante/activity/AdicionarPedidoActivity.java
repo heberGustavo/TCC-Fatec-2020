@@ -23,7 +23,6 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Categoria;
 import com.apps.heber.restaurante.modelo.Pedido;
-import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
     private Cardapio cardapioSelecionado;
     private Pedido pedidoSelecionado;
     private Categoria spinnerCategoria;
-    private QuantMesas quantMesas;
+    //private QuantMesas quantMesas;
 
     private int quantidadeCardapio;
     private int valorSpinner;
@@ -74,12 +73,12 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         verificaSpinner();
         imprimirCardapio();
 
-        quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
+        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
         //Log.v("INFO", "Quant mesas5 - final: "+ quantMesas.getIdMesa());
 
-        if (quantMesas != null){
-
-        }
+        //if (quantMesas != null){
+//
+        //}
         /*
         numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
         Log.v("INFO", "Numero mesa Final: "+numeroMesa);
@@ -279,8 +278,8 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             pedido.setValorUnitario(valorUnitario);
             pedido.setValorTotal(valorTotal);
             pedido.setObservacao(observacao);
-            pedido.setPosicaoMesa(quantMesas.getIdMesa());
-            Log.i("INFO", "Posicao mesa: "+quantMesas.getIdMesa());
+            //pedido.setPosicaoMesa(quantMesas.getIdMesa());
+            //Log.i("INFO", "Posicao mesa: "+quantMesas.getIdMesa());
 
 
             if (itemPedidoDAO.salvar(pedido)){

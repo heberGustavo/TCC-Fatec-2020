@@ -15,7 +15,6 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapioFazerPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Cardapio;
-import com.apps.heber.restaurante.modelo.QuantMesas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdapterCardapioFazerPedido adapterCardapioFazerPedido;
     private List<Cardapio> listaCardapios = new ArrayList<>();
-    private QuantMesas quantMesas;
+    //private QuantMesas quantMesas;
 
     private Long posicao;
     private int posicaoSpinner;
@@ -42,18 +41,18 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
         //Usado para listar a lista
         posicao = (Long) getIntent().getSerializableExtra("posicao");
-        quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
-        Log.v("INFO", "Quant mesas4: "+ quantMesas.getIdMesa());
+        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
+        //Log.v("INFO", "Quant mesas4: "+ quantMesas.getIdMesa());
 
-        if (quantMesas != null){
-            //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
-
-
-            /*
-            numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-            Log.v("INFO", "Numero da mesa2 dentro: "+numeroMesa);
-             */
-        }
+        //if (quantMesas != null){
+        //    //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
+//
+//
+        //    /*
+        //    numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
+        //    Log.v("INFO", "Numero da mesa2 dentro: "+numeroMesa);
+        //     */
+        //}
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -67,7 +66,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Recebe e envia para proxima tela
                         intent.putExtra("posicaoSpinner", posicaoSpinner);
-                        intent.putExtra("quantMesa", quantMesas);
+                        //intent.putExtra("quantMesa", quantMesas);
 
                         intent.putExtra("numeroMesa", numeroMesa);
                         //Log.v("INFO", "Numero da mesa3 saindo ...: "+numeroMesa);

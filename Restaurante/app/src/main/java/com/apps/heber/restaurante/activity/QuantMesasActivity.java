@@ -1,7 +1,5 @@
 package com.apps.heber.restaurante.activity;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,12 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.apps.heber.restaurante.DAO.QuantMesasDAO;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.helper.DbHelper;
-import com.apps.heber.restaurante.modelo.QuantMesas;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

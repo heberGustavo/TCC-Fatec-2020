@@ -72,7 +72,7 @@ public class PrincipalActivity extends AppCompatActivity
         recyclerViewPricipal.addItemDecoration(itemDecoration);
 
         listagemMesa();
-        //clickRecyclerView();
+        clickRecyclerView();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -130,12 +130,15 @@ public class PrincipalActivity extends AppCompatActivity
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        Toast.makeText(getApplicationContext(),
+                                "CLick: " + position,
+                                Toast.LENGTH_SHORT).show();
                         //quantMesas = listaMesas.get(position);
 
                         Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", position);
                         //intent.putExtra("quantMesas", quantMesas);
-                        //Log.v("INFO", "Quant mesas1: "+ quantMesas);
+                        Log.v("INFO", "Quant mesas1: "+ position);
                         startActivity(intent);
                     }
 
