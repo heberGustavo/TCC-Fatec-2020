@@ -53,6 +53,8 @@ public class MesasActivity extends AppCompatActivity {
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
 
+        Toast.makeText(getApplicationContext(), "Fazer pedido", Toast.LENGTH_SHORT).show();
+
         recyclerFazerPedido.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
                 recyclerFazerPedido,
@@ -60,12 +62,12 @@ public class MesasActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         //quantMesas = listaMesas.get(position);
-//
-                        //Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
+
+                        Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
                         //intent.putExtra("numeroMesa", position);
                         //intent.putExtra("quantMesas", quantMesas);
                         //Log.v("INFO", "Quant mesas1: "+ quantMesas.getIdMesa());
-                        //startActivity(intent);
+                        startActivity(intent);
                     }
 
                     @Override

@@ -6,6 +6,8 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,12 +18,25 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CardapioDAO;
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
+import com.apps.heber.restaurante.adapter.AdapterCategoriaNovo;
 import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.CategoriaNovo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdicionarNovoCardapioActivity extends AppCompatActivity {
@@ -29,10 +44,12 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
     private EditText editValor;
     private TextInputEditText editNomeProduto, editIngredientes;
     private Spinner spinner;
+    private List<CategoriaNovo> listaCategorias = new ArrayList<>();
+    private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
 
     private Cardapio cardapioSelecionado;
 
-    private Categoria posicaoSpinner; // Variavel global para saber a posição do Spinner
+    private CategoriaNovo posicaoSpinner; // Variavel global para saber a posição do Spinner
 
     private int cardapioCategoria;
 
@@ -51,7 +68,8 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         editIngredientes = findViewById(R.id.editIngredientesNovoCardapio);
         spinner = findViewById(R.id.spinnerCategoriaNovoCardapio);
 
-        carregarSpinner(); //Carrega todas as categorias no Spinner
+        listagemCategoria();
+        //carregarSpinner(); //Carrega todas as categorias no Spinner
 
         //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
@@ -79,7 +97,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Pega o id do item selecionado
-                posicaoSpinner = (Categoria) spinner.getItemAtPosition(position);
+                posicaoSpinner = (CategoriaNovo) spinner.getItemAtPosition(position);
                 //Log.v("INFO", "Posicao Spinner: "+posicaoSpinner.getId()+ " : "+posicaoSpinner.getCategoria());
             }
 
@@ -90,15 +108,50 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         });
     }
 
-    public void carregarSpinner(){
-        CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
-        List<Categoria> labels = categoriaDAO.listarCategoria();
+    private void listagemCategoria(){
 
-        ArrayAdapter<Categoria> dataAdapter = new ArrayAdapter<Categoria>(this,android.R.layout.simple_spinner_item, labels);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_categoria, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            CategoriaNovo categoria = new CategoriaNovo();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                categoria.setCategoria(jsonObject.getString("nomeCategoria"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaCategorias.add(categoria);
+                        }
+                        carregarSpinner();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    public void carregarSpinner(){
+        ArrayAdapter<CategoriaNovo> dataAdapter = new ArrayAdapter<CategoriaNovo>(this,android.R.layout.simple_spinner_item, listaCategorias);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,14 +164,14 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_salvar:
-                menuSalvar();
+                //menuSalvar();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    /*@RequiresApi(api = Build.VERSION_CODES.N)
     public void menuSalvar(){
         CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
 
@@ -172,19 +225,16 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                         cardapio.setValor(valorDouble);
                         cardapio.setNomeProduto(nome);
                         cardapio.setIngredientes(ingredientes);
-                        cardapio.setIdCategoria(posicaoSpinner.getId());
+                        cardapio.setIdCategoria(posicaoSpinner.getIdCategoria());
 
                         if (cardapioDAO.salvar(cardapio)){
                             Toast.makeText(getApplicationContext(),"Cardápio salvo!", Toast.LENGTH_SHORT).show();
 
-                            /*
-                            Log.i("INFO", "Nome: "+cardapio.getNomeProduto()+
-                                    "idCategoria: " + cardapio.getIdCategoria() +
-                                    "Valor: " + cardapio.getValor() +
-                                    "Ingrediente: " + cardapio.getIngredientes()+
-                                    "idCardapio: "+cardapio.getIdCardapio());
-                             */
-
+                            //Log.i("INFO", "Nome: "+cardapio.getNomeProduto()+
+                            //        "idCategoria: " + cardapio.getIdCategoria() +
+                            //        "Valor: " + cardapio.getValor() +
+                            //        "Ingrediente: " + cardapio.getIngredientes()+
+                            //        "idCardapio: "+cardapio.getIdCardapio());
 
                             finish();
                         }
@@ -199,5 +249,5 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Informe o valor!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 }
