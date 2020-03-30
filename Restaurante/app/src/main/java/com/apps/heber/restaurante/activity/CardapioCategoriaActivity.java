@@ -56,8 +56,6 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
         actionBar.setTitle("Categoria");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Toast.makeText(getApplicationContext(), "Aqui 2", Toast.LENGTH_SHORT).show();
-
         recyclerCardapioCategoria = findViewById(R.id.recyclerCardapioCategoria);
         descricaoCardapioCategoria = findViewById(R.id.descricaoCategoriaCardapio);
 
@@ -68,10 +66,11 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(CardapioCategoriaActivity.this, CardapioActivity.class);
-                        //Categoria categoriaSelecionada = listaCategorias.get(position);
-                        //intent.putExtra("posicao", categoriaSelecionada.getId());
+                        CategoriaNovo categoriaSelecionada = listaCategorias.get(position);
+                        intent.putExtra("posicao", categoriaSelecionada.getIdCategoria());
                         intent.putExtra("cardapioCategoria", position);
                         //Log.v("INFO", "Cardapio cat - inicio: "+position);
+                        Toast.makeText(getApplicationContext(), "Aqui 2: " + categoriaSelecionada.getIdCategoria(), Toast.LENGTH_SHORT).show();
 
                         startActivity(intent);
                     }
@@ -114,6 +113,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
 
+                                categoria.setIdCategoria(jsonObject.getInt("idCategoria"));
                                 categoria.setCategoria(jsonObject.getString("nomeCategoria"));
 
                             } catch (JSONException e) {

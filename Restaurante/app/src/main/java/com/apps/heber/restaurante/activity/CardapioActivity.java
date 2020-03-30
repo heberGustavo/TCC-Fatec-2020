@@ -1,9 +1,7 @@
 package com.apps.heber.restaurante.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,12 +13,21 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apps.heber.restaurante.DAO.CardapioDAO;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapio;
+import com.apps.heber.restaurante.adapter.AdapterCategoriaNovo;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Cardapio;
-import com.apps.heber.restaurante.modelo.Categoria;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +37,14 @@ public class CardapioActivity extends AppCompatActivity {
     private TextView descricaoCardapio;
 
     private RecyclerView recyclerCardapio;
-    private AdapterCardapio adapterCardapio;
-    private List<Cardapio> listaCardapios = new ArrayList<>();
-    private Cardapio cardapioSelecionado;
+    private DividerItemDecoration itemDecoration;
+    private LinearLayoutManager linearLayoutManager;
+    private List<Cardapio> listaCardapio;
+    private RecyclerView.Adapter adapter;
 
-    private Long posicao;
+    private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCardapio.php?idCategoria=";
+
+    private int posicao;
     private int cardapioCategoria;
 
     @Override
@@ -50,11 +60,12 @@ public class CardapioActivity extends AppCompatActivity {
         descricaoCardapio = findViewById(R.id.descricaoCardapio);
 
         //Recebe o ID e usa para fazer a listagem de itens por ID
-        posicao = (Long) getIntent().getSerializableExtra("posicao");
+        posicao = (int) getIntent().getSerializableExtra("posicao");
+        Toast.makeText(getApplicationContext(), "Posicao: " + posicao, Toast.LENGTH_SHORT).show();
 
         //Recebe a posicao do item clicado
         cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-        //Log.v("INFO", "cardapioCategoria2: "+ cardapioCategoria);
+        Toast.makeText(getApplicationContext(), "Cardapio Categoria: " + cardapioCategoria, Toast.LENGTH_SHORT).show();
 
         recyclerCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -63,19 +74,20 @@ public class CardapioActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         //Abre uma nova tela para edicao;
-                        cardapioSelecionado = listaCardapios.get(position);
+                        //cardapioSelecionado = listaCardapios.get(position);
 
                         Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);
                         //Envia o cardapio para a proxima tela
-                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        //intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Envia a posicao do item clicado
                         intent.putExtra("cardapioCategoria", cardapioCategoria);
-                        Log.v("INFO", "Cardapio categoria - cardapio: "+cardapioCategoria);
+
                         startActivity(intent);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
+                        /*
                         //Exclui o item do cardapio
 
                         //LINHA ABAIXO -> Pega a posicao do cardapio selecionado
@@ -107,7 +119,9 @@ public class CardapioActivity extends AppCompatActivity {
 
                         builder.create();
                         builder.show();
+                         */
                     }
+
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -118,6 +132,62 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
     public void carregarRecyclerView(){
+        listaCardapio = new ArrayList<>();
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerCardapio.getContext(), linearLayoutManager.getOrientation());
+
+        recyclerCardapio.setHasFixedSize(true);
+        recyclerCardapio.setLayoutManager(linearLayoutManager);
+        recyclerCardapio.addItemDecoration(itemDecoration);
+    }
+
+    private void listagemCardapio(){
+
+        String url_parametro = url_listar_categoria + posicao;
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_parametro, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            Cardapio cardapio = new Cardapio();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                cardapio.setValor(jsonObject.getDouble("preco"));
+                                cardapio.setNomeProduto(jsonObject.getString("nomeProduto"));
+                                cardapio.setIngredientes(jsonObject.getString("descricao"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaCardapio.add(cardapio);
+                        }
+                        adapter = new AdapterCardapio(listaCardapio, getApplicationContext());
+                        recyclerCardapio.setAdapter(adapter);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    //SQLite
+    /*public void carregarRecyclerView(){
         //Listar cardapios
         CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
         listaCardapios = cardapioDAO.listar(posicao);
@@ -138,11 +208,12 @@ public class CardapioActivity extends AppCompatActivity {
         recyclerCardapio.setHasFixedSize(true);
         recyclerCardapio.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
         recyclerCardapio.setAdapter(adapterCardapio);
-    }
+    }*/
 
     @Override
     protected void onStart() {
         super.onStart();
         carregarRecyclerView();
+        listagemCardapio();
     }
 }

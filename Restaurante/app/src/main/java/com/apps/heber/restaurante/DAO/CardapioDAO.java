@@ -90,7 +90,7 @@ public class CardapioDAO {
                 String nomeProduto = cursor.getString(cursor.getColumnIndex("nomeProduto"));
                 String descricao = cursor.getString(cursor.getColumnIndex("descricao"));
                 double preco = cursor.getDouble(cursor.getColumnIndex("preco"));
-                Long idCategoria = cursor.getLong(cursor.getColumnIndex("idCategoria"));
+                int idCategoria = cursor.getInt(cursor.getColumnIndex("idCategoria"));
 
                 cardapio.setIdCardapio(idProduto);
                 cardapio.setNomeProduto(nomeProduto);

@@ -8,7 +8,18 @@ public class Cardapio implements Serializable {
     private String nomeProduto;
     private String ingredientes;
     private double valor;
-    private Long idCategoria;
+    private int idCategoria;
+
+    public Cardapio() {
+    }
+
+    public Cardapio(Long idCardapio, String nomeProduto, String ingredientes, double valor, int idCategoria) {
+        this.idCardapio = idCardapio;
+        this.nomeProduto = nomeProduto;
+        this.ingredientes = ingredientes;
+        this.valor = valor;
+        this.idCategoria = idCategoria;
+    }
 
     public Long getIdCardapio() {
         return idCardapio;
@@ -18,11 +29,11 @@ public class Cardapio implements Serializable {
         this.idCardapio = idCardapio;
     }
 
-    public Long getIdCategoria() {
+    public int getIdCategoria() {
         return idCategoria;
     }
 
-    public void setIdCategoria(Long idCategoria) {
+    public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
 

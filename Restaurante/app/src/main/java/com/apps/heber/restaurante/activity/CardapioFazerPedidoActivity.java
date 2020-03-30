@@ -63,7 +63,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                         Intent intent = new Intent(CardapioFazerPedidoActivity.this, AdicionarPedidoActivity.class);
                         Cardapio cardapioSelecionado = listaCardapios.get(position);
                         //Envia o cardapio para proxima tela
-                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        //intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Recebe e envia para proxima tela
                         intent.putExtra("posicaoSpinner", posicaoSpinner);
                         //intent.putExtra("quantMesa", quantMesas);

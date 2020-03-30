@@ -222,12 +222,12 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_salvar:
-                menuSalvar();
+                //menuSalvar();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void menuSalvar(){
+    /*public void menuSalvar(){
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
 
         //Editar
@@ -289,5 +289,5 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Erro ao salvar!!!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 }
