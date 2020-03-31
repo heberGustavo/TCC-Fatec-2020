@@ -73,7 +73,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
         //cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-        Toast.makeText(getApplicationContext(), ""+ cardapioCategoria, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), ""+ cardapioCategoria, Toast.LENGTH_SHORT).show();
 
         verificaSpinnerSelecionado();
 
@@ -91,7 +91,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
             //Log.i("INFO", "fim: "+cardapioCategoria);
         }
 
-        Toast.makeText(getApplicationContext(), "Novo", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Novo", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -101,7 +101,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 posicaoSpinner = (CategoriaNovo) spinner.getItemAtPosition(position);
-                Log.v("INFO", "Posicao Spinner: "+posicaoSpinner.getIdCategoria()+ " : "+posicaoSpinner.getCategoria());
+                //Log.v("INFO", "Posicao Spinner: "+posicaoSpinner.getIdCategoria()+ " : "+posicaoSpinner.getCategoria());
             }
 
             @Override
@@ -130,7 +130,6 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),
                                         "Erro 01",
                                         Toast.LENGTH_SHORT).show();
-                                Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCategorias.add(categoria);
                         }
@@ -143,7 +142,6 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Erro 02",
                         Toast.LENGTH_SHORT).show();
-                Log.v("INFO", "Erro 02: " + error.toString());
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

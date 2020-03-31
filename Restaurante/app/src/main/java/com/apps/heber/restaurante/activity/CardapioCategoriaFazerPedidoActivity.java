@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +36,9 @@ import java.util.List;
 
 public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
 
+    private TextView descricaoCardapioCategoriaFazerPedido;
+    private ProgressBar progressBarCardapioCategoriaFazerPedido;
+
     private RecyclerView recyclerView;
     private DividerItemDecoration itemDecoration;
     private LinearLayoutManager linearLayoutManager;
@@ -52,10 +57,10 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cardapio_categoria_fazer_pedido);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setTitle("Categoria");
-
-        Toast.makeText(getApplicationContext(), "Aqui", Toast.LENGTH_SHORT).show();
-
+        
         recyclerView = findViewById(R.id.recyclerCardapioCategoriaFazerPedido);
+        descricaoCardapioCategoriaFazerPedido = findViewById(R.id.descricaoCardapioCategoriaFazerPedido);
+        progressBarCardapioCategoriaFazerPedido = findViewById(R.id.progressBarCardapioCategoriaFazerPedido);
 
         //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
         //Log.v("INFO", "Quant mesas3: "+ quantMesas.getIdMesa());
@@ -128,9 +133,16 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),
                                         "Erro 01",
                                         Toast.LENGTH_SHORT).show();
-                                Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCategorias.add(categoria);
+
+                            if(listaCategorias.size() >= 1){
+                                progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
+                            }
+                            if(listaCategorias.size() == 0){
+                                progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
+                                descricaoCardapioCategoriaFazerPedido.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerView.setAdapter(adapter);
@@ -142,7 +154,6 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Erro 02",
                         Toast.LENGTH_SHORT).show();
-                Log.v("INFO", "Erro 02: " + error.toString());
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

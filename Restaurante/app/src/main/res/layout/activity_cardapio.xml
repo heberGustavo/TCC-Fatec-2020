@@ -21,13 +21,25 @@
         android:id="@+id/descricaoCardapio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nunhum cardapio cadastrado \n no momento"
         android:gravity="center"
+        android:text="Nenhum cardápio cadastrado \n no momento"
         android:textSize="20dp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recyclerCardapio"
         app:layout_constraintStart_toStartOf="@+id/recyclerCardapio"
         app:layout_constraintTop_toTopOf="@+id/recyclerCardapio" />
+
+    <ProgressBar
+        android:id="@+id/progressBarCardapio"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerCardapio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerCardapio" />
+
 
 </android.support.constraint.ConstraintLayout>

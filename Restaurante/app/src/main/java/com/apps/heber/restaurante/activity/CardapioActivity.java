@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import java.util.List;
 public class CardapioActivity extends AppCompatActivity {
 
     private TextView descricaoCardapio;
+    private ProgressBar progressBarCardapio;
 
     private RecyclerView recyclerCardapio;
     private DividerItemDecoration itemDecoration;
@@ -58,14 +60,15 @@ public class CardapioActivity extends AppCompatActivity {
 
         recyclerCardapio = findViewById(R.id.recyclerCardapio);
         descricaoCardapio = findViewById(R.id.descricaoCardapio);
+        progressBarCardapio = findViewById(R.id.progressBarCardapio);
 
         //Recebe o ID e usa para fazer a listagem de itens por ID
         posicao = (int) getIntent().getSerializableExtra("posicao");
-        Toast.makeText(getApplicationContext(), "Posicao: " + posicao, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Posicao: " + posicao, Toast.LENGTH_SHORT).show();
 
         //Recebe a posicao do item clicado
         cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-        Toast.makeText(getApplicationContext(), "Cardapio Categoria: " + cardapioCategoria, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Cardapio Categoria: " + cardapioCategoria, Toast.LENGTH_SHORT).show();
 
         recyclerCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -165,9 +168,16 @@ public class CardapioActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),
                                         "Erro 01",
                                         Toast.LENGTH_SHORT).show();
-                                Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCardapio.add(cardapio);
+
+                            if(listaCardapio.size() >= 1){
+                                progressBarCardapio.setVisibility(View.GONE);
+                            }
+                            if(listaCardapio.size() == 0){
+                                progressBarCardapio.setVisibility(View.GONE);
+                                descricaoCardapio.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterCardapio(listaCardapio, getApplicationContext());
                         recyclerCardapio.setAdapter(adapter);
@@ -179,7 +189,6 @@ public class CardapioActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Erro 02",
                         Toast.LENGTH_SHORT).show();
-                Log.v("INFO", "Erro 02: " + error.toString());
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

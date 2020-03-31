@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
 
     private TextView descricaoCardapioCategoria;
+    private ProgressBar progressBarCardapioCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
 
         recyclerCardapioCategoria = findViewById(R.id.recyclerCardapioCategoria);
         descricaoCardapioCategoria = findViewById(R.id.descricaoCategoriaCardapio);
+        progressBarCardapioCategoria = findViewById(R.id.progressBarCardapioCategoria);
 
         recyclerCardapioCategoria.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -70,7 +73,6 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                         intent.putExtra("posicao", categoriaSelecionada.getIdCategoria());
                         intent.putExtra("cardapioCategoria", position);
                         //Log.v("INFO", "Cardapio cat - inicio: "+position);
-                        Toast.makeText(getApplicationContext(), "Aqui 2: " + categoriaSelecionada.getIdCategoria(), Toast.LENGTH_SHORT).show();
 
                         startActivity(intent);
                     }
@@ -120,9 +122,16 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),
                                         "Erro 01",
                                         Toast.LENGTH_SHORT).show();
-                                Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCategorias.add(categoria);
+
+                            if(listaCategorias.size() >= 1){
+                                progressBarCardapioCategoria.setVisibility(View.GONE);
+                            }
+                            if(listaCategorias.size() == 0){
+                                progressBarCardapioCategoria.setVisibility(View.GONE);
+                                descricaoCardapioCategoria.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerCardapioCategoria.setAdapter(adapter);
@@ -134,7 +143,6 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Erro 02",
                         Toast.LENGTH_SHORT).show();
-                Log.v("INFO", "Erro 02: " + error.toString());
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

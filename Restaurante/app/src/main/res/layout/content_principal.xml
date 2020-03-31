@@ -55,7 +55,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerPrincipal"
                     android:layout_width="match_parent"
@@ -65,7 +64,24 @@
 
         </LinearLayout>
 
-
     </ScrollView>
 
+    <TextView
+        android:id="@+id/descricaoMesa"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Nenhuma mesa cadastrada \n no momento"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_weight="10"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarMesa"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="280dp"
+        android:foregroundGravity="center"/>
 </RelativeLayout>

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +25,8 @@ import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CardapioDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCategoriaNovo;
-import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.CategoriaNovo;
-import com.apps.heber.restaurante.modelo.QuantMesa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +48,7 @@ public class CategoriaActivity extends AppCompatActivity {
     //private Categoria categoriaSelecionada;
 
     private TextView descricaoCategoria;
+    private ProgressBar progressBarCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class CategoriaActivity extends AppCompatActivity {
 
         recyclerCategoria = findViewById(R.id.recyclerCategoria);
         descricaoCategoria = findViewById(R.id.descricaoCategoria);
+        progressBarCategoria = findViewById(R.id.progressBarCardapio);
 
         recyclerCategoria.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -168,6 +169,14 @@ public class CategoriaActivity extends AppCompatActivity {
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCategorias.add(categoria);
+
+                            if(listaCategorias.size() >= 1){
+                                progressBarCategoria.setVisibility(View.GONE);
+                            }
+                            if(listaCategorias.size() == 0){
+                                progressBarCategoria.setVisibility(View.GONE);
+                                descricaoCategoria.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerCategoria.setAdapter(adapter);

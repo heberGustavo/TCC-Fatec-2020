@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,6 +36,9 @@ import java.util.List;
 
 public class MesasActivity extends AppCompatActivity {
 
+    private TextView descricaoMesa;
+    private ProgressBar progressBarMesa;
+
     private RecyclerView recyclerFazerPedido;
     private DividerItemDecoration itemDecoration;
     private LinearLayoutManager linearLayoutManager;
@@ -52,8 +57,8 @@ public class MesasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerFazerPedido = findViewById(R.id.recyclerFazerPedido);
-
-        Toast.makeText(getApplicationContext(), "Fazer pedido", Toast.LENGTH_SHORT).show();
+        descricaoMesa = findViewById(R.id.descricaoMesa);
+        progressBarMesa = findViewById(R.id.progressBarMesa);
 
         recyclerFazerPedido.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -115,6 +120,14 @@ public class MesasActivity extends AppCompatActivity {
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaMesas.add(quantMesa);
+
+                            if(listaMesas.size() >= 1){
+                                progressBarMesa.setVisibility(View.GONE);
+                            }
+                            if(listaMesas.size() == 0){
+                                progressBarMesa.setVisibility(View.GONE);
+                                descricaoMesa.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterQuantMesa(getApplicationContext(), listaMesas);
                         recyclerFazerPedido.setAdapter(adapter);

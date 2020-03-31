@@ -17,6 +17,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -49,7 +51,8 @@ public class PrincipalActivity extends AppCompatActivity
 
     private String url = "https://restaurantecome.000webhostapp.com/listarMesa.php";
 
-    //private TextView descricaoMesa;
+    private TextView descricaoMesa;
+    private ProgressBar progressBarMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,13 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //descricaoMesa = findViewById(R.id.descricaoMesa);
+        descricaoMesa = findViewById(R.id.descricaoMesa);
+        progressBarMesa = findViewById(R.id.progressBarMesa);
         recyclerViewPricipal = findViewById(R.id.recyclerPrincipal);
 
-        mesaList= new ArrayList<>();
+        progressBarMesa.setVisibility(View.VISIBLE);
 
+        mesaList= new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         itemDecoration = new DividerItemDecoration(recyclerViewPricipal.getContext(), linearLayoutManager.getOrientation());
@@ -90,12 +95,11 @@ public class PrincipalActivity extends AppCompatActivity
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        for(int i = 0; i < response.length(); i++){
+                        for(int i = 0; i < response.length(); i++) {
                             QuantMesa quantMesa = new QuantMesa();
                             try {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
-
                                 quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
 
                             } catch (JSONException e) {
@@ -105,6 +109,14 @@ public class PrincipalActivity extends AppCompatActivity
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             mesaList.add(quantMesa);
+
+                            if(mesaList.size() >=1){
+                                progressBarMesa.setVisibility(View.GONE);
+                            }
+                            if(mesaList.size() == 0){
+                                progressBarMesa.setVisibility(View.GONE);
+                                descricaoMesa.setVisibility(View.VISIBLE);
+                            }
                         }
                         adapter = new AdapterQuantMesa(getApplicationContext(), mesaList);
                         recyclerViewPricipal.setAdapter(adapter);
@@ -138,7 +150,7 @@ public class PrincipalActivity extends AppCompatActivity
                         Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", position);
                         //intent.putExtra("quantMesas", quantMesas);
-                        Log.v("INFO", "Quant mesas1: "+ position);
+                        //Log.v("INFO", "Quant mesas1: "+ position);
                         startActivity(intent);
                     }
 
