@@ -66,8 +66,9 @@ public class Cardapio implements Serializable {
         return "Cardapio{" +
                 "idCardapio=" + idCardapio +
                 ", nomeProduto='" + nomeProduto + '\'' +
-                ", valor=" + valor +
                 ", ingredientes='" + ingredientes + '\'' +
+                ", valor=" + valor +
+                ", idCategoria=" + idCategoria +
                 '}';
     }
 }

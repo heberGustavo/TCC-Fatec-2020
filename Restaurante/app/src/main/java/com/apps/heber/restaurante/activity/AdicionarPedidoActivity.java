@@ -17,13 +17,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.DAO.ItemPedidoDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.CategoriaNovo;
 import com.apps.heber.restaurante.modelo.Pedido;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdicionarPedidoActivity extends AppCompatActivity {
@@ -34,14 +46,14 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
     private Cardapio cardapioSelecionado;
     private Pedido pedidoSelecionado;
-    private Categoria spinnerCategoria;
+    private CategoriaNovo spinnerCategoria;
+    private List<CategoriaNovo> listaCategorias = new ArrayList<>();
     //private QuantMesas quantMesas;
 
     private int quantidadeCardapio;
-    private int valorSpinner;
     private int quantidadePedido;
-    private int numeroMesa;
 
+    private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
     private double valorTotal;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -65,13 +77,24 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
 
         //Recebendo dados
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
-        //Log.i("INFO", "vvvcardapio: "+cardapioSelecionado);
+        Log.i("INFO", "zzzCardapio: "+cardapioSelecionado.toString());
         pedidoSelecionado = (Pedido) getIntent().getSerializableExtra("pedidoSelecionado");
         //Log.i("INFO", "vvvPedido: "+pedidoSelecionado);
 
-        carregarSpinner();
+        listagemSpinnerCategoria();
         verificaSpinner();
         imprimirCardapio();
+
+
+
+
+
+
+
+
+
+
+
 
         //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
         //Log.v("INFO", "Quant mesas5 - final: "+ quantMesas.getIdMesa());
@@ -89,26 +112,23 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void imprimirCardapio(){
 
+        //Se for adicionar pedido a mesa
         if (cardapioSelecionado != null){
 
-            //Log.v("INFO", "Numero da mesa4 final: "+numeroMesa);
-            valorSpinner = (int) getIntent().getSerializableExtra("posicaoSpinner");
             quantidadeCardapio = 1;
-
-            //Log.i("INFO", "vvvcardapio: "+cardapioSelecionado);
 
             textNomeProduto.setText(cardapioSelecionado.getNomeProduto());
             textIngredientes.setText(cardapioSelecionado.getIngredientes());
             textValorUnitario.setText(String.valueOf(cardapioSelecionado.getValor()));
             textValorResultado.setText(String.valueOf(cardapioSelecionado.getValor())); //Mostra o valor para não iniciar com 0.00
-            spinner.setSelection(valorSpinner);
-            spinner.setEnabled(false); //Desativa para não poder alterar o valor
-            //Log.i("INFO","vvvSl: CardapioSelecionado get id: " + cardapioSelecionado.getIdCategoria());
-            //Log.i("INFO","vvvSl: Valor Spinner: "+valorSpinner);
+            spinner.setEnabled(true); //Desativa para não poder alterar o valor
+            Log.i("INFO","vvvSl: CardapioSelecionado get id: " + cardapioSelecionado.getIdCategoria());
+
         }
 
+        //Se for editar pedido da mesa
         if(pedidoSelecionado != null){
-
+            Log.v("INFO", "cardapio: "+pedidoSelecionado);
             quantidadePedido = pedidoSelecionado.getQuantidade();
             //Log.i("INFO","Quant: "+ quant);
 
@@ -139,22 +159,66 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerCategoria = (Categoria) spinner.getItemAtPosition(position);
-                //Log.i("INFO", "vvvCastCategoria: "+ spinnerCategoria.getId() + "/"+ spinnerCategoria.getCategoria());
+
+                for (int i=0; i<listaCategorias.size(); i++){
+                    if(i == cardapioSelecionado.getIdCategoria()){
+                        position = i;
+                        spinner.setSelection(position);
+                    }
+                    Log.v("INFO", "xxxLista:" + cardapioSelecionado);
+                }
+
+                //descobrir a posicao do meu id categoria android studio spinner
+                Toast.makeText(getApplicationContext(),
+                        "posicao do id: " + spinner.getSelectedItemPosition(),
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
 
-    public void carregarSpinner(){
-        CategoriaDAO categoriaDAO = new CategoriaDAO(getApplicationContext());
-        List<Categoria> labels = categoriaDAO.listarCategoria();
+    private void listagemSpinnerCategoria(){
 
-        ArrayAdapter<Categoria> dataAdapter = new ArrayAdapter<Categoria>(this,android.R.layout.simple_spinner_item, labels);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_categoria, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            CategoriaNovo categoria = new CategoriaNovo();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                categoria.setIdCategoria(jsonObject.getInt("idCategoria"));
+                                categoria.setCategoria(jsonObject.getString("nomeCategoria"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            listaCategorias.add(categoria);
+                        }
+                        carregarSpinner();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    public void carregarSpinner(){
+        ArrayAdapter<CategoriaNovo> dataAdapter = new ArrayAdapter<CategoriaNovo>(this,android.R.layout.simple_spinner_item, listaCategorias);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }

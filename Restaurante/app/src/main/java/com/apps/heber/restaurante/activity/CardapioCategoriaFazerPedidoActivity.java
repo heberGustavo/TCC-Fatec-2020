@@ -57,7 +57,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cardapio_categoria_fazer_pedido);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setTitle("Categoria");
-        
+
         recyclerView = findViewById(R.id.recyclerCardapioCategoriaFazerPedido);
         descricaoCardapioCategoriaFazerPedido = findViewById(R.id.descricaoCardapioCategoriaFazerPedido);
         progressBarCardapioCategoriaFazerPedido = findViewById(R.id.progressBarCardapioCategoriaFazerPedido);
@@ -80,14 +80,9 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(CardapioCategoriaFazerPedidoActivity.this, CardapioFazerPedidoActivity.class);
-                        //Categoria categoriaSelecionada = listaCategorias.get(position);
-                        //intent.putExtra("posicao", categoriaSelecionada.getId());
-                        intent.putExtra("posicaoSpinner", position);
-                        //Log.i("INFO", "posicao 1: " + position);
-                        intent.putExtra("numeroMesa", numeroMesa);
-                        //intent.putExtra("quantMesa", quantMesas);
 
-                        //Log.v("INFO", "Numero da mesa saindo ... : "+numeroMesa);
+                        CategoriaNovo categoriaSelecionada = listaCategorias.get(position);
+                        intent.putExtra("idCategoria", categoriaSelecionada.getIdCategoria());
 
                         startActivity(intent);
                     }
@@ -127,6 +122,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
 
+                                categoria.setIdCategoria(jsonObject.getInt("idCategoria"));
                                 categoria.setCategoria(jsonObject.getString("nomeCategoria"));
 
                             } catch (JSONException e) {
