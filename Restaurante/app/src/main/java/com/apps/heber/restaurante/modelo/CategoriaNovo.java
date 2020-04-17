@@ -3,7 +3,7 @@ package com.apps.heber.restaurante.modelo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class CategoriaNovo{
+public class CategoriaNovo implements Serializable{
 
     private int idCategoria;
     private String categoria;

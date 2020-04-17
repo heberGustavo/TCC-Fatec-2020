@@ -46,6 +46,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
     private String url_registrar_cardapio = "https://restaurantecome.000webhostapp.com/registrarProduto.php";
+    private String url_editar_cardapio = "https://restaurantecome.000webhostapp.com/editarCardapio.php";
 
     private Cardapio cardapioSelecionado;
 
@@ -68,16 +69,17 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         editIngredientes = findViewById(R.id.editIngredientesNovoCardapio);
         spinner = findViewById(R.id.spinnerCategoriaNovoCardapio);
 
-        listagemSpinnerCategoria(); //Carrega todas as categorias no Spinner
-
         //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
+        listagemSpinnerCategoria(); //Carrega todas as categorias no Spinner
+        verificaSpinnerSelecionado();
+
         //cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
         //Toast.makeText(getApplicationContext(), ""+ cardapioCategoria, Toast.LENGTH_SHORT).show();
 
-        verificaSpinnerSelecionado();
 
-        if (cardapioSelecionado != null){ //Se for edição
+
+        if (cardapioSelecionado != null) { //Se for edição
 
             Toast.makeText(getApplicationContext(), "Edição", Toast.LENGTH_SHORT).show();
             cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
@@ -92,16 +94,15 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         }
 
         //Toast.makeText(getApplicationContext(), "Novo", Toast.LENGTH_SHORT).show();
-
-
     }
 
     private void verificaSpinnerSelecionado() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 posicaoSpinner = (CategoriaNovo) spinner.getItemAtPosition(position);
-                //Log.v("INFO", "Posicao Spinner: "+posicaoSpinner.getIdCategoria()+ " : "+posicaoSpinner.getCategoria());
+                Log.v("INFO", "xxxPosicao Spinner: "+posicaoSpinner.getIdCategoria()+ " : "+posicaoSpinner.getCategoria());
             }
 
             @Override
@@ -111,13 +112,13 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         });
     }
 
-    private void listagemSpinnerCategoria(){
+    private void listagemSpinnerCategoria() {
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_categoria, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        for(int i = 0; i < response.length(); i++){
+                        for (int i = 0; i < response.length(); i++) {
                             CategoriaNovo categoria = new CategoriaNovo();
                             try {
 
@@ -148,10 +149,20 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
         requestQueue.add(arrayRequest);
     }
 
-    public void carregarSpinner(){
-        ArrayAdapter<CategoriaNovo> dataAdapter = new ArrayAdapter<CategoriaNovo>(this,android.R.layout.simple_spinner_item, listaCategorias);
+    public void carregarSpinner() {
+        ArrayAdapter<CategoriaNovo> dataAdapter = new ArrayAdapter<CategoriaNovo>(this, android.R.layout.simple_spinner_item, listaCategorias);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
+
+        if(cardapioSelecionado != null){
+            for (int i=0; i<listaCategorias.size(); i++){
+                //Se editar item cadastrado
+                if(listaCategorias.get(i).getCategoria().equals(cardapioSelecionado.getNomeCategoria())){
+                    spinner.setSelection(i);
+                }
+                Log.v("INFO", "xxxPosicao Spinner - for: "+i);
+            }
+        }
     }
 
     @Override
@@ -163,91 +174,164 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_salvar:
                 //menuSalvar();
-                RegistrarCategoria();
+                RegistrarCardapio();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void RegistrarCategoria(){
+    public void RegistrarCardapio() {
 
-        final String valor = editValor.getText().toString();
-        final String nome = editNomeProduto.getText().toString();
-        final String ingredientes = editIngredientes.getText().toString();
+        //Editar cardapio
+        if (cardapioSelecionado != null) {
 
-        if (!valor.isEmpty()) {
-            if (!nome.isEmpty()) {
-                if (!ingredientes.isEmpty()) {
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_cardapio,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        Log.v("Info", "zzzResponse: " + jsonObject);
+            final String idProduto = String.valueOf(cardapioSelecionado.getIdCardapio());
+            final String valor = editValor.getText().toString();
+            final String nomeProduto = editNomeProduto.getText().toString();
+            final String ingredientes = editIngredientes.getText().toString();
+            final String idCategoria = String.valueOf(posicaoSpinner.getIdCategoria());
+            final String nomeCategoria = posicaoSpinner.getCategoria();
 
-                                        String sucess = jsonObject.getString("sucess");
-                                        if (sucess.equals("1")) {
+            if (!valor.isEmpty()) {
+                if (!nomeProduto.isEmpty()) {
+                    if (!ingredientes.isEmpty()) {
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url_editar_cardapio,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        //Log.v("Info", "zzzResponse: " + response);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+
+                                            String sucess = jsonObject.getString("sucess");
+                                            if (sucess.equals("1")) {
+                                                Toast.makeText(AdicionarNovoCardapioActivity.this,
+                                                        "Cardapio editado",
+                                                        Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            }
+                                        } catch (JSONException e) {
                                             Toast.makeText(AdicionarNovoCardapioActivity.this,
-                                                    "Cardapio adicionado",
+                                                    "Erro ao editar! --> Erro 01",
                                                     Toast.LENGTH_SHORT).show();
-                                            editValor.setText("");
-                                            editNomeProduto.setText("");
-                                            editIngredientes.setText("");
                                         }
-                                    } catch (JSONException e) {
-                                        Log.v("INFO", "zzzErro1: " + e.toString());
-
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
                                         Toast.makeText(AdicionarNovoCardapioActivity.this,
-                                                "Erro ao registrar! --> " + e.toString(),
+                                                "Erro ao editar! --> Erro 02",
                                                 Toast.LENGTH_SHORT).show();
                                     }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.v("INFO", "zzzErro2: " + error.toString());
-                                    Toast.makeText(AdicionarNovoCardapioActivity.this,
-                                            "Erro ao registrar! --> " + error.toString(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<>();
-                            params.put("preco", valor);
-                            params.put("nomeProduto", nome);
-                            params.put("descricao", ingredientes);
-                            params.put("idCategoria", String.valueOf(posicaoSpinner.getIdCategoria()));
+                                }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                params.put("idProduto", idProduto);
+                                params.put("preco", valor);
+                                params.put("nomeProduto", nomeProduto);
+                                params.put("descricao", ingredientes);
+                                params.put("idCategoria", idCategoria);
+                                params.put("nomeCategoria", nomeCategoria);
 
-                            Log.v("zzzParametros", "Paramentros: " + params.toString());
-                            return params;
-                        }
-                    };
-                    RequestQueue requestQueue = Volley.newRequestQueue(this);
-                    requestQueue.add(stringRequest);
+                                Log.v("zzzParametros", "Paramentros: " + params.toString());
+                                return params;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(this);
+                        requestQueue.add(stringRequest);
+
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(), "Informe os ingredientes!", Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else
+                    Toast.makeText(getApplicationContext(), "Informe o nome do produto!", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getApplicationContext(), "Informe o valor!", Toast.LENGTH_SHORT).show();
+        }
+
+        //Criar novo cardapio
+        else {
+            final String valor = editValor.getText().toString();
+            final String nome = editNomeProduto.getText().toString();
+            final String ingredientes = editIngredientes.getText().toString();
+
+            if (!valor.isEmpty()) {
+                if (!nome.isEmpty()) {
+                    if (!ingredientes.isEmpty()) {
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_cardapio,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            //Log.v("Info", "zzzResponse: " + jsonObject);
+
+                                            String sucess = jsonObject.getString("sucess");
+                                            if (sucess.equals("1")) {
+                                                Toast.makeText(AdicionarNovoCardapioActivity.this,
+                                                        "Cardapio adicionado",
+                                                        Toast.LENGTH_SHORT).show();
+                                                editValor.setText("");
+                                                editNomeProduto.setText("");
+                                                editIngredientes.setText("");
+                                            }
+                                        } catch (JSONException e) {
+                                            Toast.makeText(AdicionarNovoCardapioActivity.this,
+                                                    "Erro ao registrar! --> Erro 01",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        //Log.v("INFO", "zzzErro2: " + error.toString());
+                                        Toast.makeText(AdicionarNovoCardapioActivity.this,
+                                                "Erro ao registrar! --> " + error.toString(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> params = new HashMap<>();
+                                params.put("preco", valor);
+                                params.put("nomeProduto", nome);
+                                params.put("descricao", ingredientes);
+                                params.put("idCategoria", String.valueOf(posicaoSpinner.getIdCategoria()));
+                                params.put("nomeCategoria", posicaoSpinner.getCategoria());
+
+                                Log.v("zzzParametros", "Paramentros: " + params.toString());
+                                return params;
+                            }
+                        };
+                        RequestQueue requestQueue = Volley.newRequestQueue(this);
+                        requestQueue.add(stringRequest);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Preencha o campo ingredientes!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
                     Toast.makeText(getApplicationContext(),
-                            "Preencha o campo ingredientes!",
+                            "Preencha o campo nome!",
                             Toast.LENGTH_SHORT).show();
                 }
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(),
-                        "Preencha o campo nome!",
+                        "Preencha o campo valor!",
                         Toast.LENGTH_SHORT).show();
             }
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "Preencha o campo valor!",
-                    Toast.LENGTH_SHORT).show();
         }
-    }
 
     /*@RequiresApi(api = Build.VERSION_CODES.N)
     public void menuSalvar(){
@@ -328,4 +412,5 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
             }
         }
     }*/
+    }
 }

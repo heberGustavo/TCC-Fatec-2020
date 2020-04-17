@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.modelo.Categoria;
+import com.apps.heber.restaurante.modelo.CategoriaNovo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,11 +30,12 @@ import java.util.Map;
 public class AdicionarCategoriaActivity extends AppCompatActivity {
 
     private TextInputEditText editNomeCategoria;
-    private Categoria categoriaSelecionada;
+    private CategoriaNovo categoriaSelecionada;
 
     RequestQueue requestQueue;
 
     private static String url_registrar_categoria = "https://restaurantecome.000webhostapp.com/registrarCategoria.php";
+    private static String url_editar_categoria = "https://restaurantecome.000webhostapp.com/editarCategoria.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,10 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         editNomeCategoria = findViewById(R.id.nomeCategoria);
         requestQueue = Volley.newRequestQueue(this);
 
-        categoriaSelecionada = (Categoria) getIntent().getSerializableExtra("categoriaSelecionada");
+        categoriaSelecionada = (CategoriaNovo) getIntent().getSerializableExtra("categoriaSelecionada");
+        //Log.i("INFO", "xxx Categoria chegando: "+categoriaSelecionada);
 
+        //Se for edicão traz o campo 'nome categoria' preenchido
         if (categoriaSelecionada != null){
             editNomeCategoria.setText(categoriaSelecionada.getCategoria());
         }
@@ -73,58 +77,119 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
     }
 
     public void RegistrarCategoria(){
-        final String campoCategoria = editNomeCategoria.getText().toString();
-        Log.v("INFO", "nome campo: " + campoCategoria);
 
-        if (!campoCategoria.isEmpty()){
+        // Editar categoria
+        if (categoriaSelecionada != null){
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_categoria,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                Log.v("Info", "zzzResponse: " + jsonObject);
+            final String idCategoria = String.valueOf(categoriaSelecionada.getIdCategoria());
+            final String nomeCategoria = editNomeCategoria.getText().toString();
 
-                                String sucess = jsonObject.getString("sucess");
-                                if (sucess.equals("1")) {
+            if (!nomeCategoria.isEmpty()){
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_editar_categoria,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.v("Info", "zzzResponse: " + response);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+
+                                    String sucess = jsonObject.getString("sucess");
+                                    if (sucess.equals("1")) {
+                                        Toast.makeText(AdicionarCategoriaActivity.this,
+                                                "Categoria editada",
+                                                Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                } catch (JSONException e) {
+                                    Log.v("INFO", "zzzErro1: " + e.toString());
+
                                     Toast.makeText(AdicionarCategoriaActivity.this,
-                                            "Categoria adicionada",
+                                            "Erro ao editar! --> " + e.toString(),
                                             Toast.LENGTH_SHORT).show();
                                 }
-                            } catch (JSONException e) {
-                                Log.v("INFO", "zzzErro1: " + e.toString());
-
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.v("INFO", "zzzErro2: " + error.toString());
                                 Toast.makeText(AdicionarCategoriaActivity.this,
-                                        "Erro ao registrar! --> " + e.toString(),
+                                        "Erro ao editar! --> " + error.toString(),
                                         Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.v("INFO", "zzzErro2: " + error.toString());
-                            Toast.makeText(AdicionarCategoriaActivity.this,
-                                    "Erro ao registrar! --> " + error.toString(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Log.v("zzzParametros", "Paramentros: " + campoCategoria);
-                    Map<String, String> params = new HashMap<>();
-                    params.put("nomeCategoria", campoCategoria);
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("idCategoria", idCategoria);
+                        params.put("nomeCategoria", nomeCategoria);
 
-                    Log.v("zzzParametros", "Paramentros: " + params.toString());
-                    return params;
-                }
-            };
-            requestQueue.add(stringRequest);
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "Preencha o campo!",
-                    Toast.LENGTH_SHORT).show();
+                        Log.v("zzzParametros", "Paramentros: " + params.toString());
+                        return params;
+                    }
+                };
+                requestQueue.add(stringRequest);
+            }else {
+                Toast.makeText(getApplicationContext(), "Informe a categoria", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        //Criar nova categoria
+        else{
+            final String campoCategoria = editNomeCategoria.getText().toString();
+            Log.v("INFO", "nome campo: " + campoCategoria);
+
+            if (!campoCategoria.isEmpty()){
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_categoria,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    Log.v("Info", "zzzResponse: " + jsonObject);
+
+                                    String sucess = jsonObject.getString("sucess");
+                                    if (sucess.equals("1")) {
+                                        Toast.makeText(AdicionarCategoriaActivity.this,
+                                                "Categoria adicionada",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    Log.v("INFO", "zzzErro1: " + e.toString());
+
+                                    Toast.makeText(AdicionarCategoriaActivity.this,
+                                            "Erro ao registrar! --> " + e.toString(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.v("INFO", "zzzErro2: " + error.toString());
+                                Toast.makeText(AdicionarCategoriaActivity.this,
+                                        "Erro ao registrar! --> " + error.toString(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Log.v("zzzParametros", "Paramentros: " + campoCategoria);
+                        Map<String, String> params = new HashMap<>();
+                        params.put("nomeCategoria", campoCategoria);
+
+                        Log.v("zzzParametros", "Paramentros: " + params.toString());
+                        return params;
+                    }
+                };
+                requestQueue.add(stringRequest);
+            }else{
+                Toast.makeText(getApplicationContext(),
+                        "Preencha o campo!",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

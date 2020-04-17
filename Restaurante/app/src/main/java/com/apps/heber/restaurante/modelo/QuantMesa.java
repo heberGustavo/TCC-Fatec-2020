@@ -1,6 +1,8 @@
 package com.apps.heber.restaurante.modelo;
 
-public class QuantMesa {
+import java.io.Serializable;
+
+public class QuantMesa implements Serializable {
 
     private int id;
     private int numero;

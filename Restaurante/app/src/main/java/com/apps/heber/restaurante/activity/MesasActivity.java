@@ -66,12 +66,10 @@ public class MesasActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        //quantMesas = listaMesas.get(position);
-
+                        QuantMesa numeroMesa = listaMesas.get(position);
                         Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
-                        //intent.putExtra("numeroMesa", position);
-                        //intent.putExtra("quantMesas", quantMesas);
-                        //Log.v("INFO", "Quant mesas1: "+ quantMesas.getIdMesa());
+                        intent.putExtra("numeroMesa", numeroMesa);
+
                         startActivity(intent);
                     }
 
@@ -111,6 +109,7 @@ public class MesasActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
 
+                                quantMesa.setId(jsonObject.getInt("id"));
                                 quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
 
                             } catch (JSONException e) {
@@ -120,17 +119,17 @@ public class MesasActivity extends AppCompatActivity {
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaMesas.add(quantMesa);
-
-                            if(listaMesas.size() >= 1){
-                                progressBarMesa.setVisibility(View.GONE);
-                            }
-                            if(listaMesas.size() == 0){
-                                progressBarMesa.setVisibility(View.GONE);
-                                descricaoMesa.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterQuantMesa(getApplicationContext(), listaMesas);
                         recyclerFazerPedido.setAdapter(adapter);
+
+                        if(listaMesas.size() >= 1){
+                            progressBarMesa.setVisibility(View.GONE);
+                        }
+                        if(listaMesas.size() == 0){
+                            progressBarMesa.setVisibility(View.GONE);
+                            descricaoMesa.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

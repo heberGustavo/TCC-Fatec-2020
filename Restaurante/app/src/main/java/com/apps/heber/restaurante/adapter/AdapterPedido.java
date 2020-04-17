@@ -9,17 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.modelo.Pedido;
+import com.apps.heber.restaurante.modelo.ItemPedido;
 
 import java.util.List;
 
 public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHolderPedidos> {
 
-    List<Pedido> listaPedidos;
+    List<ItemPedido> listaItemPedidos;
     Context context;
 
-    public AdapterPedido(List<Pedido> listaPedidos, Context context) {
-        this.listaPedidos = listaPedidos;
+    public AdapterPedido(List<ItemPedido> listaItemPedidos, Context context) {
+        this.listaItemPedidos = listaItemPedidos;
         this.context = context;
     }
 
@@ -34,16 +34,16 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolderPedidos myViewHolderPedidos, int i) {
-        Pedido pedido = listaPedidos.get(i);
+        ItemPedido itemPedido = listaItemPedidos.get(i);
 
-        myViewHolderPedidos.nomeProduto.setText(pedido.getNomeProduto());
-        myViewHolderPedidos.valorProduto.setText(String.valueOf(pedido.getValorTotal())); //********** retornar double
-        myViewHolderPedidos.ingredientesProduto.setText(pedido.getIngredientes());
+        myViewHolderPedidos.nomeProduto.setText(itemPedido.getNomeProduto());
+        myViewHolderPedidos.valorProduto.setText(String.valueOf(itemPedido.getValorTotal())); //********** retornar double
+        myViewHolderPedidos.ingredientesProduto.setText(itemPedido.getIngrediente());
     }
 
     @Override
     public int getItemCount() {
-        return listaPedidos.size();
+        return listaItemPedidos.size();
     }
 
     public class MyViewHolderPedidos extends RecyclerView.ViewHolder{

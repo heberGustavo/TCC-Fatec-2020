@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
@@ -22,6 +23,7 @@ import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapio;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Cardapio;
+import com.apps.heber.restaurante.modelo.QuantMesa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,11 +45,8 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCardapio.php?idCategoria=";
 
-    //private QuantMesas quantMesas;
-
+    private QuantMesa numeroMesa;
     private int idCategoria;
-    private int posicaoSpinner;
-    private int numeroMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +61,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
 
         //Usado para listar a lista
         idCategoria = (int) getIntent().getSerializableExtra("idCategoria");
-
-        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
-        //Log.v("INFO", "Quant mesas4: "+ quantMesas.getIdMesa());
-
-        //if (quantMesas != null){
-        //    //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
-//
-//
-        //    /*
-        //    numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        //    Log.v("INFO", "Numero da mesa2 dentro: "+numeroMesa);
-        //     */
-        //}
+        numeroMesa = (QuantMesa) getIntent().getSerializableExtra("numeroMesa");
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -83,14 +70,11 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(CardapioFazerPedidoActivity.this, AdicionarPedidoActivity.class);
-                        Cardapio cardapioSelecionado = listaCardapio.get(position);
-                        //Envia o cardapio para proxima tela
-                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
-                        //Recebe e envia para proxima tela
-                        //intent.putExtra("posicaoSpinner", posicaoSpinner);
 
+                        Cardapio cardapioSelecionado = listaCardapio.get(position);
+                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         intent.putExtra("numeroMesa", numeroMesa);
-                        //Log.v("INFO", "Numero da mesa3 saindo ...: "+numeroMesa);
+
                         startActivity(intent);
                     }
 
@@ -137,6 +121,7 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                                 cardapio.setNomeProduto(jsonObject.getString("nomeProduto"));
                                 cardapio.setIngredientes(jsonObject.getString("descricao"));
                                 cardapio.setIdCategoria(jsonObject.getInt("idCategoria"));
+                                cardapio.setNomeCategoria(jsonObject.getString("nomeCategoria"));
 
                             } catch (JSONException e) {
                                 Toast.makeText(getApplicationContext(),
@@ -144,17 +129,17 @@ public class CardapioFazerPedidoActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             listaCardapio.add(cardapio);
-
-                            if(listaCardapio.size() >= 1){
-                                progressBarCardapioFazerPedido.setVisibility(View.GONE);
-                            }
-                            if(listaCardapio.size() == 0){
-                                progressBarCardapioFazerPedido.setVisibility(View.GONE);
-                                descricaoCardapioFazerPedido.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterCardapio(listaCardapio, getApplicationContext());
                         recyclerView.setAdapter(adapter);
+
+                        if(listaCardapio.size() >= 1){
+                            progressBarCardapioFazerPedido.setVisibility(View.GONE);
+                        }
+                        if(listaCardapio.size() == 0){
+                            progressBarCardapioFazerPedido.setVisibility(View.GONE);
+                            descricaoCardapioFazerPedido.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

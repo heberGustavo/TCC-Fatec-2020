@@ -45,7 +45,7 @@ public class CategoriaActivity extends AppCompatActivity {
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
 
-    //private Categoria categoriaSelecionada;
+    private CategoriaNovo categoriaSelecionada;
 
     private TextView descricaoCategoria;
     private ProgressBar progressBarCategoria;
@@ -70,11 +70,11 @@ public class CategoriaActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        //categoriaSelecionada = listaCategorias.get(position);
+                        categoriaSelecionada = listaCategorias.get(position);
 
                         Intent intent = new Intent(CategoriaActivity.this, AdicionarCategoriaActivity.class);
-                        //intent.putExtra("categoriaSelecionada", categoriaSelecionada);
-                        //Log.i("INFO", "Posicao categoria: "+categoriaSelecionada.getId());
+                        intent.putExtra("categoriaSelecionada", categoriaSelecionada);
+                        //Log.i("INFO", "xxx Categoria saindo: "+categoriaSelecionada);
                         startActivity(intent);
                     }
 
@@ -160,6 +160,7 @@ public class CategoriaActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
 
+                                categoria.setIdCategoria(jsonObject.getInt("idCategoria"));
                                 categoria.setCategoria(jsonObject.getString("nomeCategoria"));
 
                             } catch (JSONException e) {
@@ -169,17 +170,17 @@ public class CategoriaActivity extends AppCompatActivity {
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             listaCategorias.add(categoria);
-
-                            if(listaCategorias.size() >= 1){
-                                progressBarCategoria.setVisibility(View.GONE);
-                            }
-                            if(listaCategorias.size() == 0){
-                                progressBarCategoria.setVisibility(View.GONE);
-                                descricaoCategoria.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerCategoria.setAdapter(adapter);
+
+                        if(listaCategorias.size() >= 1){
+                            progressBarCategoria.setVisibility(View.GONE);
+                        }
+                        if(listaCategorias.size() == 0){
+                            progressBarCategoria.setVisibility(View.GONE);
+                            descricaoCategoria.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

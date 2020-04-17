@@ -46,6 +46,8 @@ public class CardapioActivity extends AppCompatActivity {
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCardapio.php?idCategoria=";
 
+    private Cardapio cardapioSelecionado;
+
     private int posicao;
     private int cardapioCategoria;
 
@@ -77,11 +79,10 @@ public class CardapioActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         //Abre uma nova tela para edicao;
-                        //cardapioSelecionado = listaCardapios.get(position);
+                        cardapioSelecionado = listaCardapio.get(position);
 
-                        Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);
-                        //Envia o cardapio para a proxima tela
-                        //intent.putExtra("cardapioSelecionado", cardapioSelecionado);
+                        Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);//Envia o cardapio para a proxima tela
+                        intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Envia a posicao do item clicado
                         intent.putExtra("cardapioCategoria", cardapioCategoria);
 
@@ -160,9 +161,13 @@ public class CardapioActivity extends AppCompatActivity {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
 
+                                cardapio.setIdCardapio(jsonObject.getLong("idProduto"));
                                 cardapio.setValor(jsonObject.getDouble("preco"));
                                 cardapio.setNomeProduto(jsonObject.getString("nomeProduto"));
                                 cardapio.setIngredientes(jsonObject.getString("descricao"));
+                                cardapio.setIdCategoria(jsonObject.getInt("idCategoria"));
+                                cardapio.setNomeCategoria(jsonObject.getString("nomeCategoria"));
+
 
                             } catch (JSONException e) {
                                 Toast.makeText(getApplicationContext(),
@@ -170,17 +175,17 @@ public class CardapioActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             listaCardapio.add(cardapio);
-
-                            if(listaCardapio.size() >= 1){
-                                progressBarCardapio.setVisibility(View.GONE);
-                            }
-                            if(listaCardapio.size() == 0){
-                                progressBarCardapio.setVisibility(View.GONE);
-                                descricaoCardapio.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterCardapio(listaCardapio, getApplicationContext());
                         recyclerCardapio.setAdapter(adapter);
+
+                        if(listaCardapio.size() == 0){
+                            progressBarCardapio.setVisibility(View.GONE);
+                            descricaoCardapio.setVisibility(View.VISIBLE);
+                        }
+                        if(listaCardapio.size() >= 1){
+                            progressBarCardapio.setVisibility(View.GONE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

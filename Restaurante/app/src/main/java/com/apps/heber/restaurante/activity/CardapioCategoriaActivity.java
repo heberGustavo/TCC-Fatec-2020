@@ -124,17 +124,17 @@ public class CardapioCategoriaActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             listaCategorias.add(categoria);
-
-                            if(listaCategorias.size() >= 1){
-                                progressBarCardapioCategoria.setVisibility(View.GONE);
-                            }
-                            if(listaCategorias.size() == 0){
-                                progressBarCardapioCategoria.setVisibility(View.GONE);
-                                descricaoCardapioCategoria.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerCardapioCategoria.setAdapter(adapter);
+
+                        if(listaCategorias.size() >= 1){
+                            progressBarCardapioCategoria.setVisibility(View.GONE);
+                        }
+                        if(listaCategorias.size() == 0){
+                            progressBarCardapioCategoria.setVisibility(View.GONE);
+                            descricaoCardapioCategoria.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

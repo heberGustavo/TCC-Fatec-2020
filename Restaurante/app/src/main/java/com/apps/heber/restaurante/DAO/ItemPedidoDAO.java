@@ -7,13 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.apps.heber.restaurante.helper.DbHelper;
-import com.apps.heber.restaurante.modelo.Pedido;
+import com.apps.heber.restaurante.modelo.ItemPedido;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemPedidoDAO {
 
+    /*
     private SQLiteDatabase escrever;
     private SQLiteDatabase ler;
 
@@ -23,16 +24,16 @@ public class ItemPedidoDAO {
         ler = dbHelper.getReadableDatabase();
     }
 
-    public boolean salvar(Pedido pedido){
+    public boolean salvar(ItemPedido itemPedido){
         ContentValues values = new ContentValues();
-        values.put("nomeProduto", pedido.getNomeProduto());
-        values.put("ingredientes", pedido.getIngredientes());
-        values.put("quantidade", pedido.getQuantidade());
-        values.put("valorUnitario", pedido.getValorUnitario());
-        values.put("valorTotal", pedido.getValorTotal());
-        values.put("observacao", pedido.getObservacao());
-        values.put("fkIdProduto", pedido.getFkIdCategoria());
-        values.put("posicaoMesa", pedido.getPosicaoMesa());
+        values.put("nomeProduto", itemPedido.getNomeProduto());
+        values.put("ingredientes", itemPedido.getIngredientes());
+        values.put("quantidade", itemPedido.getQuantidade());
+        values.put("valorUnitario", itemPedido.getValorUnitario());
+        values.put("valorTotal", itemPedido.getValorTotal());
+        values.put("observacao", itemPedido.getObservacao());
+        values.put("fkIdProduto", itemPedido.getFkIdCategoria());
+        values.put("posicaoMesa", itemPedido.getPosicaoMesa());
 
         try {
             escrever.insert(DbHelper.TABELA_ITEM_DO_PEDIDO, null, values);
@@ -44,14 +45,14 @@ public class ItemPedidoDAO {
         return true;
     }
 
-    public boolean atualizar(Pedido pedido){
+    public boolean atualizar(ItemPedido itemPedido){
         ContentValues values = new ContentValues();
-        values.put("quantidade", pedido.getQuantidade());
-        values.put("valorTotal", pedido.getValorTotal());
-        values.put("observacao", pedido.getObservacao());
+        values.put("quantidade", itemPedido.getQuantidade());
+        values.put("valorTotal", itemPedido.getValorTotal());
+        values.put("observacao", itemPedido.getObservacao());
 
         try {
-            String[] args = {pedido.getIdItemPedido().toString()};
+            String[] args = {itemPedido.getIdItemPedido().toString()};
             escrever.update(DbHelper.TABELA_ITEM_DO_PEDIDO, values, "idItemPedido=?", args);
             escrever.close();
         }catch (Exception e){
@@ -61,9 +62,9 @@ public class ItemPedidoDAO {
         return true;
     }
 
-    public boolean deletar(Pedido pedido){
+    public boolean deletar(ItemPedido itemPedido){
         try {
-            String[] args = {pedido.getIdItemPedido().toString()};
+            String[] args = {itemPedido.getIdItemPedido().toString()};
             escrever.delete(DbHelper.TABELA_ITEM_DO_PEDIDO, "idItemPedido=?", args);
             escrever.close(); //Fecha a conexao
             //Log.i("INFO", "Sucesso na remocao do pedido");
@@ -87,8 +88,8 @@ public class ItemPedidoDAO {
         return true;
     }
 
-    public List<Pedido> listar(int pMesa){
-        List<Pedido> listaPedidos = new ArrayList<>();
+    public List<ItemPedido> listar(int pMesa){
+        List<ItemPedido> listaItemPedidos = new ArrayList<>();
 
         String sql = "SELECT * FROM " + DbHelper.TABELA_ITEM_DO_PEDIDO +
                 " WHERE posicaoMesa = " + pMesa + ";";
@@ -96,7 +97,7 @@ public class ItemPedidoDAO {
         Cursor cursor = ler.rawQuery(sql, null);
 
         while (cursor.moveToNext()){
-            Pedido pedido = new Pedido();
+            ItemPedido itemPedido = new ItemPedido();
 
             Long idItemProduto = cursor.getLong(cursor.getColumnIndex("idItemPedido"));
             String nomeProduto = cursor.getString(cursor.getColumnIndex("nomeProduto"));
@@ -108,21 +109,21 @@ public class ItemPedidoDAO {
             Long fkIdProduto = cursor.getLong(cursor.getColumnIndex("fkIdProduto"));
             int posicaoMesa = cursor.getInt(cursor.getColumnIndex("posicaoMesa"));
 
-            pedido.setIdItemPedido(idItemProduto);
-            pedido.setNomeProduto(nomeProduto);
-            pedido.setIngredientes(ingredientes);
-            pedido.setQuantidade(quantidade);
-            pedido.setValorUnitario(valorUnitario);
-            pedido.setValorTotal(valorTotal);
-            pedido.setObservacao(observacao);
-            pedido.setFkIdCategoria(fkIdProduto);
-            pedido.setPosicaoMesa(posicaoMesa);
+            itemPedido.setIdItemPedido(idItemProduto);
+            itemPedido.setNomeProduto(nomeProduto);
+            itemPedido.setIngredientes(ingredientes);
+            itemPedido.setQuantidade(quantidade);
+            itemPedido.setValorUnitario(valorUnitario);
+            itemPedido.setValorTotal(valorTotal);
+            itemPedido.setObservacao(observacao);
+            itemPedido.setFkIdCategoria(fkIdProduto);
+            itemPedido.setPosicaoMesa(posicaoMesa);
 
-            listaPedidos.add(pedido);
+            listaItemPedidos.add(itemPedido);
 
             ler.close();
         }
-        return listaPedidos;
+        return listaItemPedidos;
     }
 
     public double listarGastoMesa(int pMesa){
@@ -143,4 +144,6 @@ public class ItemPedidoDAO {
 
         return soma;
     }
+
+     */
 }

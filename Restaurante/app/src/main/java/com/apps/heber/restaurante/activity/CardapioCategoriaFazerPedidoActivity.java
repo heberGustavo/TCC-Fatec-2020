@@ -26,6 +26,7 @@ import com.apps.heber.restaurante.adapter.AdapterCategoriaNovo;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
 import com.apps.heber.restaurante.modelo.Categoria;
 import com.apps.heber.restaurante.modelo.CategoriaNovo;
+import com.apps.heber.restaurante.modelo.QuantMesa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,9 +48,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCategoria.php";
 
-    //private QuantMesas quantMesas;
-
-    private int numeroMesa;
+    private QuantMesa numeroMesa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +61,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
         descricaoCardapioCategoriaFazerPedido = findViewById(R.id.descricaoCardapioCategoriaFazerPedido);
         progressBarCardapioCategoriaFazerPedido = findViewById(R.id.progressBarCardapioCategoriaFazerPedido);
 
-        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesa");
-        //Log.v("INFO", "Quant mesas3: "+ quantMesas.getIdMesa());
-
-        //if (quantMesas != null){
-        //    //UTLIZADO SOMENTE PARA QUE 'numeroMesa' NÃO SEJA NULL
-        //    /*
-        //    numeroMesa = (int) getIntent().getSerializableExtra("numeroMesa");
-        //    Log.v("INFO", "Numero da mesa2 dentro: "+numeroMesa);
-        //     */
-        //}
+        numeroMesa = (QuantMesa) getIntent().getSerializableExtra("numeroMesa");
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
@@ -83,6 +73,7 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
 
                         CategoriaNovo categoriaSelecionada = listaCategorias.get(position);
                         intent.putExtra("idCategoria", categoriaSelecionada.getIdCategoria());
+                        intent.putExtra("numeroMesa", numeroMesa);
 
                         startActivity(intent);
                     }
@@ -131,17 +122,17 @@ public class CardapioCategoriaFazerPedidoActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             listaCategorias.add(categoria);
-
-                            if(listaCategorias.size() >= 1){
-                                progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
-                            }
-                            if(listaCategorias.size() == 0){
-                                progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
-                                descricaoCardapioCategoriaFazerPedido.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterCategoriaNovo(listaCategorias, getApplicationContext());
                         recyclerView.setAdapter(adapter);
+
+                        if(listaCategorias.size() >= 1){
+                            progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
+                        }
+                        if(listaCategorias.size() == 0){
+                            progressBarCardapioCategoriaFazerPedido.setVisibility(View.GONE);
+                            descricaoCardapioCategoriaFazerPedido.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

@@ -109,17 +109,17 @@ public class PrincipalActivity extends AppCompatActivity
                                 Log.v("INFO", "Erro 01: " + e.toString());
                             }
                             mesaList.add(quantMesa);
-
-                            if(mesaList.size() >=1){
-                                progressBarMesa.setVisibility(View.GONE);
-                            }
-                            if(mesaList.size() == 0){
-                                progressBarMesa.setVisibility(View.GONE);
-                                descricaoMesa.setVisibility(View.VISIBLE);
-                            }
                         }
                         adapter = new AdapterQuantMesa(getApplicationContext(), mesaList);
                         recyclerViewPricipal.setAdapter(adapter);
+
+                        if(mesaList.size() >=1){
+                            progressBarMesa.setVisibility(View.GONE);
+                        }
+                        if(mesaList.size() == 0){
+                            progressBarMesa.setVisibility(View.GONE);
+                            descricaoMesa.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }, new Response.ErrorListener() {

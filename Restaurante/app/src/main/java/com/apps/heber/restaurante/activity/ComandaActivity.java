@@ -8,36 +8,52 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.FluxoCaixaDAO;
-import com.apps.heber.restaurante.DAO.ItemPedidoDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
-import com.apps.heber.restaurante.modelo.Pedido;
+import com.apps.heber.restaurante.modelo.ItemPedido;
+import com.apps.heber.restaurante.modelo.QuantMesa;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComandaActivity extends AppCompatActivity {
 
-    private TextView descricaoComanda;
+    private TextView descricaoItemPedido;
+    private ProgressBar progressBarItemPedido;
 
     private RecyclerView recyclerPedidos;
-    private List<Pedido> listaPedidos = new ArrayList<>();
-    private AdapterPedido adapterPedido;
+    private DividerItemDecoration itemDecoration;
+    private LinearLayoutManager linearLayoutManager;
+    private List<ItemPedido> listaItemPedidos;
+    private RecyclerView.Adapter adapter;
 
-    private Pedido pedidoSelecionado;
-    //private QuantMesas quantMesas;
+    private ItemPedido itemPedidoSelecionado;
+    private QuantMesa numeroMesa;
 
-    private int numeroMesa;
-    private double gastoMesa;
+    private double valorTotalMesa;
+
+    private String url_listar_item_protudo = "https://restaurantecome.000webhostapp.com/listarItemProduto.php?idMesa=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +63,10 @@ public class ComandaActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerPedidos = findViewById(R.id.recyclerPedidos);
-        descricaoComanda = findViewById(R.id.descricaoComanda);
+        descricaoItemPedido = findViewById(R.id.descricaoComanda);
+        progressBarItemPedido = findViewById(R.id.progressBarItemPedido);
 
-        //quantMesas = (QuantMesas) getIntent().getSerializableExtra("quantMesas");
+        numeroMesa = (QuantMesa) getIntent().getSerializableExtra("numeroMesa");
 
         clickRecyclerView();
     }
@@ -61,36 +78,37 @@ public class ComandaActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        pedidoSelecionado = listaPedidos.get(position);
+                        itemPedidoSelecionado = listaItemPedidos.get(position);
 
                         Intent intent = new Intent(ComandaActivity.this, AdicionarPedidoActivity.class);
-                        intent.putExtra("pedidoSelecionado", pedidoSelecionado);
+                        intent.putExtra("pedidoSelecionado", itemPedidoSelecionado);
+                        Log.v("INFO", "zzzSaindo id item: " + itemPedidoSelecionado.getIdItemCardapio());
                         startActivity(intent);
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        pedidoSelecionado = listaPedidos.get(position);
+                        itemPedidoSelecionado = listaItemPedidos.get(position);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
                         builder.setTitle("Confirmar exclusão.");
-                        builder.setMessage("Deseja excluir o cardapio: " + pedidoSelecionado.getNomeProduto() + "?");
+                        builder.setMessage("Deseja excluir o cardapio: " + itemPedidoSelecionado.getNomeProduto() + "?");
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-
-                                if (itemPedidoDAO.deletar(pedidoSelecionado)){
-                                    //Atualiza os dados na lista
-                                    carregarRecycler();
-                                    Toast.makeText(getApplicationContext(),
-                                            "Sucesso ao remover pedido!",
-                                            Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(getApplicationContext(),
-                                            "Erro ao excluir pedido!",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                //ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
+//
+                                //if (itemPedidoDAO.deletar(itemPedidoSelecionado)){
+                                //    //Atualiza os dados na lista
+                                //    listagemProdutoNaComanda();
+                                //    Toast.makeText(getApplicationContext(),
+                                //            "Sucesso ao remover pedido!",
+                                //            Toast.LENGTH_SHORT).show();
+                                //}else {
+                                //    Toast.makeText(getApplicationContext(),
+                                //            "Erro ao excluir pedido!",
+                                //            Toast.LENGTH_SHORT).show();
+                                //}
                             }
                         });
 
@@ -125,13 +143,15 @@ public class ComandaActivity extends AppCompatActivity {
     }
 
     public void menuSalvar() {
-        ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        //gastoMesa = itemPedidoDAO.listarGastoMesa(quantMesas.getIdMesa());
+
+        final double valorGasto = valorTotalMesa;
+        Log.v("INFO", "Gasto total: " + valorGasto);
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
 
         builder.setTitle("Gasto total da mesa");
-        builder.setMessage("R$ " + gastoMesa);
+        builder.setMessage("R$ " + valorGasto);
         builder.setNegativeButton("Cancelar", null);
         builder.setPositiveButton("Fechar comanda", new DialogInterface.OnClickListener() {
             @Override
@@ -147,16 +167,16 @@ public class ComandaActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //Salva na tela do Fluxo de Caixa
                         FluxoCaixaDAO fluxoCaixaDAO = new FluxoCaixaDAO(getApplicationContext());
-                        ItemPedidoDAO dao = new ItemPedidoDAO(getApplicationContext());
+                        //ItemPedidoDAO dao = new ItemPedidoDAO(getApplicationContext());
 
-                        if (gastoMesa <= 0){
+                        if (valorGasto <= 0){
                             Toast.makeText(getApplicationContext(),
                                     "Comanda vazia",
                                     Toast.LENGTH_SHORT).show();
                         }
                         else{
                             //dao.deletar(quantMesas.getIdMesa())
-                            if (fluxoCaixaDAO.salvar(gastoMesa)){
+                            if (fluxoCaixaDAO.salvar(valorGasto)){
                                 Toast.makeText(getApplicationContext(),
                                         "Fechando comanda...",
                                         Toast.LENGTH_SHORT).show();
@@ -175,42 +195,85 @@ public class ComandaActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void carregarRecycler(){
-        //Listar
-        ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-        //listaPedidos = itemPedidoDAO.listar(quantMesas.getIdMesa());
-
-        //SE A LISTA ESTIVER COM ITENS, ESCONDE A DESCRIÇÃO DA TELA
-        if (listaPedidos.isEmpty()){
-            descricaoComanda.setVisibility(View.VISIBLE);
-        }else{
-            descricaoComanda.setVisibility(View.INVISIBLE);
-        }
-
-        //Adapter
-        adapterPedido = new AdapterPedido(listaPedidos, getApplicationContext());
-
-        //RecyclerView
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerPedidos.setLayoutManager(layoutManager);
-        recyclerPedidos.setHasFixedSize(true);
-        recyclerPedidos.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
-        recyclerPedidos.setAdapter(adapterPedido);
-    }
-
     public void abrirCardapioCategoriaFazerPedido(View view){
         Intent intent = new Intent(ComandaActivity.this, CardapioCategoriaFazerPedidoActivity.class);
         intent.putExtra("numeroMesa", numeroMesa);
-        //intent.putExtra("quantMesa", quantMesas);
-        //Log.v("INFO", "Numero da mesa abrir tela: "+numeroMesa);
-        //Log.v("INFO", "Quant mesa comanda2: "+quantMesas);
 
         startActivity(intent);
+    }
+
+    public void carregarRecyclerView(){
+        listaItemPedidos = new ArrayList<>();
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerPedidos.getContext(), linearLayoutManager.getOrientation());
+
+        recyclerPedidos.setHasFixedSize(true);
+        recyclerPedidos.setLayoutManager(linearLayoutManager);
+        recyclerPedidos.addItemDecoration(itemDecoration);
+    }
+
+    private void listagemProdutoNaComanda(){
+
+        String url_parametro = url_listar_item_protudo + numeroMesa.getId();
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_parametro, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            ItemPedido itemPedido = new ItemPedido();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                itemPedido.setIdItemCardapio(jsonObject.getInt("idItemPedido"));
+                                itemPedido.setNomeProduto(jsonObject.getString("nomeProduto"));
+                                itemPedido.setIngrediente(jsonObject.getString("ingrediente"));
+                                itemPedido.setQuantidade(jsonObject.getInt("quantidade"));
+                                itemPedido.setValorUnitario(jsonObject.getDouble("valorUnitario"));
+                                itemPedido.setValorTotal(jsonObject.getDouble("valorTotal"));
+                                itemPedido.setObservacoes(jsonObject.getString("observacao"));
+                                itemPedido.setNomeCategoria(jsonObject.getString("nomeCategoria"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            listaItemPedidos.add(itemPedido);
+                            //Acumula o total gasto na mesa
+                            valorTotalMesa += itemPedido.getValorTotal();
+                            //Log.v("INFO", "Gasto total: Lista == " + valorTotalMesa);
+                        }
+                        adapter = new AdapterPedido(listaItemPedidos, getApplicationContext());
+                        recyclerPedidos.setAdapter(adapter);
+
+                        if(listaItemPedidos.size() >= 1){
+                            progressBarItemPedido.setVisibility(View.GONE);
+                        }
+                        if(listaItemPedidos.size() == 0){
+                            progressBarItemPedido.setVisibility(View.GONE);
+                            descricaoItemPedido.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        carregarRecycler();
+        carregarRecyclerView();
+        listagemProdutoNaComanda();
     }
 }
