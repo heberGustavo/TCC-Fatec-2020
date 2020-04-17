@@ -327,6 +327,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             final String valorUnitario = textValorUnitario.getText().toString();
             final String valorTotal = textValorResultado.getText().toString();
             final String observacao = editObservacao.getText().toString();
+            final String idCategoria = String.valueOf(cardapioSelecionado.getIdCategoria());
             final String nomeCategoria = cardapioSelecionado.getNomeCategoria();
             final String idMesa = String.valueOf(numeroMesa.getId());
 
@@ -369,6 +370,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
                     params.put("valorUnitario", valorUnitario);
                     params.put("valorTotal", valorTotal);
                     params.put("observacao", observacao);
+                    params.put("idCategoria", idCategoria);
                     params.put("nomeCategoria", nomeCategoria);
                     params.put("idMesa", idMesa);
 

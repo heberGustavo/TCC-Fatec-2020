@@ -82,6 +82,7 @@ public class CardapioActivity extends AppCompatActivity {
                         cardapioSelecionado = listaCardapio.get(position);
 
                         Intent intent = new Intent(CardapioActivity.this, AdicionarNovoCardapioActivity.class);//Envia o cardapio para a proxima tela
+                        Log.v("INFO", "Cardapio 1: " + cardapioSelecionado);
                         intent.putExtra("cardapioSelecionado", cardapioSelecionado);
                         //Envia a posicao do item clicado
                         intent.putExtra("cardapioCategoria", cardapioCategoria);

@@ -71,6 +71,7 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
         //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
+        Log.v("INFO", "Cardapio 1 - recebendo: " + cardapioSelecionado);
         listagemSpinnerCategoria(); //Carrega todas as categorias no Spinner
         verificaSpinnerSelecionado();
 

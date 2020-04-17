@@ -13,13 +13,14 @@ public class ItemPedido implements Serializable {
     private double valorUnitario;
     private double valorTotal;
     private String observacoes;
+    private int idCategoria;
     private String nomeCategoria;
     private int idMesa;
 
     public ItemPedido() {
     }
 
-    public ItemPedido(int idItemCardapio, String nomeProduto, String ingrediente, int quantidade, double valorUnitario, double valorTotal, String observacoes, String nomeCategoria, int idMesa) {
+    public ItemPedido(int idItemCardapio, String nomeProduto, String ingrediente, int quantidade, double valorUnitario, double valorTotal, String observacoes, String nomeCategoria, int idMesa, int idCategoria) {
         this.idItemCardapio = idItemCardapio;
         this.nomeProduto = nomeProduto;
         this.ingrediente = ingrediente;
@@ -29,11 +30,12 @@ public class ItemPedido implements Serializable {
         this.observacoes = observacoes;
         this.nomeCategoria = nomeCategoria;
         this.idMesa = idMesa;
+        this.idCategoria = idCategoria;
     }
 
     @Override
     public String toString() {
-        return "ItemCardapio{" +
+        return "ItemPedido{" +
                 "idItemCardapio=" + idItemCardapio +
                 ", nomeProduto='" + nomeProduto + '\'' +
                 ", ingrediente='" + ingrediente + '\'' +
@@ -41,9 +43,18 @@ public class ItemPedido implements Serializable {
                 ", valorUnitario=" + valorUnitario +
                 ", valorTotal=" + valorTotal +
                 ", observacoes='" + observacoes + '\'' +
+                ", idCategoria=" + idCategoria +
                 ", nomeCategoria='" + nomeCategoria + '\'' +
                 ", idMesa=" + idMesa +
                 '}';
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public int getIdItemCardapio() {
