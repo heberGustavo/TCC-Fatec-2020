@@ -17,11 +17,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.FluxoCaixaDAO;
 import com.apps.heber.restaurante.R;
@@ -35,7 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComandaActivity extends AppCompatActivity {
 
@@ -54,6 +58,7 @@ public class ComandaActivity extends AppCompatActivity {
     private double valorTotalMesa;
 
     private String url_listar_item_protudo = "https://restaurantecome.000webhostapp.com/listarItemProduto.php?idMesa=";
+    private String url_excluir_pedido = "https://restaurantecome.000webhostapp.com/excluirProdutoComanda.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class ComandaActivity extends AppCompatActivity {
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
+                        //ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
 //
                                 //if (itemPedidoDAO.deletar(itemPedidoSelecionado)){
                                 //    //Atualiza os dados na lista
@@ -109,8 +114,56 @@ public class ComandaActivity extends AppCompatActivity {
                                 //            "Erro ao excluir pedido!",
                                 //            Toast.LENGTH_SHORT).show();
                                 //}
+
+
+                                //Excluir item no pedido
+                                Log.v("INFO", "zzzChegando id item excluir: " + itemPedidoSelecionado.getIdItemCardapio());
+                                final String idItemPedido = String.valueOf(itemPedidoSelecionado.getIdItemCardapio());
+
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_excluir_pedido,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                Log.v("Info", "zzzResponse: " + response);
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(response);
+
+                                                    String sucess = jsonObject.getString("sucess");
+                                                    if (sucess.equals("1")) {
+                                                        Toast.makeText(ComandaActivity.this,
+                                                                "Pedido excluido",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    Toast.makeText(ComandaActivity.this,
+                                                            "Erro ao editar! --> Erro 01",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(ComandaActivity.this,
+                                                        "Erro ao editar! --> Erro 2",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("idItemPedido", idItemPedido);
+
+                                        Log.v("zzzParametros", "Paramentros: " + params.toString());
+                                        return params;
+                                    }
+                                };
+                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                requestQueue.add(stringRequest);
                             }
                         });
+
+                        listagemProdutoNaComanda();
 
                         builder.setNegativeButton("Não", null);
 
