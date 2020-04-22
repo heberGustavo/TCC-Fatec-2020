@@ -36,7 +36,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +63,7 @@ public class ComandaActivity extends AppCompatActivity {
 
     private String url_listar_item_protudo = "https://restaurantecome.000webhostapp.com/listarItemProduto.php?idMesa=";
     private String url_excluir_pedido = "https://restaurantecome.000webhostapp.com/excluirProdutoComanda.php";
+    private String url_registrar_fluxo_mesa = "https://restaurantecome.000webhostapp.com/registrarFluxoMesa.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,7 @@ public class ComandaActivity extends AppCompatActivity {
         progressBarItemPedido = findViewById(R.id.progressBarItemPedido);
 
         numeroMesa = (QuantMesa) getIntent().getSerializableExtra("numeroMesa");
+        Log.v("INFO", "zzzNumeroDaMesa: " + numeroMesa.getId());
 
         clickRecyclerView();
     }
@@ -101,69 +107,54 @@ public class ComandaActivity extends AppCompatActivity {
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                        //ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getApplicationContext());
-//
-                                //if (itemPedidoDAO.deletar(itemPedidoSelecionado)){
-                                //    //Atualiza os dados na lista
-                                //    listagemProdutoNaComanda();
-                                //    Toast.makeText(getApplicationContext(),
-                                //            "Sucesso ao remover pedido!",
-                                //            Toast.LENGTH_SHORT).show();
-                                //}else {
-                                //    Toast.makeText(getApplicationContext(),
-                                //            "Erro ao excluir pedido!",
-                                //            Toast.LENGTH_SHORT).show();
-                                //}
 
+                            //Excluir item no pedido
+                            Log.v("INFO", "zzzChegando id item excluir: " + itemPedidoSelecionado.getIdItemCardapio());
+                            final String idItemPedido = String.valueOf(itemPedidoSelecionado.getIdItemCardapio());
 
-                                //Excluir item no pedido
-                                Log.v("INFO", "zzzChegando id item excluir: " + itemPedidoSelecionado.getIdItemCardapio());
-                                final String idItemPedido = String.valueOf(itemPedidoSelecionado.getIdItemCardapio());
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, url_excluir_pedido,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            Log.v("Info", "zzzResponse: " + response);
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(response);
 
-                                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_excluir_pedido,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                Log.v("Info", "zzzResponse: " + response);
-                                                try {
-                                                    JSONObject jsonObject = new JSONObject(response);
-
-                                                    String sucess = jsonObject.getString("sucess");
-                                                    if (sucess.equals("1")) {
-                                                        Toast.makeText(ComandaActivity.this,
-                                                                "Pedido excluido",
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } catch (JSONException e) {
+                                                String sucess = jsonObject.getString("sucess");
+                                                if (sucess.equals("1")) {
                                                     Toast.makeText(ComandaActivity.this,
-                                                            "Erro ao editar! --> Erro 01",
+                                                            "Pedido excluido",
                                                             Toast.LENGTH_SHORT).show();
+                                                    listagemProdutoNaComanda();
                                                 }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
+                                            } catch (JSONException e) {
                                                 Toast.makeText(ComandaActivity.this,
-                                                        "Erro ao editar! --> Erro 2",
+                                                        "Erro ao editar! --> Erro 01",
                                                         Toast.LENGTH_SHORT).show();
                                             }
-                                        }) {
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map<String, String> params = new HashMap<>();
-                                        params.put("idItemPedido", idItemPedido);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(ComandaActivity.this,
+                                                    "Erro ao editar! --> Erro 2",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("idItemPedido", idItemPedido);
 
-                                        Log.v("zzzParametros", "Paramentros: " + params.toString());
-                                        return params;
-                                    }
-                                };
-                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                                requestQueue.add(stringRequest);
+                                    Log.v("zzzParametros", "Paramentros: " + params.toString());
+                                    return params;
+                                }
+                            };
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(stringRequest);
                             }
                         });
-
-                        listagemProdutoNaComanda();
 
                         builder.setNegativeButton("Não", null);
 
@@ -197,14 +188,9 @@ public class ComandaActivity extends AppCompatActivity {
 
     public void menuSalvar() {
 
-        final double valorGasto = valorTotalMesa;
-        Log.v("INFO", "Gasto total: " + valorGasto);
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
-
         builder.setTitle("Gasto total da mesa");
-        builder.setMessage("R$ " + valorGasto);
+        builder.setMessage("R$ " + valorTotalMesa);
         builder.setNegativeButton("Cancelar", null);
         builder.setPositiveButton("Fechar comanda", new DialogInterface.OnClickListener() {
             @Override
@@ -219,26 +205,57 @@ public class ComandaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Salva na tela do Fluxo de Caixa
-                        FluxoCaixaDAO fluxoCaixaDAO = new FluxoCaixaDAO(getApplicationContext());
-                        //ItemPedidoDAO dao = new ItemPedidoDAO(getApplicationContext());
 
-                        if (valorGasto <= 0){
+                        if (valorTotalMesa <= 0){
                             Toast.makeText(getApplicationContext(),
                                     "Comanda vazia",
                                     Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            //dao.deletar(quantMesas.getIdMesa())
-                            if (fluxoCaixaDAO.salvar(valorGasto)){
-                                Toast.makeText(getApplicationContext(),
-                                        "Fechando comanda...",
-                                        Toast.LENGTH_SHORT).show();
-                                finish();
-                            }else {
-                                Toast.makeText(getApplicationContext(),
-                                        "Erro ao fechar comanda...",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            //Configuração data
+                            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                            Date dataSistema = new Date();
+
+                            final String dataFormatada = formato.format(dataSistema);
+                            final String idMesa = String.valueOf(numeroMesa.getId());
+                            final String tipo = "Mesa";
+                            final String receita = String.valueOf(valorTotalMesa);
+                            final String despesa = String.valueOf(0);
+
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_fluxo_mesa,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            //Log.v("Info", "zzzResponse: " + response);
+                                            Toast.makeText(ComandaActivity.this,
+                                                    "Comanda fechada" + numeroMesa.getId(),
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(ComandaActivity.this,
+                                                    "Erro ao rfechar comanda! --> Erro 2",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("tipo", tipo);
+                                    params.put("dataFluxo", dataFormatada);
+                                    params.put("receita", receita);
+                                    params.put("despesa", despesa);
+                                    params.put("idMesa", idMesa);
+
+                                    Log.v("zzzParametros", "Paramentros: " + params.toString());
+                                    return params;
+                                }
+                            };
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            requestQueue.add(stringRequest);
                         }
                     }
                 });
@@ -269,6 +286,9 @@ public class ComandaActivity extends AppCompatActivity {
 
     private void listagemProdutoNaComanda(){
 
+        listaItemPedidos.clear();
+        valorTotalMesa = 0;
+
         String url_parametro = url_listar_item_protudo + numeroMesa.getId();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_parametro, null,
                 new Response.Listener<JSONArray>() {
@@ -287,6 +307,7 @@ public class ComandaActivity extends AppCompatActivity {
                                 itemPedido.setValorUnitario(jsonObject.getDouble("valorUnitario"));
                                 itemPedido.setValorTotal(jsonObject.getDouble("valorTotal"));
                                 itemPedido.setObservacoes(jsonObject.getString("observacao"));
+                                itemPedido.setIdMesa(jsonObject.getInt("idMesa"));
                                 itemPedido.setNomeCategoria(jsonObject.getString("nomeCategoria"));
 
                             } catch (JSONException e) {

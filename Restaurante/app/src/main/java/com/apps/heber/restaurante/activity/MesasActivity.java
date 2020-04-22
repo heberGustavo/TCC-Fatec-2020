@@ -66,11 +66,17 @@ public class MesasActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        QuantMesa numeroMesa = listaMesas.get(position);
-                        Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
-                        intent.putExtra("numeroMesa", numeroMesa);
+                        try {
+                            QuantMesa numeroMesa = listaMesas.get(position);
+                            Intent intent = new Intent(MesasActivity.this, ComandaActivity.class);
+                            intent.putExtra("numeroMesa", numeroMesa);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }catch (Exception e){
+                            Log.v("INFO", "zzzErroMesa: " + e.toString());
+                            Log.v("INFO", "zzzErroMesa: " + e.getMessage());
+                        }
+
                     }
 
                     @Override
