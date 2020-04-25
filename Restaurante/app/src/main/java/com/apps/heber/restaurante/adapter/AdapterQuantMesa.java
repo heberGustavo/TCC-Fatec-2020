@@ -1,7 +1,10 @@
 package com.apps.heber.restaurante.adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ public class AdapterQuantMesa extends RecyclerView.Adapter<AdapterQuantMesa.Quan
         return new QuantMesaViewHolder(itemView);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(QuantMesaViewHolder quantMesaViewHolder, int i) {
         QuantMesa mesa = mListaMesa.get(i);
@@ -40,6 +44,16 @@ public class AdapterQuantMesa extends RecyclerView.Adapter<AdapterQuantMesa.Quan
         // --> Pegar pelo Id da mesa
         quantMesaViewHolder.iconeMesa.setImageResource(ic_restaurant_menu_gray_24dp);
         quantMesaViewHolder.numeroMesa.setText("Mesa " + (i+1));
+
+        //Mostra a bolinha conforme o status da mesa
+        if(mesa.getStatus() == 0){
+            //Livre
+            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_bolinha_verde_24dp));
+        }
+        if(mesa.getStatus() == 1){
+            //Ocupada
+            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_bolinha_vermelha_24dp));
+        }
     }
 
     @Override
@@ -51,11 +65,13 @@ public class AdapterQuantMesa extends RecyclerView.Adapter<AdapterQuantMesa.Quan
 
         ImageView iconeMesa;
         TextView numeroMesa;
+        TextView statusMesa;
 
         public QuantMesaViewHolder(View itemView) {
             super(itemView);
             numeroMesa = itemView.findViewById(R.id.textNumeroMesa);
             iconeMesa = itemView.findViewById(R.id.iconeMesa);
+            statusMesa = itemView.findViewById(R.id.textStatus);
         }
     }
 

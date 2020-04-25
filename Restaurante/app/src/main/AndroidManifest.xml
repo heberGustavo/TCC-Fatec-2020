@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apps.heber.restaurante">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.FluxoDeCaixaActivity"
-            android:parentActivityName=".activity.PrincipalActivity"></activity>
+        <activity
+            android:name=".activity.AdicionarDespesaActivity"
+            android:parentActivityName=".activity.FluxoDeCaixaActivity"/>
+        <activity
+            android:name=".activity.AdicionarReceitaActivity"
+            android:parentActivityName=".activity.FluxoDeCaixaActivity"/>
+        <activity
+            android:name=".activity.FluxoDeCaixaActivity"
+            android:parentActivityName=".activity.PrincipalActivity" />
         <activity
             android:name=".activity.AdicionarMesasActivity"
             android:parentActivityName=".activity.PrincipalActivity" />

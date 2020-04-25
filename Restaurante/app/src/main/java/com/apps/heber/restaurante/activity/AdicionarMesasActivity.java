@@ -66,11 +66,20 @@ public class AdicionarMesasActivity extends AppCompatActivity {
 
     //MySQL
     public void RegistrarMesa(){
+        /* Status Mesa
+
+        0 - livre
+        1 - ocupado
+
+         */
+
+
         final String campoquantidade = numeroMesa.getText().toString();
 
         if (!campoquantidade.isEmpty()){
 
             final int quantidade = Integer.parseInt(campoquantidade);
+            final String statusMesa = String.valueOf(0);
             int i;
 
             for(i=1; i<= quantidade; i++) {
@@ -110,6 +119,7 @@ public class AdicionarMesasActivity extends AppCompatActivity {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
                         params.put("numeroMesa", finalI+"");
+                        params.put("statusMesa", statusMesa);
 
                         Log.v("zzzParametros", "Paramentros: " + params.toString());
                         return params;

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.FluxoDeCaixaActivity">
-
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -141,5 +141,40 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        android:layout_margin="16dp"
+        fab:menu_colorNormal="@color/colorPrimaryDark"
+        app:menu_colorPressed="@color/colorPrimaryDark"
+        fab:menu_icon="@drawable/fab_add">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="adicionarDespesa"
+            android:src="@drawable/fab_add"
+            app:fab_colorNormal="@color/colorRed"
+            app:fab_colorPressed="@color/colorRed"
+            fab:fab_label="Despesas"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="adicionarReceita"
+            android:src="@drawable/fab_add"
+            app:fab_colorNormal="@color/colorGreen"
+            app:fab_colorPressed="@color/colorGreen"
+            fab:fab_label="Receitas"
+            fab:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
 
 </RelativeLayout>

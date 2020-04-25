@@ -1,5 +1,6 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -73,6 +74,7 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         campoReceita.setText("R$ " + totalReceita);
         campoSaldo.setText("R$ " + (totalReceita - totalDespesa));
     }
+
     public void carregarRecyclerView(){
         listaFluxoDeCaixa = new ArrayList<>();
 
@@ -139,5 +141,14 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(arrayRequest);
     }
-    
+
+    public void adicionarReceita(View view){
+        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarReceitaActivity.class);
+        startActivity(intent);
+    }
+
+    public void adicionarDespesa(View view){
+        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarDespesaActivity.class);
+        startActivity(intent);
+    }
 }

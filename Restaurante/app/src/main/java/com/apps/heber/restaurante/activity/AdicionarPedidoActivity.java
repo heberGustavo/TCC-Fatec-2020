@@ -330,6 +330,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
             final String idCategoria = String.valueOf(cardapioSelecionado.getIdCategoria());
             final String nomeCategoria = cardapioSelecionado.getNomeCategoria();
             final String idMesa = String.valueOf(numeroMesa.getId());
+            final String statusMesa = String.valueOf(1); //Mesa ocupada
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_pedido,
                     new Response.Listener<String>() {
@@ -373,6 +374,7 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
                     params.put("idCategoria", idCategoria);
                     params.put("nomeCategoria", nomeCategoria);
                     params.put("idMesa", idMesa);
+                    params.put("statusMesa", statusMesa);
 
                     Log.v("zzzParametros", "Paramentros: " + params.toString());
                     return params;

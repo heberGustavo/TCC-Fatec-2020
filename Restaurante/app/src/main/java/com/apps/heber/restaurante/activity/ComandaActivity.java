@@ -221,6 +221,7 @@ public class ComandaActivity extends AppCompatActivity {
                             final String tipo = "Mesa";
                             final String receita = String.valueOf(valorTotalMesa);
                             final String despesa = String.valueOf(0);
+                            final String statusMesa = String.valueOf(0); //Torna mesa disponivel
 
                             StringRequest stringRequest = new StringRequest(Request.Method.POST, url_registrar_fluxo_mesa,
                                     new Response.Listener<String>() {
@@ -237,7 +238,7 @@ public class ComandaActivity extends AppCompatActivity {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             Toast.makeText(ComandaActivity.this,
-                                                    "Erro ao rfechar comanda! --> Erro 2",
+                                                    "Erro ao fechar comanda! --> Erro 2",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }) {
@@ -249,6 +250,7 @@ public class ComandaActivity extends AppCompatActivity {
                                     params.put("receita", receita);
                                     params.put("despesa", despesa);
                                     params.put("idMesa", idMesa);
+                                    params.put("statusMesa", statusMesa);
 
                                     Log.v("zzzParametros", "Paramentros: " + params.toString());
                                     return params;

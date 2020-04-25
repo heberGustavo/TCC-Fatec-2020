@@ -117,6 +117,7 @@ public class MesasActivity extends AppCompatActivity {
 
                                 quantMesa.setId(jsonObject.getInt("id"));
                                 quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
+                                quantMesa.setStatus(jsonObject.getInt("statusMesa"));
 
                             } catch (JSONException e) {
                                 Toast.makeText(getApplicationContext(),
