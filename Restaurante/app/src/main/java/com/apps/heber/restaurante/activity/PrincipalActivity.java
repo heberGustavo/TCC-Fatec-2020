@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import com.android.volley.toolbox.Volley;
+import com.apps.heber.restaurante.adapter.AdapterPrincipal;
 import com.apps.heber.restaurante.modelo.QuantMesa;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
@@ -49,7 +50,7 @@ public class PrincipalActivity extends AppCompatActivity
     private List<QuantMesa> mesaList;
     private RecyclerView.Adapter adapter;
 
-    private String url = "https://restaurantecome.000webhostapp.com/listarMesa.php";
+    private String url = "https://restaurantecome.000webhostapp.com/listarMesaEmAtendimento.php";
 
     private TextView descricaoMesa;
     private ProgressBar progressBarMesa;
@@ -100,6 +101,7 @@ public class PrincipalActivity extends AppCompatActivity
                             try {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
+                                quantMesa.setId(jsonObject.getInt("id"));
                                 quantMesa.setNumero(jsonObject.getInt("numeroMesa"));
 
                             } catch (JSONException e) {
@@ -110,7 +112,7 @@ public class PrincipalActivity extends AppCompatActivity
                             }
                             mesaList.add(quantMesa);
                         }
-                        adapter = new AdapterQuantMesa(getApplicationContext(), mesaList);
+                        adapter = new AdapterPrincipal(getApplicationContext(), mesaList);
                         recyclerViewPricipal.setAdapter(adapter);
 
                         if(mesaList.size() >=1){
@@ -142,15 +144,15 @@ public class PrincipalActivity extends AppCompatActivity
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        QuantMesa numeroMesa = mesaList.get(position);
+
                         Toast.makeText(getApplicationContext(),
-                                "CLick: " + position,
+                                "mesa: " + numeroMesa.getId(),
                                 Toast.LENGTH_SHORT).show();
-                        //quantMesas = listaMesas.get(position);
 
                         Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
-                        intent.putExtra("numeroMesa", position);
-                        //intent.putExtra("quantMesas", quantMesas);
-                        //Log.v("INFO", "Quant mesas1: "+ position);
+                        intent.putExtra("numeroMesa", numeroMesa);
+
                         startActivity(intent);
                     }
 

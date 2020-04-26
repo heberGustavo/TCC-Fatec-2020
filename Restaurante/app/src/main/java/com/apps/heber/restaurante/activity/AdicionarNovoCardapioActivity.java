@@ -277,19 +277,15 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
                                             JSONObject jsonObject = new JSONObject(response);
                                             //Log.v("Info", "zzzResponse: " + jsonObject);
 
-                                            String sucess = jsonObject.getString("sucess");
-                                            if (sucess.equals("1")) {
-                                                Toast.makeText(AdicionarNovoCardapioActivity.this,
-                                                        "Cardapio adicionado",
-                                                        Toast.LENGTH_SHORT).show();
-                                                editValor.setText("");
-                                                editNomeProduto.setText("");
-                                                editIngredientes.setText("");
-                                            }
-                                        } catch (JSONException e) {
                                             Toast.makeText(AdicionarNovoCardapioActivity.this,
-                                                    "Erro ao registrar! --> Erro 01",
+                                                    "Cardapio adicionado",
                                                     Toast.LENGTH_SHORT).show();
+                                            editValor.setText("");
+                                            editNomeProduto.setText("");
+                                            editIngredientes.setText("");
+
+                                        } catch (JSONException e) {
+
                                         }
                                     }
                                 },

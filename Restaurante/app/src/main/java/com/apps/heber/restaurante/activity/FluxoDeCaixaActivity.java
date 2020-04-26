@@ -26,7 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,16 +63,18 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         descricaoFluxoDeCaixa = findViewById(R.id.descricaoFluxoDeCaixa);
         progressBarFluxoDeCaixa = findViewById(R.id.progressBarFluxoDeCaixa);
 
-        carregarRecyclerView();
-        listagemCategoria();
-
     }
 
     public void imprimeValores(){
+
+        //Formata para money
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        formatter.setMaximumFractionDigits(2);//duas casas decimais
+
         //Imprime valores
-        campoDespesa.setText("R$ " +totalDespesa);
-        campoReceita.setText("R$ " + totalReceita);
-        campoSaldo.setText("R$ " + (totalReceita - totalDespesa));
+        campoDespesa.setText(formatter.format( totalDespesa));
+        campoReceita.setText(formatter.format( totalReceita));
+        campoSaldo.setText(formatter.format( totalReceita - totalDespesa));
     }
 
     public void carregarRecyclerView(){
@@ -87,8 +89,11 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         recyclerFluxoDeCaixa.addItemDecoration(itemDecoration);
     }
 
-    private void listagemCategoria(){
+    private void listagemFluxoDeCaixa(){
 
+        listaFluxoDeCaixa.clear();
+        totalReceita = 0;
+        totalDespesa = 0;
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_fluxo, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -150,5 +155,12 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
     public void adicionarDespesa(View view){
         Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarDespesaActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregarRecyclerView();
+        listagemFluxoDeCaixa();
     }
 }
