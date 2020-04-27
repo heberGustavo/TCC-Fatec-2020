@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,8 @@ public class AdapterPrincipal extends RecyclerView.Adapter<AdapterPrincipal.MyVi
     public void onBindViewHolder(@NonNull MyViewHolderPrincipal myViewHolderPrincipal, int i) {
         QuantMesa mesa = listaMesas.get(i);
 
-        // --> Pegar pelo Id da mesa
         myViewHolderPrincipal.iconeMesa.setImageResource(ic_restaurant_menu_gray_24dp);
-        myViewHolderPrincipal.numeroMesa.setText("Mesa " + (i+1));
+        myViewHolderPrincipal.numeroMesa.setText("Mesa " + mesa.getId());
         myViewHolderPrincipal.statusMesa.setBackground(context.getDrawable(R.drawable.ic_bolinha_laranja_24dp));
     }
 

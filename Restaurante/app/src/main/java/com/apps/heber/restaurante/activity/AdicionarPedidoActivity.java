@@ -278,17 +278,13 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
 
-                                String sucess = jsonObject.getString("sucess");
-                                if (sucess.equals("1")) {
-                                    Toast.makeText(AdicionarPedidoActivity.this,
-                                            "Pedido foi editado",
-                                            Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            } catch (JSONException e) {
                                 Toast.makeText(AdicionarPedidoActivity.this,
-                                        "Erro ao editar! --> Erro 01",
+                                        "Pedido foi editado",
                                         Toast.LENGTH_SHORT).show();
+                                finish();
+
+                            } catch (JSONException e) {
+
                             }
                         }
                     },
@@ -337,21 +333,10 @@ public class AdicionarPedidoActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             //Log.v("Info", "zzzResponse: " + response);
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-
-                                String sucess = jsonObject.getString("sucess");
-                                if (sucess.equals("1")) {
-                                    Toast.makeText(AdicionarPedidoActivity.this,
-                                            "Pedido salvo na mesa " + numeroMesa.getId(),
-                                            Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            } catch (JSONException e) {
-                                Toast.makeText(AdicionarPedidoActivity.this,
-                                        "Erro ao registrar! --> Erro 01",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(AdicionarPedidoActivity.this,
+                                    "Pedido salvo na mesa " + numeroMesa.getId(),
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     },
                     new Response.ErrorListener() {

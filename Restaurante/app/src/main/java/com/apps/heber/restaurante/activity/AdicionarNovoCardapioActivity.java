@@ -71,30 +71,21 @@ public class AdicionarNovoCardapioActivity extends AppCompatActivity {
 
         //Recebendo dados da tela anterior
         cardapioSelecionado = (Cardapio) getIntent().getSerializableExtra("cardapioSelecionado");
-        Log.v("INFO", "Cardapio 1 - recebendo: " + cardapioSelecionado);
+
         listagemSpinnerCategoria(); //Carrega todas as categorias no Spinner
         verificaSpinnerSelecionado();
 
-        //cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-        //Toast.makeText(getApplicationContext(), ""+ cardapioCategoria, Toast.LENGTH_SHORT).show();
-
-
-
         if (cardapioSelecionado != null) { //Se for edição
 
-            Toast.makeText(getApplicationContext(), "Edição", Toast.LENGTH_SHORT).show();
             cardapioCategoria = (int) getIntent().getSerializableExtra("cardapioCategoria");
-            //Log.v("INFO", "Cardapio Categoria: "+cardapioCategoria);
 
             String valor = String.valueOf(cardapioSelecionado.getValor());
             editValor.setText(valor);
             editNomeProduto.setText(cardapioSelecionado.getNomeProduto());
             editIngredientes.setText(cardapioSelecionado.getIngredientes());
             spinner.setSelection(cardapioCategoria);
-            //Log.i("INFO", "fim: "+cardapioCategoria);
         }
 
-        //Toast.makeText(getApplicationContext(), "Novo", Toast.LENGTH_SHORT).show();
     }
 
     private void verificaSpinnerSelecionado() {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -14,28 +15,37 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.DAO.CategoriaDAO;
 import com.apps.heber.restaurante.R;
+import com.apps.heber.restaurante.adapter.AdapterCardapio;
+import com.apps.heber.restaurante.modelo.Cardapio;
 import com.apps.heber.restaurante.modelo.Categoria;
 import com.apps.heber.restaurante.modelo.CategoriaNovo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdicionarCategoriaActivity extends AppCompatActivity {
 
     private TextInputEditText editNomeCategoria;
     private CategoriaNovo categoriaSelecionada;
+    private List<Cardapio> listaCardapio = new ArrayList<>();
 
     RequestQueue requestQueue;
 
     private static String url_registrar_categoria = "https://restaurantecome.000webhostapp.com/registrarCategoria.php";
     private static String url_editar_categoria = "https://restaurantecome.000webhostapp.com/editarCategoria.php";
+    private String url_listar_cardapio = "https://restaurantecome.000webhostapp.com/listarCardapio.php?idCategoria=";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,7 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         //Se for edicão traz o campo 'nome categoria' preenchido
         if (categoriaSelecionada != null){
             editNomeCategoria.setText(categoriaSelecionada.getCategoria());
+            listagemCardapio();
         }
     }
 
@@ -81,57 +92,64 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
         // Editar categoria
         if (categoriaSelecionada != null){
 
-            final String idCategoria = String.valueOf(categoriaSelecionada.getIdCategoria());
-            final String nomeCategoria = editNomeCategoria.getText().toString();
+            if(listaCardapio.size()>=1){
+                Toast.makeText(getApplicationContext(),
+                        "Não é possivel alterar categoria com cardápio cadastrado",
+                        Toast.LENGTH_LONG).show();
+            }
+            else{
+                final String idCategoria = String.valueOf(categoriaSelecionada.getIdCategoria());
+                final String nomeCategoria = editNomeCategoria.getText().toString();
 
-            if (!nomeCategoria.isEmpty()){
+                if (!nomeCategoria.isEmpty()){
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url_editar_categoria,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.v("Info", "zzzResponse: " + response);
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url_editar_categoria,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Log.v("Info", "zzzResponse: " + response);
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
 
-                                    String sucess = jsonObject.getString("sucess");
-                                    if (sucess.equals("1")) {
+                                        String sucess = jsonObject.getString("sucess");
+                                        if (sucess.equals("1")) {
+                                            Toast.makeText(AdicionarCategoriaActivity.this,
+                                                    "Categoria editada",
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.v("INFO", "zzzErro1: " + e.toString());
+
                                         Toast.makeText(AdicionarCategoriaActivity.this,
-                                                "Categoria editada",
+                                                "Erro ao editar! --> " + e.toString(),
                                                 Toast.LENGTH_SHORT).show();
-                                        finish();
                                     }
-                                } catch (JSONException e) {
-                                    Log.v("INFO", "zzzErro1: " + e.toString());
-
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.v("INFO", "zzzErro2: " + error.toString());
                                     Toast.makeText(AdicionarCategoriaActivity.this,
-                                            "Erro ao editar! --> " + e.toString(),
+                                            "Erro ao editar! --> " + error.toString(),
                                             Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.v("INFO", "zzzErro2: " + error.toString());
-                                Toast.makeText(AdicionarCategoriaActivity.this,
-                                        "Erro ao editar! --> " + error.toString(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("idCategoria", idCategoria);
-                        params.put("nomeCategoria", nomeCategoria);
+                            }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("idCategoria", idCategoria);
+                            params.put("nomeCategoria", nomeCategoria);
 
-                        Log.v("zzzParametros", "Paramentros: " + params.toString());
-                        return params;
-                    }
-                };
-                requestQueue.add(stringRequest);
-            }else {
-                Toast.makeText(getApplicationContext(), "Informe a categoria", Toast.LENGTH_SHORT).show();
+                            Log.v("zzzParametros", "Paramentros: " + params.toString());
+                            return params;
+                        }
+                    };
+                    requestQueue.add(stringRequest);
+                }else {
+                    Toast.makeText(getApplicationContext(), "Informe a categoria", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -155,6 +173,7 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
                                         Toast.makeText(AdicionarCategoriaActivity.this,
                                                 "Categoria adicionada",
                                                 Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 } catch (JSONException e) {
                                     Log.v("INFO", "zzzErro1: " + e.toString());
@@ -191,6 +210,46 @@ public class AdicionarCategoriaActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void listagemCardapio(){
+
+        String url_parametro = url_listar_cardapio + categoriaSelecionada.getIdCategoria();
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_parametro, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            Cardapio cardapio = new Cardapio();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                cardapio.setIdCardapio(jsonObject.getLong("idProduto"));
+                                cardapio.setValor(jsonObject.getDouble("preco"));
+                                cardapio.setNomeProduto(jsonObject.getString("nomeProduto"));
+                                cardapio.setIngredientes(jsonObject.getString("descricao"));
+                                cardapio.setIdCategoria(jsonObject.getInt("idCategoria"));
+                                cardapio.setNomeCategoria(jsonObject.getString("nomeCategoria"));
+
+
+                            } catch (JSONException e) { }
+
+                            listaCardapio.add(cardapio);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
     }
 
     /* - SQLite

@@ -77,7 +77,6 @@ public class ComandaActivity extends AppCompatActivity {
         progressBarItemPedido = findViewById(R.id.progressBarItemPedido);
 
         numeroMesa = (QuantMesa) getIntent().getSerializableExtra("numeroMesa");
-        Log.v("INFO", "zzzNumeroDaMesa: " + numeroMesa.getId());
 
         clickRecyclerView();
     }
@@ -284,6 +283,7 @@ public class ComandaActivity extends AppCompatActivity {
         recyclerPedidos.setHasFixedSize(true);
         recyclerPedidos.setLayoutManager(linearLayoutManager);
         recyclerPedidos.addItemDecoration(itemDecoration);
+
     }
 
     private void listagemProdutoNaComanda(){
@@ -296,8 +296,21 @@ public class ComandaActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+
+                        //Verifica se o resultado trouxe dados - MELHOR FORMA
+                        if(response.length() >= 1){
+                            Log.v("INFO", "zzzEu1");
+                            progressBarItemPedido.setVisibility(View.GONE);
+                            descricaoItemPedido.setVisibility(View.GONE);
+                        }
+                        else{
+                            Log.v("INFO", "zzzEu2");
+                            progressBarItemPedido.setVisibility(View.GONE);
+                            descricaoItemPedido.setVisibility(View.VISIBLE);
+                        }
                         for(int i = 0; i < response.length(); i++){
                             ItemPedido itemPedido = new ItemPedido();
+
                             try {
 
                                 JSONObject jsonObject = response.getJSONObject(i);
@@ -318,20 +331,14 @@ public class ComandaActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             listaItemPedidos.add(itemPedido);
+
                             //Acumula o total gasto na mesa
                             valorTotalMesa += itemPedido.getValorTotal();
-                            //Log.v("INFO", "Gasto total: Lista == " + valorTotalMesa);
+
                         }
+
                         adapter = new AdapterPedido(listaItemPedidos, getApplicationContext());
                         recyclerPedidos.setAdapter(adapter);
-
-                        if(listaItemPedidos.size() >= 1){
-                            progressBarItemPedido.setVisibility(View.GONE);
-                        }
-                        if(listaItemPedidos.size() == 0){
-                            progressBarItemPedido.setVisibility(View.GONE);
-                            descricaoItemPedido.setVisibility(View.VISIBLE);
-                        }
 
                     }
                 }, new Response.ErrorListener() {

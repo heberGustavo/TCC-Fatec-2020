@@ -77,9 +77,6 @@ public class PrincipalActivity extends AppCompatActivity
         recyclerViewPricipal.setLayoutManager(linearLayoutManager);
         recyclerViewPricipal.addItemDecoration(itemDecoration);
 
-        listagemMesa();
-        clickRecyclerView();
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,6 +88,8 @@ public class PrincipalActivity extends AppCompatActivity
     }
 
     private void listagemMesa(){
+
+        mesaList.clear();
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -146,10 +145,6 @@ public class PrincipalActivity extends AppCompatActivity
                     public void onItemClick(View view, int position) {
                         QuantMesa numeroMesa = mesaList.get(position);
 
-                        Toast.makeText(getApplicationContext(),
-                                "mesa: " + numeroMesa.getId(),
-                                Toast.LENGTH_SHORT).show();
-
                         Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", numeroMesa);
 
@@ -173,6 +168,8 @@ public class PrincipalActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        listagemMesa();
+        clickRecyclerView();
     }
 
     @Override
@@ -224,4 +221,5 @@ public class PrincipalActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
