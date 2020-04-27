@@ -7,6 +7,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -46,6 +48,8 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
     private ProgressBar progressBarFluxoDeCaixa;
 
     private String url_listar_fluxo = "https://restaurantecome.000webhostapp.com/listarFluxoDeCaixa.php";
+    private String url_listar_fluxo_receita = "https://restaurantecome.000webhostapp.com/listarFluxoDeCaixaReceita.php";
+    private String url_listar_fluxo_despesa = "https://restaurantecome.000webhostapp.com/listarFluxoDeCaixaDespesa.php";
 
     private double totalReceita = 0;
     private double totalDespesa = 0;
@@ -87,6 +91,16 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         recyclerFluxoDeCaixa.setHasFixedSize(true);
         recyclerFluxoDeCaixa.setLayoutManager(linearLayoutManager);
         recyclerFluxoDeCaixa.addItemDecoration(itemDecoration);
+    }
+
+    public void adicionarReceita(View view){
+        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarReceitaActivity.class);
+        startActivity(intent);
+    }
+
+    public void adicionarDespesa(View view){
+        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarDespesaActivity.class);
+        startActivity(intent);
     }
 
     private void listagemFluxoDeCaixa(){
@@ -147,14 +161,143 @@ public class FluxoDeCaixaActivity extends AppCompatActivity {
         requestQueue.add(arrayRequest);
     }
 
-    public void adicionarReceita(View view){
-        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarReceitaActivity.class);
-        startActivity(intent);
+    private void listagemFluxoDeCaixaReceita(){
+
+        listaFluxoDeCaixa.clear();
+        totalReceita = 0;
+        totalDespesa = 0;
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_fluxo_receita, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            FluxoCaixa fluxo = new FluxoCaixa();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                fluxo.setId(jsonObject.getInt("id"));
+                                fluxo.setTipo(jsonObject.getString("tipo"));
+                                fluxo.setDataFluxo(jsonObject.getString("dataFluxo"));
+                                fluxo.setReceita(jsonObject.getDouble("receita"));
+                                fluxo.setDespesa(jsonObject.getDouble("despesa"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaFluxoDeCaixa.add(fluxo);
+                            totalReceita += fluxo.getReceita();
+                            totalDespesa += fluxo.getDespesa();
+                            imprimeValores();
+
+                        }
+                        adapter = new AdapterFluxoDeCaixa(listaFluxoDeCaixa, getApplicationContext());
+                        recyclerFluxoDeCaixa.setAdapter(adapter);
+
+                        if(listaFluxoDeCaixa.size() >= 1){
+                            progressBarFluxoDeCaixa.setVisibility(View.GONE);
+                        }
+                        if(listaFluxoDeCaixa.size() == 0){
+                            progressBarFluxoDeCaixa.setVisibility(View.GONE);
+                            descricaoFluxoDeCaixa.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
     }
 
-    public void adicionarDespesa(View view){
-        Intent intent = new Intent(FluxoDeCaixaActivity.this, AdicionarDespesaActivity.class);
-        startActivity(intent);
+    private void listagemFluxoDeCaixaDespesa(){
+
+        listaFluxoDeCaixa.clear();
+        totalReceita = 0;
+        totalDespesa = 0;
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_fluxo_despesa, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            FluxoCaixa fluxo = new FluxoCaixa();
+                            try {
+
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                fluxo.setId(jsonObject.getInt("id"));
+                                fluxo.setTipo(jsonObject.getString("tipo"));
+                                fluxo.setDataFluxo(jsonObject.getString("dataFluxo"));
+                                fluxo.setReceita(jsonObject.getDouble("receita"));
+                                fluxo.setDespesa(jsonObject.getDouble("despesa"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaFluxoDeCaixa.add(fluxo);
+                            totalReceita += fluxo.getReceita();
+                            totalDespesa += fluxo.getDespesa();
+                            imprimeValores();
+
+                        }
+                        adapter = new AdapterFluxoDeCaixa(listaFluxoDeCaixa, getApplicationContext());
+                        recyclerFluxoDeCaixa.setAdapter(adapter);
+
+                        if(listaFluxoDeCaixa.size() >= 1){
+                            progressBarFluxoDeCaixa.setVisibility(View.GONE);
+                        }
+                        if(listaFluxoDeCaixa.size() == 0){
+                            progressBarFluxoDeCaixa.setVisibility(View.GONE);
+                            descricaoFluxoDeCaixa.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.filtro_fluxo_de_caixa, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_receitaDespesa:
+                listagemFluxoDeCaixa();
+                break;
+            case R.id.menu_Receita:
+                listagemFluxoDeCaixaReceita();
+                break;
+            case R.id.menu_Despesa:
+                listagemFluxoDeCaixaDespesa();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

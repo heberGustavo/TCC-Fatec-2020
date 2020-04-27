@@ -228,7 +228,7 @@ public class ComandaActivity extends AppCompatActivity {
                                         public void onResponse(String response) {
                                             //Log.v("Info", "zzzResponse: " + response);
                                             Toast.makeText(ComandaActivity.this,
-                                                    "Comanda fechada" + numeroMesa.getId(),
+                                                    "Comanda " + numeroMesa.getId() + " fechada",
                                                     Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
