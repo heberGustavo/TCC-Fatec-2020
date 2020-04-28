@@ -14,11 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterCardapio;
@@ -31,7 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CardapioActivity extends AppCompatActivity {
 
@@ -200,30 +204,7 @@ public class CardapioActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(arrayRequest);
     }
-
-    //SQLite
-    /*public void carregarRecyclerView(){
-        //Listar cardapios
-        CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
-        listaCardapios = cardapioDAO.listar(posicao);
-        //Log.i("INFO", "Lista de cardapios: "+posicao);
-
-        if (listaCardapios.isEmpty()){
-            descricaoCardapio.setVisibility(View.VISIBLE);
-        }else{
-            descricaoCardapio.setVisibility(View.INVISIBLE);
-        }
-
-        //Adapter
-        adapterCardapio = new AdapterCardapio(listaCardapios, getApplicationContext());
-
-        //RecyclerView
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerCardapio.setLayoutManager(layoutManager);
-        recyclerCardapio.setHasFixedSize(true);
-        recyclerCardapio.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
-        recyclerCardapio.setAdapter(adapterCardapio);
-    }*/
+    
 
     @Override
     protected void onStart() {
