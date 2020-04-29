@@ -49,15 +49,12 @@ public class LoginActivity extends AppCompatActivity {
                 String textoEmail = campoEmail.getText().toString();
                 String textoSenha = campoSenha.getText().toString();
 
-                // !
-                if (textoEmail.isEmpty()){
-                    if (textoSenha.isEmpty()){
+                if (!textoEmail.isEmpty()){
+                    if (!textoSenha.isEmpty()){
                         //Chama o metodo pra validação se tudo preenchido
                         usuario = new Usuario();
-                        //usuario.setEmail(textoEmail);
-                        //usuario.setSenha(textoSenha);
-                        usuario.setEmail("fatec@fatec.com");
-                        usuario.setSenha("fatecfatec");
+                        usuario.setEmail(textoEmail);
+                        usuario.setSenha(textoSenha);
                         validarUsuario();
                     }else {
                         Toast.makeText(
