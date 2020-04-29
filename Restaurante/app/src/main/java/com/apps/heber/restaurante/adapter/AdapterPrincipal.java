@@ -46,7 +46,7 @@ public class AdapterPrincipal extends RecyclerView.Adapter<AdapterPrincipal.MyVi
 
         myViewHolderPrincipal.iconeMesa.setImageResource(ic_restaurant_menu_gray_24dp);
         myViewHolderPrincipal.numeroMesa.setText("Mesa " + mesa.getId());
-        myViewHolderPrincipal.statusMesa.setBackground(context.getDrawable(R.drawable.ic_bolinha_laranja_24dp));
+        myViewHolderPrincipal.statusMesa.setBackground(context.getDrawable(R.drawable.ic_room_service_laranja_24dp));
     }
 
     @Override

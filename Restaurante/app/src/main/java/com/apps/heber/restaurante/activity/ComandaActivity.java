@@ -25,7 +25,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.apps.heber.restaurante.DAO.FluxoCaixaDAO;
 import com.apps.heber.restaurante.R;
 import com.apps.heber.restaurante.adapter.AdapterPedido;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
@@ -36,10 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +61,7 @@ public class ComandaActivity extends AppCompatActivity {
     private String url_listar_item_protudo = "https://restaurantecome.000webhostapp.com/listarItemProduto.php?idMesa=";
     private String url_excluir_pedido = "https://restaurantecome.000webhostapp.com/excluirProdutoComanda.php";
     private String url_registrar_fluxo_mesa = "https://restaurantecome.000webhostapp.com/registrarFluxoMesa.php";
+    private String urlExcluirItensMesaPorID = "https://restaurantecome.000webhostapp.com/excluirItensPedidoMesaPorId.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +169,7 @@ public class ComandaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_salvar_comanda, menu);
+        getMenuInflater().inflate(R.menu.menu_comanda, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -180,6 +178,10 @@ public class ComandaActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.salvar_comanda:
                 menuSalvar();
+                break;
+
+            case R.id.menu_limparMesa:
+                menuLimparMesa(numeroMesa.getId());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -264,6 +266,64 @@ public class ComandaActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void menuLimparMesa(final int id){
+        //Cancelar pedidos da mesa
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ComandaActivity.this);
+        builder.setTitle("Confirmar exclusão.");
+        builder.setMessage("DESEJA CANCELAR TODOS PEDIDOS DA MESA ?");
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                excluirItensPedidoMesaPorId(id);
+
+            }
+        });
+
+        builder.setNegativeButton("Não", null);
+
+        builder.create();
+        builder.show();
+    }
+
+    private void excluirItensPedidoMesaPorId(int id){
+
+        final String idMesa = String.valueOf(id);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlExcluirItensMesaPorID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("Info", "zzzResponse: " + response);
+                        Toast.makeText(ComandaActivity.this,
+                                "Limpando mesa ...",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("INFO", "zzzErro2: " + error.toString());
+                        Toast.makeText(ComandaActivity.this,
+                                "Erro ao limpar mesa! --> " + error.toString(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", idMesa);
+
+                Log.v("zzzParametros", "Paramentros: " + params.toString());
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     public void abrirCardapioCategoriaFazerPedido(View view){

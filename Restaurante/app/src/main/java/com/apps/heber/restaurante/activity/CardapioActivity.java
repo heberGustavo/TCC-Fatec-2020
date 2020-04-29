@@ -1,7 +1,9 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -49,6 +51,8 @@ public class CardapioActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
 
     private String url_listar_categoria = "https://restaurantecome.000webhostapp.com/listarCardapio.php?idCategoria=";
+    private String urlListarItemComandaPorNome = "https://restaurantecome.000webhostapp.com/listarItensComandaPorNome.php?nomeProduto=";
+    private String url_excluir_cardapio = "https://restaurantecome.000webhostapp.com/excluirCardapio.php";
 
     private Cardapio cardapioSelecionado;
 
@@ -96,11 +100,10 @@ public class CardapioActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        /*
-                        //Exclui o item do cardapio
 
-                        //LINHA ABAIXO -> Pega a posicao do cardapio selecionado
-                        cardapioSelecionado = listaCardapios.get(position);
+                        cardapioSelecionado = listaCardapio.get(position);
+
+                        //Exclui o item do cardapio
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(CardapioActivity.this);
                         builder.setTitle("Confirmar exclusão.");
@@ -108,19 +111,9 @@ public class CardapioActivity extends AppCompatActivity {
                         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                CardapioDAO cardapioDAO = new CardapioDAO(getApplicationContext());
 
-                                if (cardapioDAO.deletar(cardapioSelecionado)){
-                                    //Atualiza os dados na lista
-                                    carregarRecyclerView();
-                                    Toast.makeText(getApplicationContext(),
-                                            "Sucesso ao remover cardápio!",
-                                            Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(getApplicationContext(),
-                                            "Erro ao excluir cardápio!",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                listarItensComandaExcluir(cardapioSelecionado.getNomeProduto());
+
                             }
                         });
 
@@ -128,7 +121,6 @@ public class CardapioActivity extends AppCompatActivity {
 
                         builder.create();
                         builder.show();
-                         */
                     }
 
 
@@ -204,7 +196,90 @@ public class CardapioActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(arrayRequest);
     }
-    
+
+    private void listarItensComandaExcluir(String nomeProduto){
+
+        final String nomeProdutoSelecionado = nomeProduto;
+        String url_parametro = urlListarItemComandaPorNome + nomeProdutoSelecionado;
+        Log.v("INFO", "zzzURL: " + url_parametro);
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_parametro, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.v("INFO", "zzzLista response: " + response.length());
+                        if (response.length() >= 1){
+                            Toast.makeText(getApplicationContext(),
+                                    "Impossivel excluir! Alguma comanda contém esse cardápio!",
+                                    Toast.LENGTH_LONG).show();
+                        } else{
+                            excluirCardapio(nomeProdutoSelecionado);
+                            Toast.makeText(getApplicationContext(),
+                                    "Cardápio excluido!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(arrayRequest);
+    }
+
+    private void excluirCardapio(String nomeProduto){
+
+        final String nomeProdutoSelecionado = nomeProduto;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url_excluir_cardapio,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("Info", "zzzResponse: " + response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            String sucess = jsonObject.getString("sucess");
+                            if (sucess.equals("1")) {
+                                Toast.makeText(CardapioActivity.this,
+                                        "Cardápio deletado!",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.v("INFO", "zzzErro1: " + e.toString());
+
+                            Toast.makeText(CardapioActivity.this,
+                                    "Erro ao deletar! --> " + e.toString(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("INFO", "zzzErro2: " + error.toString());
+                        Toast.makeText(CardapioActivity.this,
+                                "Erro ao deletar! --> " + error.toString(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("nomeProduto", nomeProdutoSelecionado);
+
+                Log.v("zzzParametros", "Paramentros: " + params.toString());
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
     @Override
     protected void onStart() {

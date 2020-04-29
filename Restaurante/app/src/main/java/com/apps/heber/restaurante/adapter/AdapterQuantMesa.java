@@ -48,11 +48,11 @@ public class AdapterQuantMesa extends RecyclerView.Adapter<AdapterQuantMesa.Quan
         //Mostra a bolinha conforme o status da mesa
         if(mesa.getStatus() == 0){
             //Livre
-            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_bolinha_verde_24dp));
+            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_room_service_verde_24dp));
         }
         if(mesa.getStatus() == 1){
             //Ocupada
-            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_bolinha_vermelha_24dp));
+            quantMesaViewHolder.statusMesa.setBackground(mContext.getDrawable(R.drawable.ic_room_service_vermelha_24dp));
         }
     }
 

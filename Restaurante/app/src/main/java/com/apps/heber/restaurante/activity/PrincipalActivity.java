@@ -1,7 +1,9 @@
 package com.apps.heber.restaurante.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,12 +23,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.adapter.AdapterPrincipal;
 import com.apps.heber.restaurante.modelo.QuantMesa;
@@ -39,7 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,6 +101,14 @@ public class PrincipalActivity extends AppCompatActivity
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        if(response.length() >= 1){
+                            progressBarMesa.setVisibility(View.GONE);
+                            descricaoMesa.setVisibility(View.GONE);
+                        }
+                        else{
+                            progressBarMesa.setVisibility(View.GONE);
+                            descricaoMesa.setVisibility(View.VISIBLE);
+                        }
                         for(int i = 0; i < response.length(); i++) {
                             QuantMesa quantMesa = new QuantMesa();
                             try {
@@ -113,14 +127,6 @@ public class PrincipalActivity extends AppCompatActivity
                         }
                         adapter = new AdapterPrincipal(getApplicationContext(), mesaList);
                         recyclerViewPricipal.setAdapter(adapter);
-
-                        if(mesaList.size() >=1){
-                            progressBarMesa.setVisibility(View.GONE);
-                        }
-                        if(mesaList.size() == 0){
-                            progressBarMesa.setVisibility(View.GONE);
-                            descricaoMesa.setVisibility(View.VISIBLE);
-                        }
 
                     }
                 }, new Response.ErrorListener() {
@@ -163,7 +169,6 @@ public class PrincipalActivity extends AppCompatActivity
                 }
         ));
     }
-
 
     @Override
     protected void onStart() {

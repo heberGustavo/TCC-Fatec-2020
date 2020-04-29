@@ -96,19 +96,7 @@ public class CategoriaActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                // SE EXISTIR CARDAPIO CADASTRADO NÃO EXCLUI CATEGORIA
-                                //int count = cardapioDAO.somaCardapio(categoriaSelecionada.getId());
-                                //if (count >=1){
-                                //    Toast.makeText(getApplicationContext(),
-                                //            "Existe cardápio cadastrado nessa categoria!",
-                                //            Toast.LENGTH_LONG).show();
-                                //    //Log.v("INFO", "Quant de cardapios: "+count);
-                                //}
-
-                                int quantidadeArrayNoBanco = 0;
-
                                 listarCardapioExcluir(categoriaSelecionada.getIdCategoria());
-                                Log.v("INFO", "zzzLista: ");
                             }
                         });
 
