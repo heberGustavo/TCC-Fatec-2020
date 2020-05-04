@@ -1,56 +1,50 @@
-package com.apps.heber.restaurante.activity;
+package com.apps.heber.restaurante.activity.garcom;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.apps.heber.restaurante.adapter.AdapterPrincipal;
-import com.apps.heber.restaurante.modelo.QuantMesa;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.adapter.AdapterQuantMesa;
+import com.apps.heber.restaurante.activity.ComandaActivity;
+import com.apps.heber.restaurante.activity.MesasActivity;
+import com.apps.heber.restaurante.activity.PrincipalActivity;
+import com.apps.heber.restaurante.adapter.AdapterPrincipal;
 import com.apps.heber.restaurante.helper.RecyclerItemClickListener;
+import com.apps.heber.restaurante.modelo.QuantMesa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class PrincipalActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class PrincipalGarconActivity extends AppCompatActivity
+implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView recyclerViewPricipal;
+    private RecyclerView recyclerViewPricipalGarcom;
     private DividerItemDecoration itemDecoration;
     private LinearLayoutManager linearLayoutManager;
     private List<QuantMesa> mesaList;
@@ -58,39 +52,38 @@ public class PrincipalActivity extends AppCompatActivity
 
     private String url = "https://restaurantecome.000webhostapp.com/listarMesaEmAtendimento.php";
 
-    private TextView descricaoMesa;
-    private ProgressBar progressBarMesa;
+    private TextView descricaoMesaGarcom;
+    private ProgressBar progressBarMesaGarcom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_principal_garcom);
+        Toolbar toolbar = findViewById(R.id.toolbarGarcom);
         setSupportActionBar(toolbar);
 
-        descricaoMesa = findViewById(R.id.descricaoMesa);
-        progressBarMesa = findViewById(R.id.progressBarMesa);
-        recyclerViewPricipal = findViewById(R.id.recyclerPrincipal);
+        descricaoMesaGarcom = findViewById(R.id.descricaoMesaGarcom);
+        progressBarMesaGarcom = findViewById(R.id.progressBarMesaGarcom);
+        recyclerViewPricipalGarcom = findViewById(R.id.recyclerPrincipalGarcom);
 
-        progressBarMesa.setVisibility(View.VISIBLE);
-
-        mesaList= new ArrayList<>();
-        linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        itemDecoration = new DividerItemDecoration(recyclerViewPricipal.getContext(), linearLayoutManager.getOrientation());
-
-        recyclerViewPricipal.setHasFixedSize(true);
-        recyclerViewPricipal.setLayoutManager(linearLayoutManager);
-        recyclerViewPricipal.addItemDecoration(itemDecoration);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout_garcom);
+        NavigationView navigationView = findViewById(R.id.nav_view_garcom);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    private void carregarRecyclerView(){
+        mesaList= new ArrayList<>();
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        itemDecoration = new DividerItemDecoration(recyclerViewPricipalGarcom.getContext(), linearLayoutManager.getOrientation());
+
+        recyclerViewPricipalGarcom.setHasFixedSize(true);
+        recyclerViewPricipalGarcom.setLayoutManager(linearLayoutManager);
+        recyclerViewPricipalGarcom.addItemDecoration(itemDecoration);
     }
 
     private void listagemMesa(){
@@ -102,12 +95,12 @@ public class PrincipalActivity extends AppCompatActivity
                     @Override
                     public void onResponse(JSONArray response) {
                         if(response.length() >= 1){
-                            progressBarMesa.setVisibility(View.GONE);
-                            descricaoMesa.setVisibility(View.GONE);
+                            progressBarMesaGarcom.setVisibility(View.GONE);
+                            descricaoMesaGarcom.setVisibility(View.GONE);
                         }
                         else{
-                            progressBarMesa.setVisibility(View.GONE);
-                            descricaoMesa.setVisibility(View.VISIBLE);
+                            progressBarMesaGarcom.setVisibility(View.GONE);
+                            descricaoMesaGarcom.setVisibility(View.VISIBLE);
                         }
                         for(int i = 0; i < response.length(); i++) {
                             QuantMesa quantMesa = new QuantMesa();
@@ -126,7 +119,7 @@ public class PrincipalActivity extends AppCompatActivity
                             mesaList.add(quantMesa);
                         }
                         adapter = new AdapterPrincipal(getApplicationContext(), mesaList);
-                        recyclerViewPricipal.setAdapter(adapter);
+                        recyclerViewPricipalGarcom.setAdapter(adapter);
 
                     }
                 }, new Response.ErrorListener() {
@@ -143,15 +136,15 @@ public class PrincipalActivity extends AppCompatActivity
     }
 
     public void clickRecyclerView(){
-        recyclerViewPricipal.addOnItemTouchListener(new RecyclerItemClickListener(
+        recyclerViewPricipalGarcom.addOnItemTouchListener(new RecyclerItemClickListener(
                 getApplicationContext(),
-                recyclerViewPricipal,
+                recyclerViewPricipalGarcom,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         QuantMesa numeroMesa = mesaList.get(position);
 
-                        Intent intent = new Intent(PrincipalActivity.this, ComandaActivity.class);
+                        Intent intent = new Intent(PrincipalGarconActivity.this, ComandaActivity.class);
                         intent.putExtra("numeroMesa", numeroMesa);
 
                         startActivity(intent);
@@ -171,59 +164,31 @@ public class PrincipalActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        listagemMesa();
-        clickRecyclerView();
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(this, PrincipalActivity.class));
+            startActivity(new Intent(this, PrincipalGarconActivity.class));
             finish();
 
         } else if (id == R.id.nav_fazer_pedido) {
             startActivity(new Intent(this, MesasActivity.class));
 
-        } else if (id == R.id.nav_cardapio) {
-            startActivity(new Intent(this, CardapioCategoriaActivity.class));
-
-        } else if (id == R.id.nav_categoria) {
-            startActivity(new Intent(this, CategoriaActivity.class));
-
-        } else if (id == R.id.nav_mesa) {
-            startActivity(new Intent(this, AdicionarMesasActivity.class));
-        }
-        else if (id == R.id.nav_fluxoDeCaixa) {
-            startActivity(new Intent(this, FluxoDeCaixaActivity.class));
-
-        } else if (id == R.id.nav_share) {
-
-            Toast.makeText(getApplicationContext(),
-                    "Em manutenção",
-                    Toast.LENGTH_SHORT).show();
-
         } else if (id == R.id.nav_send) {
             finish();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout_garcom);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregarRecyclerView();
+        listagemMesa();
+        clickRecyclerView();
+    }
 }
+

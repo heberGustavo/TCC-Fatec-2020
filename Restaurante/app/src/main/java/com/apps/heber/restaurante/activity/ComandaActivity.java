@@ -359,12 +359,10 @@ public class ComandaActivity extends AppCompatActivity {
 
                         //Verifica se o resultado trouxe dados - MELHOR FORMA
                         if(response.length() >= 1){
-                            Log.v("INFO", "zzzEu1");
                             progressBarItemPedido.setVisibility(View.GONE);
                             descricaoItemPedido.setVisibility(View.GONE);
                         }
                         else{
-                            Log.v("INFO", "zzzEu2");
                             progressBarItemPedido.setVisibility(View.GONE);
                             descricaoItemPedido.setVisibility(View.VISIBLE);
                         }

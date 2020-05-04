@@ -12,12 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.garcom.PrincipalGarconActivity"
+            android:label="@string/title_activity_principal"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AdicionarDespesaActivity"
-            android:parentActivityName=".activity.FluxoDeCaixaActivity"/>
+            android:parentActivityName=".activity.FluxoDeCaixaActivity" />
         <activity
             android:name=".activity.AdicionarReceitaActivity"
-            android:parentActivityName=".activity.FluxoDeCaixaActivity"/>
+            android:parentActivityName=".activity.FluxoDeCaixaActivity" />
         <activity
             android:name=".activity.FluxoDeCaixaActivity"
             android:parentActivityName=".activity.PrincipalActivity" />

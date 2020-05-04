@@ -1,22 +1,33 @@
 package com.apps.heber.restaurante.activity;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.apps.heber.restaurante.R;
-import com.apps.heber.restaurante.helper.ConfiguracaoFirebase;
+import com.apps.heber.restaurante.activity.garcom.PrincipalGarconActivity;
 import com.apps.heber.restaurante.modelo.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.apps.heber.restaurante.modelo.UsuarioNovo;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +39,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private Usuario usuario;
     private FirebaseAuth autenticacao;
+
+    private List<UsuarioNovo> listaUsuarios = new ArrayList<>();
+    private List<String> listaEmail = new ArrayList<>();
+    private List<String> listaSenha = new ArrayList<>();
+    private String url_listar_usuario = "https://restaurantecome.000webhostapp.com/listarUsuario.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +61,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 String textoEmail = campoEmail.getText().toString();
                 String textoSenha = campoSenha.getText().toString();
 
                 if (!textoEmail.isEmpty()){
                     if (!textoSenha.isEmpty()){
-                        //Chama o metodo pra validação se tudo preenchido
-                        usuario = new Usuario();
-                        usuario.setEmail(textoEmail);
-                        usuario.setSenha(textoSenha);
-                        validarUsuario();
+                        progressBar.setVisibility(View.VISIBLE);
+                        validandoUsuario(textoEmail, textoSenha);
                     }else {
                         Toast.makeText(
                                 getApplicationContext(),
@@ -75,30 +87,89 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void validarUsuario(){
-        progressBar.setVisibility(View.VISIBLE);
+    private void validandoUsuario(final String email, final String senha){
 
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url_listar_usuario, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if(response.length() >= 1){
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        for(int i = 0; i < response.length(); i++){
+                            UsuarioNovo usuarioNovo = new UsuarioNovo();
+                            try {
 
-        autenticacao.signInWithEmailAndPassword(
-                usuario.getEmail(), usuario.getSenha()
-        ).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                usuarioNovo.setIdUsuario(jsonObject.getInt("idUsuario"));
+                                usuarioNovo.setEmail(jsonObject.getString("email"));
+                                usuarioNovo.setSenha(jsonObject.getString("senha"));
+                                usuarioNovo.setTipo(jsonObject.getString("tipo"));
+
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Erro 01",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.v("INFO", "Erro 01: " + e.toString());
+                            }
+                            listaUsuarios.add(usuarioNovo);
+                            listaEmail.add(usuarioNovo.getEmail());
+                            listaSenha.add(usuarioNovo.getSenha());
+                        }
+
+                        if(listaEmail.contains(email) && listaSenha.contains(senha)){
+
+                            for (int i=0; i<listaUsuarios.size(); i++){
+                                if(email.equals(listaUsuarios.get(i).getEmail()) &&
+                                        senha.equals(listaUsuarios.get(i).getSenha())){
+
+                                    switch (listaUsuarios.get(i).getTipo()){
+                                        case "administrador":
+                                            abrirTelaDoAdministrador();
+                                            break;
+                                        case "garcom":
+                                            abrirTelaDoGarcom();
+                                            break;
+                                    }
+                                }
+                            }
+                            listaUsuarios.clear();
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "Email ou senha inválido!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getApplicationContext(),
-                            "Login efetuado!",
-                            Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, PrincipalActivity.class));
-                }
-                else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getApplicationContext(),
-                            "Email ou senha incorreta!",
-                            Toast.LENGTH_SHORT).show();
-                }
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        "Erro 02",
+                        Toast.LENGTH_SHORT).show();
+                Log.v("INFO", "Erro 02: " + error.toString());
             }
         });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(arrayRequest);
+    }
+
+    private void abrirTelaDoAdministrador(){
+        Toast.makeText(getApplicationContext(),
+                "Administrador",
+                Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(LoginActivity.this, PrincipalActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirTelaDoGarcom(){
+        Toast.makeText(getApplicationContext(),
+                "Garçom",
+                Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(LoginActivity.this, PrincipalGarconActivity.class);
+        startActivity(intent);
     }
 }
