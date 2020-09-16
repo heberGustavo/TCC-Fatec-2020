@@ -1,1 +1,2 @@
-TCC-FATEC-2020]
+# App -  Restaurante Come Bem
+Aplicativo Android em desenvolvimento com foco em Restaurantes, tendo como função principal otimizar o serviço dos garçons, mas também irá ser utilizado para o cadastramento de categorias, cardápios, controle de mesa e controle de fluxo de caixa. Como o sistema terá vários usuários (Adm, caixa, garçons, cozinha) cada um terá acesso somente as funcionalidades das respectivas funções.
